@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>教師模式｜AI 文創實驗室：創造另一個我，讓故事動起來</title>
+<meta name="description" content="教師投影授課模式：肖像權判斷題、角色與故事、CREATE Prompt 框架、隨機輪盤、劇情與分鏡教學、繪本動畫與輸出流程。" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="teacher" data-current-mode="green">
+<a class="skip-link" href="#main-content">跳到主要內容</a>
+
+<nav class="teacher-nav" aria-label="課程段落導覽">
+  <div class="teacher-nav__row">
+    <span class="teacher-nav__brand">AI 文創實驗室</span>
+    <ul class="teacher-nav__links" id="nav-links">
+      <li><a href="#sec-rights" data-nav="sec-rights">01 權利</a></li>
+      <li><a href="#sec-character" data-nav="sec-character">02 角色</a></li>
+      <li><a href="#sec-create" data-nav="sec-create">03 CREATE</a></li>
+      <li><a href="#sec-wheel" data-nav="sec-wheel">04 輪盤</a></li>
+      <li><a href="#sec-story" data-nav="sec-story">05 劇情</a></li>
+      <li><a href="#sec-storyboard" data-nav="sec-storyboard">06 分鏡</a></li>
+      <li><a href="#sec-picturebook" data-nav="sec-picturebook">07 作品</a></li>
+    </ul>
+    <span class="teacher-nav__spacer"></span>
+    <button type="button" class="btn btn-sm btn-ghost" id="toggle-motion" style="color:#dfe3f0;border-color:rgba(255,255,255,.4)" aria-pressed="false">
+      關閉動畫效果
+    </button>
+    <div class="mode-switch" role="group" aria-label="備援模式切換">
+      <button type="button" data-mode="green" aria-pressed="true">綠燈</button>
+      <button type="button" data-mode="yellow" aria-pressed="false">黃燈</button>
+      <button type="button" data-mode="red" aria-pressed="false">紅燈</button>
+    </div>
+  </div>
+  <div class="teacher-nav__progress" role="progressbar" aria-label="課程進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track">
+    <div class="teacher-nav__progress-bar" id="progress-bar"></div>
+  </div>
+</nav>
+
+<main id="main-content">
+
+  <!-- 開場 -->
+  <section class="section" id="sec-intro" data-section>
+    <div class="container">
+      <span class="section-label">開場</span>
+      <h1 class="section-title">AI 文創實驗室：創造另一個我，讓故事動起來</h1>
+      <p style="font-size:1.3em;font-weight:700;color:var(--color-accent-dark)">
+        創造一個我，讓他遇到一件事，再讓故事動起來。
+      </p>
+      <div class="flow-diagram" aria-label="課程流程">
+        <span class="step">自拍</span><span class="arrow">→</span>
+        <span class="step">數位角色</span><span class="arrow">→</span>
+        <span class="step">劇情</span><span class="arrow">→</span>
+        <span class="step">分鏡</span><span class="arrow">→</span>
+        <span class="step">繪本</span><span class="arrow">→</span>
+        <span class="step">動畫</span><span class="arrow">→</span>
+        <span class="step">實體輸出</span>
+      </div>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>每人</h3>
+          <p class="mb-0">完成一張專屬角色卡</p>
+        </div>
+        <div class="card">
+          <h3>每組</h3>
+          <p class="mb-0">完成一句話故事與三格分鏡</p>
+        </div>
+        <div class="card">
+          <h3>教師</h3>
+          <p class="mb-0">示範完整動畫生成流程</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 系所介紹 -->
+  <section class="section" id="sec-dept" data-section>
+    <div class="container">
+      <span class="section-label">系所介紹</span>
+      <h2>資訊傳播系在做什麼？</h2>
+      <div class="tag-row" style="margin-bottom:1rem">
+        <span class="tag">AI 影像</span>
+        <span class="tag">互動設計</span>
+        <span class="tag">資訊視覺化</span>
+        <span class="tag">文創 IP</span>
+        <span class="tag">XR／動畫</span>
+        <span class="tag">人機互動</span>
+        <span class="tag">媒介轉譯</span>
+      </div>
+      <div class="callout">
+        <p class="mb-0">
+          資訊傳播系不只是做圖，而是把人、故事與資訊轉換成可理解、可互動、可傳播的作品。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 權利 -->
+  <section class="section" id="sec-rights" data-section>
+    <div class="container">
+      <span class="section-label">01 權利</span>
+      <h2>肖像權與著作權</h2>
+      <p>點擊每一題的選項，看看你的判斷是否正確。</p>
+      <div id="quiz-list"></div>
+      <div class="callout warn">
+        <strong>核心提醒：</strong>
+        <ul class="mb-0">
+          <li>拍攝同意 ≠ AI 處理同意</li>
+          <li>公開照片 ≠ 自由使用</li>
+          <li>AI 生成 ≠ 自動擁有全部權利</li>
+          <li>課堂練習 ≠ 商業使用</li>
+          <li>公開展示需另取得同意</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 角色 -->
+  <section class="section" id="sec-character" data-section>
+    <div class="container">
+      <span class="section-label">02 角色</span>
+      <h2>角色與故事</h2>
+      <div class="callout">
+        <p class="mb-0" style="font-weight:700">故事推動角色，角色帶動故事。</p>
+      </div>
+      <h3>角色最小結構</h3>
+      <div class="grid grid-3">
+        <div class="card"><strong>名稱</strong><p class="mb-0 small text-muted">角色的稱呼</p></div>
+        <div class="card"><strong>身分</strong><p class="mb-0 small text-muted">他是誰、做什麼的</p></div>
+        <div class="card"><strong>外觀錨點</strong><p class="mb-0 small text-muted">讓人一眼認出他的特徵</p></div>
+        <div class="card"><strong>特殊能力</strong><p class="mb-0 small text-muted">他能做到別人做不到的事</p></div>
+        <div class="card"><strong>個性弱點</strong><p class="mb-0 small text-muted">讓故事有阻礙與成長空間</p></div>
+      </div>
+      <h3 style="margin-top:1.6rem">範例角色卡</h3>
+      <div class="card" id="example-character"></div>
+    </div>
+  </section>
+
+  <!-- 03 CREATE -->
+  <section class="section" id="sec-create" data-section>
+    <div class="container">
+      <span class="section-label">03 CREATE 框架</span>
+      <h2>CREATE Prompt 框架（改編版）</h2>
+      <p class="callout mb-0" style="font-weight:700">記憶句：<span id="create-mnemonic"></span></p>
+      <div class="create-grid" id="create-grid" style="margin-top:1.2rem"></div>
+      <h3 style="margin-top:1.8rem">不完整 Prompt v.s. 完整 Prompt</h3>
+      <div class="prompt-compare">
+        <div>
+          <p class="small text-muted mb-0">不完整</p>
+          <p class="prompt-box" id="create-incomplete"></p>
+        </div>
+        <div>
+          <p class="small text-muted mb-0">完整（CREATE）</p>
+          <p class="prompt-box" id="create-complete"></p>
+          <div class="btn-row">
+            <button type="button" class="btn btn-sm btn-outline" id="copy-create-complete">複製完整 Prompt</button>
+            <span class="copy-feedback" id="copy-create-feedback"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 輪盤 -->
+  <section class="section" id="sec-wheel" data-section>
+    <div class="container">
+      <span class="section-label">04 隨機輪盤</span>
+      <h2>隨機輪盤示範</h2>
+      <div class="field" style="max-width:320px">
+        <label for="wheel-select">選擇目前使用的輪盤</label>
+        <select id="wheel-select"></select>
+        <p class="hint mb-0">預設建議：能力輪盤 或 阻礙輪盤</p>
+      </div>
+      <div class="card" id="wheel-mount" style="max-width:420px;margin:1rem auto"></div>
+    </div>
+  </section>
+
+  <!-- 05 劇情 -->
+  <section class="section" id="sec-story" data-section>
+    <div class="container">
+      <span class="section-label">05 劇情設計</span>
+      <h2>一句話故事公式</h2>
+      <p class="prompt-box">一位＿＿＿的角色，想要＿＿＿，但是＿＿＿，最後他＿＿＿。</p>
+      <h3 style="margin-top:1.6rem">三幕劇</h3>
+      <div class="grid grid-3">
+        <div class="card"><strong>第一幕：開始／鋪陳</strong><p class="mb-0 small text-muted">角色平常如何生活？他想得到什麼？</p></div>
+        <div class="card"><strong>第二幕：衝突／阻礙</strong><p class="mb-0 small text-muted">發生什麼問題？阻礙如何加劇？</p></div>
+        <div class="card"><strong>第三幕：改變／解決</strong><p class="mb-0 small text-muted">角色做了什麼選擇？最後產生什麼改變？</p></div>
+      </div>
+      <h3 style="margin-top:1.6rem">完整範例</h3>
+      <div class="card">
+        <p id="example-one-line-story" style="font-weight:700"></p>
+        <ol id="example-three-act" class="mb-0"></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 分鏡 -->
+  <section class="section" id="sec-storyboard" data-section>
+    <div class="container">
+      <span class="section-label">06 分鏡設計</span>
+      <h2>三格分鏡結構</h2>
+      <table>
+        <thead><tr><th>格</th><th>內容</th><th>鏡位</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>角色與目標</td><td>全景／中景</td></tr>
+          <tr><td>2</td><td>衝突高潮</td><td>近景／特寫</td></tr>
+          <tr><td>3</td><td>選擇與改變</td><td>中景／特寫</td></tr>
+        </tbody>
+      </table>
+      <h3>四種構圖示意</h3>
+      <div class="grid grid-2" id="shot-diagrams"></div>
+      <h3 style="margin-top:1.6rem">範例分鏡</h3>
+      <div class="grid grid-3" id="example-storyboard"></div>
+    </div>
+  </section>
+
+  <!-- 07 作品 part A：繪本與動畫 -->
+  <section class="section" id="sec-picturebook" data-section>
+    <div class="container">
+      <span class="section-label">07 作品（一）繪本與動畫</span>
+      <h2>繪本 Prompt v.s. 動畫 Prompt</h2>
+      <ul>
+        <li>繪本 Prompt 控制畫面構圖與角色姿態</li>
+        <li>動畫 Prompt 控制動作順序、幅度、鏡頭運動</li>
+        <li>學生完成靜態設計，動畫由教師視時間與 Token 示範</li>
+      </ul>
+      <div class="prompt-compare">
+        <div>
+          <p class="small text-muted mb-0">靜態繪本 Prompt</p>
+          <p class="prompt-box" id="static-prompt-example"></p>
+        </div>
+        <div>
+          <p class="small text-muted mb-0">動畫 Prompt</p>
+          <p class="prompt-box" id="animation-prompt-example"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 作品 part B：輸出與收束 -->
+  <section class="section" id="sec-output" data-section>
+    <div class="container">
+      <span class="section-label">07 作品（二）輸出與收束</span>
+      <h2>輸出流程</h2>
+      <div class="flow-diagram">
+        <span class="step">生成底圖</span><span class="arrow">→</span>
+        <span class="step">套入角色卡模板</span><span class="arrow">→</span>
+        <span class="step">加入文字</span><span class="arrow">→</span>
+        <span class="step">匯出 JPG</span><span class="arrow">→</span>
+        <span class="step">上傳 Final</span><span class="arrow">→</span>
+        <span class="step">CP1200 列印</span>
+      </div>
+      <h3 style="margin-top:2rem">完整專業流程</h3>
+      <div class="flow-diagram">
+        <span class="step">肖像</span><span class="arrow">→</span>
+        <span class="step">角色</span><span class="arrow">→</span>
+        <span class="step">故事</span><span class="arrow">→</span>
+        <span class="step">分鏡</span><span class="arrow">→</span>
+        <span class="step">繪本</span><span class="arrow">→</span>
+        <span class="step">動畫</span><span class="arrow">→</span>
+        <span class="step">文創 IP</span>
+      </div>
+      <div class="mode-banner" style="margin-top:2rem">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="mode-banner-text"></span>
+      </div>
+      <div data-mode-only="green">
+        <h3>綠燈模式流程</h3>
+        <ul><li>每人生成角色</li><li>每組生成三格圖</li><li>教師示範動畫</li></ul>
+      </div>
+      <div data-mode-only="yellow">
+        <h3>黃燈模式流程</h3>
+        <ul><li>每人只生成一張角色</li><li>每組只生成高潮畫面</li><li>其他分鏡用文字或草圖完成</li></ul>
+      </div>
+      <div data-mode-only="red">
+        <h3>紅燈模式流程</h3>
+        <ul>
+          <li>不使用即時 AI，使用預先準備的角色與背景圖</li>
+          <li>學生完成角色卡、CREATE、故事與分鏡</li>
+          <li>教師播放預先生成動畫，仍可完成輸出</li>
+        </ul>
+      </div>
+      <p class="text-center small text-muted" style="margin-top:2rem">
+        <a href="student.html">前往學生模式</a>　｜　<a href="print.html">前往輸出模式</a>　｜　<a href="index.html">回首頁</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<div class="jump-controls no-print">
+  <button type="button" id="btn-prev" aria-label="上一段">↑</button>
+  <button type="button" id="btn-next" aria-label="下一段">↓</button>
+</div>
+
+<script src="assets/js/shared.js"></script>
+<script src="assets/js/wheel.js"></script>
+<script src="assets/js/export.js"></script>
+<script src="data/wheel-options.js"></script>
+<script src="data/prompt-templates.js"></script>
+<script src="data/examples.js"></script>
+<script src="assets/js/teacher.js"></script>
+</body>
+</html>

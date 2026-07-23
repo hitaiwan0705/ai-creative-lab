@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>學生模式｜AI 文創實驗室：創造另一個我，讓故事動起來</title>
+<meta name="description" content="學生操作頁：角色設定、CREATE Prompt 組合器、隨機輪盤、一句話故事、三幕劇、三格分鏡、動畫 Prompt 與匯出。" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="student">
+<a class="skip-link" href="#main-content">跳到主要內容</a>
+
+<div class="student-progress">
+  <div class="container" style="padding:0">
+    <strong id="progress-label">目前進度：閱讀規則</strong>
+    <div class="student-progress__bar"><div class="student-progress__fill" id="student-progress-fill"></div></div>
+  </div>
+</div>
+
+<main id="main-content" class="container" style="padding-top:1.5rem;padding-bottom:4rem">
+  <h1>創造另一個我，讓故事動起來</h1>
+  <p class="text-muted">上午／下午場次通用｜請依序完成以下步驟，最後別忘了匯出你的作品內容。</p>
+
+  <!-- 1. 活動規則 -->
+  <section class="card" id="step-rules">
+    <span class="section-label">STEP 1</span>
+    <h2>活動規則</h2>
+    <div class="gate-notice">
+      <p style="font-weight:700">
+        請只使用本人同意使用的照片。拍攝別人前要先詢問，上傳 AI 前要再次確認。不願露臉者可使用物品、背影或原創角色。
+      </p>
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" id="agree-1" />
+      <label for="agree-1">我理解肖像使用規則</label>
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" id="agree-2" />
+      <label for="agree-2">我不會擅自使用名人、網路照片或具名動漫角色</label>
+    </div>
+    <button type="button" class="btn btn-accent" id="btn-start" disabled>開始創作</button>
+    <p class="small text-muted" id="gate-hint">請先勾選以上兩項才能繼續。</p>
+  </section>
+
+  <div id="workspace" hidden>
+
+    <!-- 2. 基本資料 -->
+    <section class="card" id="step-info" data-step>
+      <span class="section-label">STEP 2</span>
+      <h2>基本資料</h2>
+      <div class="grid grid-3">
+        <div class="field">
+          <label for="meta-group">組別</label>
+          <input type="text" id="meta-group" maxlength="20" />
+        </div>
+        <div class="field">
+          <label for="meta-seat">座號或代號</label>
+          <input type="text" id="meta-seat" maxlength="20" />
+        </div>
+        <div class="field">
+          <label for="meta-title">作品名稱</label>
+          <input type="text" id="meta-title" maxlength="30" placeholder="例如：星光攝影師" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="meta-name">姓名（非必要）</label>
+        <input type="text" id="meta-name" maxlength="20" />
+        <p class="hint mb-0">若不方便填寫姓名可留空，僅用於教師現場核對。</p>
+      </div>
+    </section>
+
+    <!-- 3. 角色五格卡 -->
+    <section class="card" id="step-character" data-step>
+      <span class="section-label">STEP 3</span>
+      <h2>角色五格卡</h2>
+      <div class="field">
+        <label for="char-name">角色名稱</label>
+        <p class="hint">為你的角色取一個名字</p>
+        <input type="text" id="char-name" maxlength="20" />
+        <p class="example">範例：林霧</p>
+      </div>
+      <div class="field">
+        <label for="char-identity">角色身分</label>
+        <p class="hint">他是誰？平常做什麼？</p>
+        <textarea id="char-identity" maxlength="60"></textarea>
+        <p class="example">範例：17 歲的街頭攝影師，白天在夜市幫忙顧攤</p>
+        <p class="char-count" data-count-for="char-identity"></p>
+      </div>
+      <div class="field">
+        <label for="char-appearance">外觀錨點</label>
+        <p class="hint">讓人一眼認出他的外觀特徵</p>
+        <textarea id="char-appearance" maxlength="60"></textarea>
+        <p class="example">範例：短髮、深藍色防水外套、隨身背相機包</p>
+        <p class="char-count" data-count-for="char-appearance"></p>
+      </div>
+      <div class="field">
+        <label for="char-ability">特殊能力</label>
+        <p class="hint">他能做到別人做不到的事</p>
+        <textarea id="char-ability" maxlength="60"></textarea>
+        <p class="example">範例：能透過相機看到物品殘留的記憶片段</p>
+        <p class="char-count" data-count-for="char-ability"></p>
+      </div>
+      <div class="field">
+        <label for="char-weakness">個性弱點</label>
+        <p class="hint">讓故事有阻礙與成長空間的弱點</p>
+        <textarea id="char-weakness" maxlength="60"></textarea>
+        <p class="example">範例：太專注拍照時會忽略身邊的危險</p>
+        <p class="char-count" data-count-for="char-weakness"></p>
+      </div>
+    </section>
+
+    <!-- 4. CREATE Prompt 組合器 -->
+    <section class="card" id="step-create" data-step>
+      <span class="section-label">STEP 4</span>
+      <h2>CREATE Prompt 組合器</h2>
+      <div class="btn-row" style="margin-top:0;margin-bottom:1rem">
+        <button type="button" class="btn btn-outline btn-sm" id="create-apply-character">沿用角色五格</button>
+      </div>
+      <fieldset>
+        <legend>輸出版本</legend>
+        <div class="checkbox-row">
+          <input type="radio" name="create-mode" id="create-mode-short" value="short" checked style="width:auto;height:auto" />
+          <label for="create-mode-short" style="font-weight:500">簡短版</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="radio" name="create-mode" id="create-mode-advanced" value="advanced" style="width:auto;height:auto" />
+          <label for="create-mode-advanced" style="font-weight:500">進階版</label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label for="create-context">C・情境 Context</label>
+        <p class="hint">在哪裡？什麼時間？</p>
+        <textarea id="create-context" maxlength="80"></textarea>
+        <p class="example">範例：近未來的港口城市，傍晚下著細雨</p>
+      </div>
+      <div class="field">
+        <label for="create-role">R・角色 Role</label>
+        <p class="hint">誰？外觀特徵是什麼？</p>
+        <textarea id="create-role" maxlength="80"></textarea>
+        <p class="example">範例：17 歲街頭攝影師，短髮、深藍色防水外套</p>
+      </div>
+      <div class="field">
+        <label for="create-elements">E・元素 Elements</label>
+        <p class="hint">有哪些關鍵物件、道具？</p>
+        <textarea id="create-elements" maxlength="80"></textarea>
+        <p class="example">範例：一台復古底片相機、被雨水打濕的招牌燈光</p>
+      </div>
+      <div class="field">
+        <label for="create-action">A・動作 Action</label>
+        <p class="hint">正在做什麼？</p>
+        <textarea id="create-action" maxlength="80"></textarea>
+        <p class="example">範例：舉起相機，準備拍下街角一閃而過的畫面</p>
+      </div>
+      <div class="field">
+        <label for="create-tone">T・風格與情緒 Tone</label>
+        <p class="hint">畫面氛圍是什麼感覺？</p>
+        <textarea id="create-tone" maxlength="80"></textarea>
+        <p class="example">範例：懷舊、寧靜中帶點孤獨感</p>
+      </div>
+      <div class="field">
+        <label for="create-expectation">E・輸出與限制 Expectation</label>
+        <p class="hint">希望輸出成什麼形式？有什麼限制？</p>
+        <textarea id="create-expectation" maxlength="80"></textarea>
+        <p class="example">範例：直式構圖、電影感畫面、不要出現任何文字或 Logo</p>
+      </div>
+
+      <h3>組合結果</h3>
+      <p class="prompt-box" id="create-result" aria-live="polite"></p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline" id="create-copy">一鍵複製</button>
+        <button type="button" class="btn btn-ghost" id="create-clear">清除</button>
+        <button type="button" class="btn btn-ghost" id="create-restore">還原範例</button>
+        <span class="copy-feedback" id="create-copy-feedback"></span>
+      </div>
+      <div class="callout warn" style="margin-top:1rem">
+        <p class="mb-0">請到指定 AI 工具（Moonland／Runway／ChatGPT／Gemini 等）上傳照片與貼上 Prompt，<strong>請勿在本站上傳照片</strong>。</p>
+      </div>
+    </section>
+
+    <!-- 5. 輪盤 -->
+    <section class="card" id="step-wheel" data-step>
+      <span class="section-label">STEP 5</span>
+      <h2>隨機輪盤</h2>
+      <p class="hint">每個輪盤最多可重抽一次，抽完後可選擇接受或自行修改。</p>
+      <div class="field" style="max-width:320px">
+        <label for="student-wheel-select">選擇輪盤</label>
+        <select id="student-wheel-select"></select>
+      </div>
+      <div class="card" id="student-wheel-mount" style="max-width:420px"></div>
+      <div class="btn-row" id="wheel-apply-row" hidden></div>
+    </section>
+
+    <!-- 6. 一句話故事 -->
+    <section class="card" id="step-story" data-step>
+      <span class="section-label">STEP 6</span>
+      <h2>一句話故事</h2>
+      <p class="prompt-box mb-0">一位＿＿＿的角色，想要＿＿＿，但是＿＿＿，最後他＿＿＿。</p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline btn-sm" id="story-apply-character">沿用角色五格</button>
+      </div>
+      <div class="field" style="margin-top:1rem">
+        <label for="story-protagonist">主角</label>
+        <input type="text" id="story-protagonist" maxlength="40" />
+        <p class="example">範例：街頭攝影師林霧</p>
+      </div>
+      <div class="field">
+        <label for="story-goal">目標</label>
+        <input type="text" id="story-goal" maxlength="40" />
+        <p class="example">範例：找到能證明自己攝影天賦的機會</p>
+      </div>
+      <div class="field">
+        <label for="story-obstacle">阻礙</label>
+        <input type="text" id="story-obstacle" maxlength="60" />
+        <p class="example">範例：拍到的照片洩漏了不該曝光的記憶</p>
+      </div>
+      <div class="field">
+        <label for="story-change">最後改變</label>
+        <input type="text" id="story-change" maxlength="60" />
+        <p class="example">範例：選擇公開這段記憶，成為被信任的記錄者</p>
+      </div>
+      <h3>自動組成結果</h3>
+      <p class="prompt-box" id="story-result" aria-live="polite"></p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline" id="story-copy">複製</button>
+        <span class="copy-feedback" id="story-copy-feedback"></span>
+      </div>
+    </section>
+
+    <!-- 7. 三幕劇 -->
+    <section class="card" id="step-threeact" data-step>
+      <span class="section-label">STEP 7</span>
+      <h2>三幕劇</h2>
+      <div class="btn-row" style="margin-top:0;margin-bottom:1rem">
+        <button type="button" class="btn btn-outline btn-sm" id="threeact-apply-story">沿用一句話故事</button>
+      </div>
+      <h3>第一幕：開始／鋪陳</h3>
+      <div class="field">
+        <label for="act1-life">角色平常如何生活？</label>
+        <textarea id="act1-life" maxlength="80"></textarea>
+      </div>
+      <div class="field">
+        <label for="act1-want">他想得到什麼？</label>
+        <textarea id="act1-want" maxlength="60"></textarea>
+      </div>
+      <h3>第二幕：衝突／阻礙</h3>
+      <div class="field">
+        <label for="act2-problem">發生什麼問題？</label>
+        <textarea id="act2-problem" maxlength="80"></textarea>
+      </div>
+      <div class="field">
+        <label for="act2-escalate">阻礙如何加劇？</label>
+        <textarea id="act2-escalate" maxlength="80"></textarea>
+      </div>
+      <h3>第三幕：改變／解決</h3>
+      <div class="field">
+        <label for="act3-choice">角色做了什麼選擇？</label>
+        <textarea id="act3-choice" maxlength="60"></textarea>
+      </div>
+      <div class="field">
+        <label for="act3-change">最後產生什麼改變？</label>
+        <textarea id="act3-change" maxlength="60"></textarea>
+      </div>
+      <h3>自動摘要成三句故事</h3>
+      <ol class="prompt-box" id="threeact-result" aria-live="polite" style="list-style-position:inside"></ol>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline" id="threeact-copy">複製</button>
+        <span class="copy-feedback" id="threeact-copy-feedback"></span>
+      </div>
+    </section>
+
+    <!-- 8. 三格分鏡 -->
+    <section class="card" id="step-storyboard" data-step>
+      <span class="section-label">STEP 8</span>
+      <h2>三格分鏡</h2>
+      <div class="btn-row" style="margin-top:0;margin-bottom:1rem">
+        <button type="button" class="btn btn-outline btn-sm" id="storyboard-apply-threeact">沿用三幕劇</button>
+      </div>
+      <div id="storyboard-shots"></div>
+    </section>
+
+    <!-- 9. 動畫 Prompt -->
+    <section class="card" id="step-animation" data-step>
+      <span class="section-label">STEP 9</span>
+      <h2>動畫 Prompt（僅套用於第二格或高潮格）</h2>
+      <div class="btn-row" style="margin-top:0;margin-bottom:1rem">
+        <button type="button" class="btn btn-outline btn-sm" id="animation-apply-shot">沿用第二格分鏡</button>
+      </div>
+      <div class="field">
+        <label for="anim-start">起始動作</label>
+        <textarea id="anim-start" maxlength="60"></textarea>
+      </div>
+      <div class="field">
+        <label for="anim-follow">後續動作</label>
+        <textarea id="anim-follow" maxlength="60"></textarea>
+      </div>
+      <div class="field">
+        <label for="anim-expression">表情變化</label>
+        <textarea id="anim-expression" maxlength="60"></textarea>
+      </div>
+      <div class="field">
+        <label for="anim-env">環境動態</label>
+        <textarea id="anim-env" maxlength="60"></textarea>
+      </div>
+      <div class="field">
+        <label for="anim-camera">鏡頭運動</label>
+        <textarea id="anim-camera" maxlength="60"></textarea>
+      </div>
+      <div class="field">
+        <label for="anim-nodeform">禁止變形條件</label>
+        <textarea id="anim-nodeform" maxlength="60">禁止臉部、服裝、道具變形</textarea>
+      </div>
+      <h3>自動組成動畫 Prompt</h3>
+      <p class="prompt-box" id="animation-result" aria-live="polite"></p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline" id="animation-copy">複製</button>
+        <span class="copy-feedback" id="animation-copy-feedback"></span>
+      </div>
+    </section>
+
+    <!-- 10. 匯出 -->
+    <section class="card" id="step-export" data-step>
+      <span class="section-label">STEP 10</span>
+      <h2>匯出作品</h2>
+      <div class="callout warn">
+        <p class="mb-0">頁面重新整理後，尚未匯出的內容將會消失，請務必先下載備份。</p>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" id="export-all">下載全部檔案（文字＋JSON＋可列印HTML）</button>
+      </div>
+      <p class="small text-muted" id="export-status" aria-live="polite" style="margin-top:0.6rem"></p>
+      <p class="small text-muted">
+        檔名格式：<code>組別_座號或代號_作品名稱</code>，完成後請將角色 Prompt 貼到指定 AI 工具生成圖片，
+        再依<a href="print.html">輸出模式</a>說明列印。
+      </p>
+    </section>
+
+  </div>
+</main>
+
+<script src="assets/js/shared.js"></script>
+<script src="assets/js/wheel.js"></script>
+<script src="assets/js/export.js"></script>
+<script src="data/wheel-options.js"></script>
+<script src="data/prompt-templates.js"></script>
+<script src="data/examples.js"></script>
+<script src="assets/js/student.js"></script>
+</body>
+</html>

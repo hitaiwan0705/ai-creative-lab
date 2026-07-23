@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>輸出模式｜AI 文創實驗室：創造另一個我，讓故事動起來</title>
+<meta name="description" content="輸出模式：Canon SELPHY CP1200 輸出規格、檔名規則、列印檢查清單與輸出小隊角色分工。" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="student">
+<a class="skip-link" href="#main-content">跳到主要內容</a>
+
+<main id="main-content" class="container" style="padding-top:1.5rem;padding-bottom:4rem">
+  <h1>輸出模式：角色卡列印 SOP</h1>
+  <p class="text-muted">供輸出小隊操作，使用 Canon SELPHY CP1200 完成角色卡實體輸出。</p>
+
+  <section class="card">
+    <span class="section-label">輸出規格</span>
+    <h2>CP1200 輸出規格</h2>
+    <table>
+      <tbody>
+        <tr><th>尺寸</th><td>4×6 英吋</td></tr>
+        <tr><th>建議版型</th><td>直式 1200 × 1800 px</td></tr>
+        <tr><th>色彩</th><td>sRGB</td></tr>
+        <tr><th>格式</th><td>JPG</td></tr>
+        <tr><th>安全邊界</th><td>文字與重要元素距邊緣至少 5–7 mm</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warn">
+      <p class="mb-0">AI 底圖不直接生成中文字；中文請用 Canva、PowerPoint 或網頁模板另外加入。</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <span class="section-label">檔名規則</span>
+    <h2>檔名產生小工具</h2>
+    <p class="prompt-box mb-0">組別_座號或代號_作品名稱.jpg　　例如：03_17_星光攝影師.jpg</p>
+    <div class="grid grid-3" style="margin-top:1rem">
+      <div class="field">
+        <label for="fn-group">組別</label>
+        <input type="text" id="fn-group" maxlength="20" />
+      </div>
+      <div class="field">
+        <label for="fn-seat">座號或代號</label>
+        <input type="text" id="fn-seat" maxlength="20" />
+      </div>
+      <div class="field">
+        <label for="fn-title">作品名稱</label>
+        <input type="text" id="fn-title" maxlength="30" />
+      </div>
+    </div>
+    <p class="prompt-box" id="fn-result" aria-live="polite">請輸入以上欄位</p>
+    <div class="btn-row">
+      <button type="button" class="btn btn-outline" id="fn-copy">複製檔名</button>
+      <span class="copy-feedback" id="fn-copy-feedback"></span>
+    </div>
+  </section>
+
+  <section class="card">
+    <span class="section-label">上傳連結</span>
+    <h2>作品上傳入口</h2>
+    <p class="hint">請教師填入本場次實際使用的雲端資料夾或表單連結。</p>
+    <div class="field">
+      <label for="link-drive">Google Drive 資料夾連結</label>
+      <input type="text" id="link-drive" placeholder="https://drive.google.com/..." />
+    </div>
+    <div class="field">
+      <label for="link-form">Google 表單連結</label>
+      <input type="text" id="link-form" placeholder="https://forms.gle/..." />
+    </div>
+    <p class="external-link-note" id="link-preview" style="display:none">
+      將離開本網站：<a id="link-anchor" target="_blank" rel="noopener noreferrer"></a>
+    </p>
+  </section>
+
+  <section class="card">
+    <span class="section-label">檢查清單</span>
+    <h2>輸出檢查清單</h2>
+    <p class="hint">每張角色卡送印前請逐項確認。</p>
+    <ul class="checklist" id="print-checklist">
+      <li><input type="checkbox" id="chk-1" /><label for="chk-1">檔名是否正確</label></li>
+      <li><input type="checkbox" id="chk-2" /><label for="chk-2">圖片是否為直式</label></li>
+      <li><input type="checkbox" id="chk-3" /><label for="chk-3">是否已加入角色名稱</label></li>
+      <li><input type="checkbox" id="chk-4" /><label for="chk-4">是否確認無錯字</label></li>
+      <li><input type="checkbox" id="chk-5" /><label for="chk-5">是否為最終版本</label></li>
+      <li><input type="checkbox" id="chk-6" /><label for="chk-6">是否只送印一次</label></li>
+    </ul>
+    <p class="small text-muted" id="checklist-status" aria-live="polite"></p>
+  </section>
+
+  <section class="card">
+    <span class="section-label">輸出小隊</span>
+    <h2>學生輸出小隊角色</h2>
+    <div class="role-cards">
+      <div class="card"><h3>檔案接收員</h3><p class="mb-0 small">確認每位同學的檔案都已上傳且檔名正確</p></div>
+      <div class="card"><h3>版面檢查員</h3><p class="mb-0 small">檢查版面是否直式、無錯字、元素完整</p></div>
+      <div class="card"><h3>印表機操作員</h3><p class="mb-0 small">操作 CP1200，確認每張只送印一次</p></div>
+      <div class="card"><h3>分類員</h3><p class="mb-0 small">依組別／座號整理列印完成的角色卡</p></div>
+    </div>
+  </section>
+
+  <p class="text-center small text-muted">
+    <a href="teacher.html">前往教師模式</a>　｜　<a href="student.html">前往學生模式</a>　｜　<a href="index.html">回首頁</a>
+  </p>
+</main>
+
+<script src="assets/js/shared.js"></script>
+<script src="assets/js/print.js"></script>
+</body>
+</html>
