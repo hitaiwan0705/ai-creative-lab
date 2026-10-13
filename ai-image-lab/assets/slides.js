@@ -183,6 +183,21 @@
       notes: "整堂的價值轉折。<b>不要說「變漂亮」</b>，改問「你希望給別人什麼感覺？」——這其實已經在教意象（Kansei）與自我呈現，但不寫術語。" },
 
     { seg: "trap", html: `
+      <div class="cols wide-left">
+        <div>
+          <div class="kicker">SORT IT</div>
+          <h2 style="font-size:clamp(2rem,4.6vw,3.8rem)">排排看：<br>哪一張<em>被改最多</em>？</h2>
+          <div data-sorter></div>
+        </div>
+        <div>
+          <p class="lead">三張裡面，<b>只有一張是原圖</b>。</p>
+          <p class="lead soft">另外兩張用同一套「美顏」做過——一張輕、一張重。<br>先憑第一眼排，再揭曉。</p>
+          <p class="lead"><b style="color:var(--cobalt)">你第一眼，認得出原圖嗎？</b></p>
+        </div>
+      </div>`,
+      notes: "全班舉手投票，老師依多數意見點三張，再按「揭曉」。<b>常見結果：很多人把「輕度美顏」當成原圖</b>——看過重度之後，輕度就顯得「很自然」，這就是錨定效應。這三張是同一張原圖用程式做的（磨皮、提亮、眼睛放大、瘦臉），只控制「強度」一個變因；第 12 頁那張則是 AI 重新生成，連人都換了。兩種「被改」的機制不同。" },
+
+    { seg: "trap", html: `
       <div class="cols">
         <div>
           <div class="kicker">THE BEAUTY TRAP</div>
@@ -191,7 +206,7 @@
           <p class="lead reveal-target" data-reveal hidden><b style="color:var(--cobalt)">AI 也有學來的「審美習慣」。</b><br>它從大量人類產生的影像中學習——所以不是完全中立的鏡子。</p>
           <button class="btn ghost" data-reveal-btn>揭曉</button>
         </div>
-        ${ba("original","beautified",{cls:"fit"})}
+        ${ba("original","beautified-heavy",{cls:"fit"})}
       </div>`,
       notes: "先問「為什麼？」<b>不要急著給標準答案</b>，讓學生猜 1–2 分鐘再按「揭曉」。" },
 
@@ -213,7 +228,7 @@
         ${[["換顏色","色彩與視覺感知"],["換髮型","AI 影像生成"],["要求 AI 不要亂改","Prompt／需求定義"],["比較版本","設計與使用者判斷"],["發現 AI 偷偷美顏","AI Bias／媒體素養"],["不同平台不同形象","數位媒體與傳播"]].map(([a,b])=>`<button type="button">${a}<span class="to">${b}</span></button>`).join("")}
       </div>
       <p class="big" style="margin-top:.8em;font-size:clamp(1.3rem,3vw,2.4rem)">原來這些都是<span style="color:var(--terra)">資訊傳播</span>。</p>
-      <p class="lead soft">科技怎麼影響人的感覺、選擇與溝通？</p>`,
+      <div class="qr-box" style="margin-top:.6em"><div class="qr" data-qr="#feedback"></div><p class="lead" style="margin:0">科技怎麼影響人的感覺、選擇與溝通？<br><b style="color:var(--cobalt)">掃碼填 1 分鐘回饋 →</b></p></div>`,
       notes: "逐張點開，每點一張唸一次。最後收三句：<b>① AI 可以幫我快速試很多可能 ② AI 生成的版本不等於真實的我 ③ 最後選哪一個，應該由我決定。</b><br>10/20 接續句：「上週我們發現 AI 可能偷偷改變我們看到的自己；今天來看看，它會不會也偷偷改變我們看到的世界。」" }
   ];
 
@@ -317,6 +332,13 @@
     };
     if (rs) rs.onclick = () => { clearInterval(h); h = null; left = total; fmt(); tg.textContent = label; };
   });
+
+  // 排序活動
+  document.querySelectorAll("[data-sorter]").forEach(el => window.LAB.sorter(el, [
+    { key: "beautified-light", rank: 2 },
+    { key: "beautified-heavy", rank: 3 },
+    { key: "original", rank: 1, reveal: "原圖（沒改）" }
+  ]));
 
   // QR
   document.querySelectorAll("[data-qr]").forEach(el => qr(el, studentURL(el.dataset.qr), 170));

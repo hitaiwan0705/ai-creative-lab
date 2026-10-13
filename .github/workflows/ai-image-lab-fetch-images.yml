@@ -1,8 +1,9 @@
-# 把 ai-image-lab/images/sources.txt 列出的生成圖下載、轉成 900x1200 JPG 並提交回 repo
+# 把 ai-image-lab/**/images/sources.txt 列出的生成圖下載並轉成 JPG，提交回 repo
+#   直式（人像）裁成 900x1200；橫式裁成 1200x900
 name: ai-image-lab fetch images
 on:
   push:
-    paths: ["ai-image-lab/images/sources.txt"]
+    paths: ["ai-image-lab/**/images/sources.txt"]
   workflow_dispatch:
 permissions:
   contents: write
@@ -14,17 +15,22 @@ jobs:
       - name: Download and convert
         run: |
           pip install --quiet pillow
-          cd ai-image-lab/images
-          grep -v '^#' sources.txt | while read -r name url; do
-            [ -z "$name" ] && continue
-            curl -fsSL -o "/tmp/$name.png" "$url" && echo "got $name" || echo "FAILED $name"
+          for src in $(find ai-image-lab -path '*/images/sources.txt'); do
+            dir=$(dirname "$src"); mkdir -p "/tmp/dl/$dir"
+            grep -v '^#' "$src" | while read -r name url; do
+              [ -z "$name" ] && continue
+              [ -f "$dir/$name.jpg" ] && continue
+              curl -fsSL -o "/tmp/dl/$dir/$name.png" "$url" && echo "got $dir/$name" || echo "FAILED $dir/$name"
+            done
           done
           python3 - <<'PY'
           import glob, os
           from PIL import Image, ImageOps
-          for f in glob.glob('/tmp/*.png'):
-              im = ImageOps.fit(Image.open(f).convert('RGB'), (900, 1200), Image.LANCZOS)
-              out = os.path.basename(f)[:-4] + '.jpg'
+          for f in glob.glob('/tmp/dl/**/*.png', recursive=True):
+              im = Image.open(f).convert('RGB')
+              size = (900, 1200) if im.height >= im.width else (1200, 900)
+              im = ImageOps.fit(im, size, Image.LANCZOS)
+              out = f.replace('/tmp/dl/', '')[:-4] + '.jpg'
               im.save(out, quality=82, optimize=True, progressive=True)
               print('saved', out, os.path.getsize(out))
           PY
@@ -32,5 +38,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ai-image-lab/images/*.jpg
-          git diff --cached --quiet && echo "nothing new" || (git commit -m "ai-image-lab: 加入示範人物圖片" && git push)
+          git add -A ai-image-lab
+          git diff --cached --quiet && echo "nothing new" || (git commit -m "ai-image-lab: 加入生成圖片" && git push)

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 資訊實驗室｜學生任務</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css?v=4">
+</head>
+<body>
+<div class="stu">
+  <header>
+    <span class="tag">AI INFO LAB／第二堂學生任務頁</span>
+    <h1>你看到的世界，是誰選的？</h1>
+    <p style="margin:.4em 0 0">上週看 AI 怎麼改「自己」，今天看它怎麼改「世界」。</p>
+  </header>
+
+  <nav class="stu-tabs" aria-label="任務">
+    <a href="#bubble">任務1 推薦泡泡</a><a href="#photo">任務2 真假照片</a><a href="#news">任務3 假新聞偵探</a><a href="#lie">AI 會說謊？</a><a href="#mine">轉傳前三秒</a>
+  </nav>
+
+  <section id="bubble">
+    <h2><small>TASK 01｜約 7 分鐘</small>推薦泡泡</h2>
+    <p>這是一個迷你動態牆。<b>想看的就按 ♥</b>，按完「下一輪」，一共 6 輪。</p>
+    <div class="box note"><b>規則公開：</b>你按讚的主題，下一輪出現機率 ×1.8；看到但沒按的 ×0.85。真的平台還會看你停留幾秒、分享給誰。</div>
+    <div id="bub" class="box"><noscript>這個活動需要開啟 JavaScript。</noscript></div>
+  </section>
+
+  <section id="photo">
+    <h2><small>TASK 02</small>真的還是 AI？</h2>
+    <p>每張選一個，四張都選完再按「揭曉」。</p>
+    <div id="roa"></div>
+  </section>
+
+  <section id="news">
+    <h2><small>TASK 03｜約 9 分鐘</small>假新聞偵探</h2>
+    <div class="box"><b>查證四步：</b>
+      <ol id="steps" style="margin:.4em 0 0;padding-left:1.4em"></ol>
+    </div>
+    <p class="soft" style="color:var(--ink-soft)">以下三則是<b>練習用的虛構新聞</b>。</p>
+    <div id="det"></div>
+    <div class="box note"><b>查不出來？交給查核專家：</b><ul id="fc" style="margin:.4em 0 0;padding-left:1.2em"></ul></div>
+  </section>
+
+  <section id="lie">
+    <h2><small>DEMO</small>AI 會說謊嗎？</h2>
+    <p>把這段丟給任何一個聊天 AI，看它怎麼回答：</p>
+    <div class="box"><p id="hp"></p><div class="row"><button class="btn" data-copy="hp">複製</button></div></div>
+    <p>提示：這部電影<b>根本不存在</b>。如果 AI 很認真地回答了，那就是「AI 幻覺」——它是在接出最像答案的句子，不是在查資料。</p>
+  </section>
+
+  <section id="mine">
+    <h2><small>MY RULE</small>轉傳之前，停三秒</h2>
+    <label class="f" for="rule">轉傳之前，我會先……</label>
+    <input id="rule" type="text" placeholder="例：看是誰說的、找別家有沒有報">
+    <div class="box"><p id="rulep">轉傳之前，我會先＿＿＿＿＿＿。</p></div>
+    <div class="box note">
+      <b>今天帶走三句話</b><br>
+      ① 我看到的世界，是被挑選過的。<br>
+      ② 眼見不一定為憑，先查來源。<br>
+      ③ 轉傳之前，停三秒。
+    </div>
+    <p><a href="../student.html">← 上週的任務頁（AI 形象實驗室）</a></p>
+  </section>
+</div>
+<script src="../assets/common.js?v=4"></script>
+<script src="assets/data.js?v=1"></script>
+<script src="assets/w2.js?v=1"></script>
+<script>
+(function(){
+  var L = window.LAB, D = window.W2;
+  L.w2.bubble(document.getElementById("bub"));
+  L.w2.realOrAI(document.getElementById("roa"), "student");
+  L.w2.detective(document.getElementById("det"));
+  document.getElementById("steps").innerHTML = D.checklist.map(function (c) { return "<li><b>" + c[0] + "</b>：" + c[1] + "</li>"; }).join("");
+  document.getElementById("fc").innerHTML = D.factcheck.map(function (c) { return '<li><a href="' + c[1] + '" target="_blank" rel="noopener">' + c[0] + "</a></li>"; }).join("");
+  document.getElementById("hp").textContent = D.hallucinationPrompt;
+  document.querySelector("[data-copy=hp]").onclick = function (e) { L.copy(D.hallucinationPrompt, e.target); };
+  var rule = document.getElementById("rule");
+  rule.addEventListener("input", function () { document.getElementById("rulep").textContent = "轉傳之前，我會先" + (rule.value.trim() || "＿＿＿＿＿＿") + "。"; });
+  var tabs = [].slice.call(document.querySelectorAll(".stu-tabs a"));
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) {
+      if (e.isIntersecting) tabs.forEach(function (t) { t.classList.toggle("on", t.hash === "#" + e.target.id); });
+    }); }, { rootMargin: "-40% 0px -55% 0px" });
+    document.querySelectorAll(".stu section").forEach(function (s) { io.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>

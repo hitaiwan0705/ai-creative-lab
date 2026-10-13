@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 資訊實驗室</title>
+<meta name="description" content="高中微課程第二堂：用推薦、照片與新聞，看看 AI 怎麼改變我們看到的世界。中國文化大學資訊傳播學系。">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css?v=4">
+</head>
+<body>
+<header class="site-head">
+  <span class="brand">AI 資訊實驗室 <span class="mono" style="font-weight:500;color:var(--ink-soft)">／第二堂</span></span>
+  <nav><a href="../index.html">第一堂</a><a href="slides.html">投影上課</a><a href="student.html">學生任務</a></nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <span class="tag">高中微課程｜第二堂｜60 分鐘</span>
+      <h1>你看到的世界，<em>是誰選的</em>？</h1>
+      <p class="sub">上週發現 AI 可能偷偷改變我們看到的自己；今天來看看，它會不會也偷偷改變我們看到的世界——你的動態牆、你相信的照片、你轉傳的新聞。</p>
+      <div class="cta">
+        <a class="btn" href="slides.html">開始上課（投影）</a>
+        <a class="btn ghost" href="student.html">學生任務頁</a>
+      </div>
+    </div>
+    <div class="hero-grid" id="heroGrid"></div>
+  </section>
+
+  <section class="band">
+    <h2>這堂課在玩什麼</h2>
+    <div class="facts">
+      <div><b>CORE</b>推薦泡泡 → 真假照片 → 假新聞偵探</div>
+      <div><b>ATTITUDE</b>不是教你「看出假的」，而是養成「先查再信」</div>
+      <div><b>TOOLS</b>手機瀏覽器即可；AI 幻覺由老師現場示範</div>
+      <div><b>RATIO</b>5 分回顧＋43 分體驗＋12 分分享</div>
+    </div>
+  </section>
+
+  <section class="band">
+    <h2>60 分鐘流程</h2>
+    <ol class="timeline">
+      <li><span class="t">00–05</span><div><h3>上週回顧：AI 改了我們看到的自己</h3><p>今天看它會不會也改我們看到的世界。</p></div></li>
+      <li class="play"><span class="t">05–17</span><div><h3>第一關｜推薦泡泡</h3><p>在迷你動態牆按讚 6 輪，看自己的泡泡長怎樣，再跟同學比。</p></div></li>
+      <li class="play"><span class="t">17–29</span><div><h3>第二關｜真的還是 AI？</h3><p>四張照片投票——揭曉後發現，眼睛已經不夠用了。</p></div></li>
+      <li class="play"><span class="t">29–41</span><div><h3>第三關｜假新聞偵探</h3><p>停、查來源、找別家、追原圖：三則新聞實戰。</p></div></li>
+      <li><span class="t">41–48</span><div><h3>AI 會說謊嗎？</h3><p>問 AI 一部不存在的電影，看它怎麼回答。</p></div></li>
+      <li><span class="t">48–55</span><div><h3>轉傳前停三秒</h3><p>寫下自己的轉傳規則。</p></div></li>
+      <li><span class="t">55–60</span><div><h3>最後揭曉</h3><p>推薦演算法、生成影像、資訊查證、AI 幻覺——都是資訊傳播。</p></div></li>
+    </ol>
+  </section>
+
+  <section class="band">
+    <h2>帶走三句話</h2>
+    <div class="three">
+      <p>我看到的世界，是被挑選過的。</p>
+      <p>眼見不一定為憑，先查來源。</p>
+      <p>轉傳之前，停三秒。</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  中國文化大學 資訊傳播學系｜AI 資訊實驗室｜本頁照片皆為 AI 生成（Figma AI），新聞皆為練習用虛構內容。<a href="../index.html">← 第一堂：AI 形象實驗室</a>
+</footer>
+<script src="../assets/common.js?v=4"></script>
+<script src="assets/w2.js?v=1"></script>
+<script>
+  document.getElementById("heroGrid").innerHTML =
+    ["snow-taipei","shiba-chef","typhoon-wave","students-field"].map(function (k) { return LAB.fig(k, { caption: false }); }).join("");
+  LAB.wireImages();
+</script>
+</body>
+</html>

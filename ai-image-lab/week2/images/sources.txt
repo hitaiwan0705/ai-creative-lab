@@ -1,0 +1,5 @@
+# 檔名 <空白> 來源網址（Figma AI 生成，gemini-3.1-flash-image，2026-10-13；四張全部都是 AI 生成）
+snow-taipei https://www.figma.com/api/mcp/asset/aff7c064-e368-4004-838f-832f3d081586.png
+typhoon-wave https://www.figma.com/api/mcp/asset/244a526d-8392-492f-bbb8-05d5a215e6ce.png
+shiba-chef https://www.figma.com/api/mcp/asset/0f1457c3-0dfa-419b-8270-aba6a60118f9.png
+students-field https://www.figma.com/api/mcp/asset/3027eae2-ed9d-406d-baed-6c893025f42e.png

@@ -6,7 +6,7 @@
 <title>AI 形象實驗室｜學生任務</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=3">
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 <div class="stu">
@@ -17,7 +17,7 @@
   </header>
 
   <nav class="stu-tabs" aria-label="任務">
-    <a href="#rules">規則</a><a href="#task1">任務1 顏色</a><a href="#task2">任務2 髮型</a><a href="#task3">任務3 風格</a><a href="#builder">自己寫</a><a href="#mine">我的版本</a>
+    <a href="#rules">規則</a><a href="#task1">任務1 顏色</a><a href="#task2">任務2 髮型</a><a href="#task3">任務3 風格</a><a href="#sort">排排看</a><a href="#builder">自己寫</a><a href="#mine">我的版本</a><a href="#feedback">回饋</a>
   </nav>
 
   <section id="rules">
@@ -68,6 +68,13 @@
     <p class="soft" style="color:var(--ink-soft)">可以動的：髮型、服裝、配色、配件、眼鏡、背景、角色設定。妝容想加再加。</p>
   </section>
 
+  <section id="sort">
+    <h2><small>AI 審美陷阱</small>排排看：哪一張被改最多？</h2>
+    <p>三張裡面<b>只有一張是原圖</b>，另外兩張用同一套美顏做過，一輕一重。先憑第一眼排。</p>
+    <div id="sorter"></div>
+    <div class="box note" id="sortNote" hidden><b>發現了嗎？</b>看過「重度」之後，「輕度」很容易被當成原圖——我們對「自然」的感覺，會被眼前看到的東西拉著走。AI 美顏常常就是這樣，一點一點把我們對「正常的臉」的標準往同一個方向推。</div>
+  </section>
+
   <section id="builder">
     <h2><small>DIY</small>自己寫一個 Prompt</h2>
     <p>比背「神 Prompt」更重要的，是說清楚你要什麼。</p>
@@ -94,14 +101,27 @@
     </div>
     <p>今天玩的顏色、AI 影像、Prompt、比較與選擇、媒體與數位身份——都是<b>資訊傳播</b>在研究的事。</p>
   </section>
+  <section id="feedback">
+    <h2><small>1 MINUTE</small>課後回饋（3 題）</h2>
+    <p>沒有對錯壓力，送出後才會看到說明。</p>
+    <div id="fb"></div>
+  </section>
 </div>
 
-<script src="assets/common.js?v=3"></script>
+<script src="assets/common.js?v=4"></script>
+<script src="assets/feedback-config.js?v=4"></script>
+<script src="assets/feedback.js?v=4"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
   const v = id => ($(id).value || "").trim();
   LAB.wireImages();
+  LAB.sorter(document.getElementById("sorter"), [
+    { key: "beautified-light", rank: 2 },
+    { key: "beautified-heavy", rank: 3 },
+    { key: "original", rank: 1, reveal: "原圖（沒改）" }
+  ], { onReveal: () => { document.getElementById("sortNote").hidden = false; } });
+  FEEDBACK.render(document.getElementById("fb"));
 
   const pick = name => { const el = document.querySelector(`[data-pick=${name}] [aria-pressed=true]`); return el ? el.textContent : ""; };
   document.querySelectorAll("[data-pick] button").forEach(b => b.onclick = () => {

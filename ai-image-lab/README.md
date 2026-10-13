@@ -22,3 +22,12 @@
 
 ## 視覺
 mono-color CIS：Neutral White 紙底＋Cobalt（冷）／Terracotta（暖）雙墨；思源黑體。文字對比皆符合 WCAG 2.1 AA。
+
+## 第二堂（10/20）：AI 資訊實驗室
+`week2/`：介紹頁、13 頁投影、學生任務頁（推薦泡泡模擬、真的還是 AI、假新聞偵探、AI 幻覺示範）。共用 `assets/style.css`、`assets/common.js`、`assets/deck.js`（投影引擎）。
+
+## 兩段式美顏刺激物
+`tools/beautify.py`：對同一張原圖產生輕度、重度兩級美顏（磨皮、提亮、放大眼睛、瘦臉），只控制強度一個變因。第一堂第 16 頁與學生頁「排排看」使用。
+
+## 課後回饋問卷
+`feedback/`：三題（辨識／歸因／自主）、計分方式與盲點說明；`create-form.gs` 一鍵建立 Google 表單，設定貼到 `assets/feedback-config.js` 即開始收集。

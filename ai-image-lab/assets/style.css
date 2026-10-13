@@ -220,3 +220,89 @@ body.deck{overflow:hidden;height:100vh;height:100dvh}
   .ph.missing::before{top:0;right:0;bottom:0;left:0}
   .ba input[type=range]{top:0;left:0}
 }
+
+/* ---------- 排序活動 ---------- */
+.sorter-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sort-card{position:relative;padding:0;border:3px solid var(--ink-text);border-radius:var(--r);background:var(--paper);overflow:hidden;color:var(--ink-text)}
+.sort-card .ph{border-radius:0}
+.sort-card.picked{border-color:var(--cobalt)}
+.sort-letter{position:absolute;left:6px;top:6px;background:var(--paper);font-family:var(--mono);font-weight:700;padding:0 .45em;border-radius:2px}
+.sort-n{position:absolute;right:6px;top:6px;width:2.2em;height:2.2em;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:1.1rem;color:#fff;background:var(--cobalt)}
+.sort-n:empty{display:none}
+.sort-reveal{position:absolute;left:0;right:0;bottom:0;padding:.35em .5em;background:var(--ink-text);color:var(--paper);font-weight:700;font-size:.95rem;text-align:left}
+.sort-card.ok{border-color:var(--cobalt)}
+.sort-card.ng{border-color:var(--terra)}
+.sort-card.ng .sort-reveal{background:var(--terra-text)}
+.sort-hint{margin:.6em 0 .2em;color:var(--ink-soft)}
+.sort-result{font-weight:700;color:var(--cobalt);min-height:1.6em}
+.slide .sorter-grid{max-width:min(860px,100%)}
+.slide .sorter-grid .ph{max-height:46vh}
+
+/* ---------- 回饋問卷 ---------- */
+.fb fieldset{margin:12px 0}
+.fb legend{padding:0 .3em;font-size:1.05rem;line-height:1.5}
+.fb .opts,.fb .likert{display:grid;gap:6px}
+.fb .opt{display:flex;gap:.6em;align-items:flex-start;padding:10px 12px;border:1.5px solid var(--line);border-radius:var(--r);background:#fff;cursor:pointer;line-height:1.45}
+.fb .opt input{margin-top:.25em;width:20px;height:20px;accent-color:var(--cobalt);flex:none}
+.fb .opt:has(input:checked){border-color:var(--cobalt);background:var(--cobalt-tint)}
+.fb-explain{margin:10px 0 0;padding:10px 12px;border-left:4px solid var(--cobalt);background:var(--cobalt-tint)}
+.fb-msg{font-weight:700;color:var(--cobalt);min-height:1.5em}
+
+/* =========================================================
+   第二堂元件
+   ========================================================= */
+/* 推薦泡泡 */
+.bub-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.bub-feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:10px}
+.bub-post{position:relative;border:1.5px solid var(--ink-text);border-radius:var(--r);padding:10px 56px 10px 12px;background:#fff;min-height:84px}
+.bub-post p{margin:.2em 0 0;font-weight:700;line-height:1.4}
+.bub-t{font-family:var(--mono);font-size:.78rem;color:var(--cobalt);border:1px solid var(--cobalt);padding:0 .4em;border-radius:2px}
+.bub-like{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:2px solid var(--ink-text);background:var(--paper);font-size:1.2rem;color:var(--ink-soft)}
+.bub-like[aria-pressed="true"]{background:var(--terra);border-color:var(--terra);color:#fff}
+.bub-bars{display:grid;gap:4px;margin:8px 0}
+.bub-bar{display:grid;grid-template-columns:5.5em 1fr 3em;align-items:center;gap:8px;font-size:.92rem}
+.bub-bar i{display:block;height:14px;background:var(--cobalt);border-radius:2px;transition:width .4s}
+.bub-bar b{font-family:var(--mono);text-align:right}
+.bub-peek{margin-top:8px}
+.bub-peek summary{cursor:pointer;color:var(--cobalt);font-weight:700}
+.bub-end .bub-k{font-family:var(--mono);color:var(--terra-text);font-weight:700;margin:0}
+.bub-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.bub-stats div{border:2px solid var(--ink-text);border-radius:var(--r);padding:10px}
+.bub-stats b{display:block;font-size:1.6rem;color:var(--cobalt);line-height:1.2}
+.bub-stats span{font-size:.85rem;color:var(--ink-soft)}
+/* 回饋迴圈圖 */
+.loop{display:grid;grid-template-columns:repeat(4,1fr);gap:34px;align-items:stretch;max-width:1080px;margin:1em 0}
+.loop div{border:2px solid var(--ink-text);padding:14px;font-weight:900;font-size:clamp(1rem,2vw,1.5rem);position:relative;background:var(--paper)}
+.loop div::after{content:"→";position:absolute;right:-30px;width:26px;text-align:center;top:50%;transform:translateY(-50%);color:var(--terra);font-size:1.4em}
+.loop div:last-child::after{content:"↺";right:6px;top:4px;transform:none}
+.loop small{display:block;font-weight:400;font-size:.8em;color:var(--ink-soft)}
+/* 真的還是 AI */
+.roa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.roa{position:relative}
+.roa .ph{aspect-ratio:4/3}
+.roa-n{position:absolute;left:6px;top:6px;background:var(--paper);font-family:var(--mono);font-weight:700;padding:0 .45em;border-radius:2px}
+.roa-btns{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.roa-btns button{min-height:44px;border:2px solid var(--ink-text);border-radius:var(--r);background:var(--paper);font-weight:700;color:var(--ink-text)}
+.roa-btns button b{font-family:var(--mono);color:var(--cobalt);margin-left:.3em}
+.roa-btns button[aria-pressed="true"]{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+.roa-btns button[aria-pressed="true"] b{color:#fff}
+.roa-reveal{margin:.4em 0 0;font-size:.92rem;line-height:1.45}
+.roa-reveal b{color:var(--terra-text)}
+.roa-sum{font-weight:700;color:var(--cobalt)}
+@supports not (aspect-ratio:4/3){.roa .ph{height:0;padding-top:75%}}
+/* 假新聞偵探 */
+.det h3{margin:.2em 0;font-size:1.25rem;line-height:1.35}
+.det-meta{margin:0;font-size:.82rem;color:var(--ink-soft)}
+.det-img{max-width:420px;margin:8px 0}
+.det-img .ph{aspect-ratio:4/3}
+.det-q{margin:.8em 0 .3em}
+.det .check button{font-size:.98rem}
+.det .check button.is-flag{outline:3px solid var(--terra);outline-offset:-3px}
+.det .check button.not-flag{opacity:.55}
+.det-ans{margin-top:10px;padding:10px 12px;border-left:4px solid var(--cobalt);background:var(--cobalt-tint)}
+.det-ans p{margin:.2em 0}
+.steps4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.steps4 div{border-top:4px solid var(--cobalt);padding-top:8px}
+.steps4 b{display:block;font-size:clamp(1.3rem,2.6vw,2rem);color:var(--cobalt)}
+.slide .roa-grid .ph{max-height:30vh}
+@media (max-width:820px){.roa-grid{grid-template-columns:1fr 1fr}.loop,.steps4{grid-template-columns:1fr 1fr}.loop div:nth-child(2)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-32px;transform:translateX(-50%)}}
