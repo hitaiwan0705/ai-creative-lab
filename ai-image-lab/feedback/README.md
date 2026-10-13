@@ -23,7 +23,7 @@
 
 ## 啟用資料收集
 1. 打開 https://script.google.com → 新專案 → 貼上 `create-form.gs` → 執行 `createFeedbackForm`
-2. 授權後，在執行紀錄複製 `window.FEEDBACK_FORM = {...}`
-3. 貼到 `assets/feedback-config.js`，推送後學生在任務頁送出，答案就會進到試算表
+2. 授權後跑完，雲端硬碟會出現表單、回應試算表、與「回饋表單設定（給 Claude 讀取）」文件
+3. 跟 Claude 說「跑完了」，Claude 會讀取設定並寫入 `assets/feedback-config.js`；或自行複製執行紀錄中的 `window.FEEDBACK_FORM = {...}` 貼上
 
 未啟用時，學生頁仍可作答並看到說明，只是答案不會被收集。

@@ -4,8 +4,8 @@
  * 使用方式（約 2 分鐘）：
  * 1. 打開 https://script.google.com → 新專案 → 把這整個檔案貼上
  * 2. 按「執行」createFeedbackForm，第一次會要求授權（表單、試算表、外部網址）→ 允許
- * 3. 看「執行紀錄」：複製 window.FEEDBACK_FORM = {...} 那一段，
- *    貼到網站 ai-image-lab/assets/feedback-config.js（或貼給 Claude）
+ * 3. 完成後回到對話跟 Claude 說「跑完了」：腳本會在雲端硬碟留一份
+ *    「回饋表單設定（給 Claude 讀取）」文件，Claude 讀取後會自動完成網站串聯
  * 題目文字必須和網站 assets/feedback.js 完全一致，請兩邊一起改。
  */
 const SITE = 'https://hitaiwan0705.github.io/ai-creative-lab/ai-image-lab/';
@@ -74,4 +74,9 @@ function createFeedbackForm() {
   Logger.log('回應試算表：' + ss.getUrl());
   Logger.log('↓ 貼到 assets/feedback-config.js');
   Logger.log('window.FEEDBACK_FORM = ' + JSON.stringify(cfg, null, 2) + ';');
+  // 寫一份設定文件到雲端硬碟，讓 Claude 可以直接讀取並完成網站串聯
+  const doc = DocumentApp.create('AI 形象實驗室｜回饋表單設定（給 Claude 讀取）');
+  doc.getBody().setText('FEEDBACK_FORM_CONFIG\n' + JSON.stringify(cfg) + '\nEDIT_URL ' + form.getEditUrl() + '\nSHEET_URL ' + ss.getUrl());
+  doc.saveAndClose();
+  Logger.log('設定文件：' + doc.getUrl());
 }
