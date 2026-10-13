@@ -1,8 +1,8 @@
 /* AI 形象實驗室 — mono-color CIS：Neutral White 紙底 + Cobalt（冷）/ Terracotta（暖）雙墨
-[hidden]{display:none!important}
    對比檢核（WCAG 2.1）：
    --ink-text  on paper 11.97:1 ｜ --cobalt on paper 7.48:1 ｜ --terra-text on paper 5.46:1
    --terra (#C65F38) on paper 3.94:1 → 只用於 ≥24px 大字或裝飾；白字疊 terracotta 只用於 ≥19px 粗體 */
+[hidden]{display:none!important}
 :root{
   --paper:#FAFAF7; --paper-2:#E9E9E5;
   --cobalt:#2148B8; --cobalt-tint:#DCE3F4;
