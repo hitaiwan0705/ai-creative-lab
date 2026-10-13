@@ -1,0 +1,36 @@
+# 把 ai-image-lab/images/sources.txt 列出的生成圖下載、轉成 900x1200 JPG 並提交回 repo
+name: ai-image-lab fetch images
+on:
+  push:
+    paths: ["ai-image-lab/images/sources.txt"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and convert
+        run: |
+          pip install --quiet pillow
+          cd ai-image-lab/images
+          grep -v '^#' sources.txt | while read -r name url; do
+            [ -z "$name" ] && continue
+            curl -fsSL -o "/tmp/$name.png" "$url" && echo "got $name" || echo "FAILED $name"
+          done
+          python3 - <<'PY'
+          import glob, os
+          from PIL import Image, ImageOps
+          for f in glob.glob('/tmp/*.png'):
+              im = ImageOps.fit(Image.open(f).convert('RGB'), (900, 1200), Image.LANCZOS)
+              out = os.path.basename(f)[:-4] + '.jpg'
+              im.save(out, quality=82, optimize=True, progressive=True)
+              print('saved', out, os.path.getsize(out))
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ai-image-lab/images/*.jpg
+          git diff --cached --quiet && echo "nothing new" || (git commit -m "ai-image-lab: 加入示範人物圖片" && git push)

@@ -1,0 +1,11 @@
+# 檔名 <空白> 來源網址（Figma AI 生成，gemini-3.1-flash-image，2026-10-13；網址 7 天後失效）
+original https://www.figma.com/api/mcp/asset/265246ad-a58f-475a-839c-9af2db32cfc3.png
+color-cool-low https://www.figma.com/api/mcp/asset/f300e22a-be9c-4f3d-92e3-04aa31168203.png
+color-cool-high https://www.figma.com/api/mcp/asset/73645981-0bbf-42f3-8448-9d765bc787a1.png
+color-warm-low https://www.figma.com/api/mcp/asset/6b3cf41e-01bb-44c4-877d-d09e372b37d4.png
+color-warm-high https://www.figma.com/api/mcp/asset/eb5262a6-df62-4265-9efd-0f379e03627d.png
+hair-short https://www.figma.com/api/mcp/asset/95a9342d-bd1b-4507-ad57-1018a3a29a38.png
+hair-curly https://www.figma.com/api/mcp/asset/e67d8b2e-f5bf-4b32-ae97-39870c9845af.png
+hair-bangs https://www.figma.com/api/mcp/asset/f8ae0e67-a59c-4052-a035-4191a62a314c.png
+style-natural https://www.figma.com/api/mcp/asset/dcff943c-1ff2-4f69-8d27-d95599319b2a.png
+beautified https://www.figma.com/api/mcp/asset/82a8dc52-92bf-4524-a680-0b994c973106.png

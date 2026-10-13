@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 形象實驗室</title>
+<meta name="description" content="高中微課程：用 AI 玩配色、髮型與風格，看看 AI 到底懂不懂你。中國文化大學資訊傳播學系。">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-head">
+  <span class="brand">AI 形象實驗室</span>
+  <nav><a href="slides.html">投影上課</a><a href="student.html">學生任務</a></nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <span class="tag">高中微課程｜60 分鐘</span>
+      <h1>試試<em>不同版本</em>的自己</h1>
+      <p class="sub">不用真的染頭髮、不用真的剪、不用先買衣服，先讓 AI 幫你試試看不同版本的自己；再一起看看——AI 到底改了什麼？</p>
+      <div class="cta">
+        <a class="btn" href="slides.html">開始上課（投影）</a>
+        <a class="btn ghost" href="student.html">學生任務頁</a>
+      </div>
+    </div>
+    <div class="hero-grid" id="heroGrid"></div>
+  </section>
+
+  <section class="band">
+    <h2>這堂課在玩什麼</h2>
+    <div class="facts">
+      <div><b>CORE</b>個人色彩 → 髮型 → 形象風格</div>
+      <div><b>ATTITUDE</b>不是找出「最好看的我」，而是探索「不同版本的我」</div>
+      <div><b>TOOLS</b>Adobe Firefly／Express；登入失敗改用老師示範圖</div>
+      <div><b>RATIO</b>10 分引導＋38 分體驗＋12 分分享</div>
+    </div>
+  </section>
+
+  <section class="band">
+    <h2>60 分鐘流程</h2>
+    <ol class="timeline">
+      <li><span class="t">00–05</span><div><h3>如果今天可以免費試造型？</h3><p>投票：換髮色、髮型、配色，還是整個風格？</p></div></li>
+      <li><span class="t">05–08</span><div><h3>科技 × 設計 × 人</h3><p>一句話認識資訊傳播。</p></div></li>
+      <li class="play"><span class="t">08–20</span><div><h3>第一關｜我的顏色</h3><p>冷暖 × 明暗 × 彩度：不要改人，只換顏色。</p></div></li>
+      <li class="play"><span class="t">20–34</span><div><h3>第二關｜剪之前，先試一下？</h3><p>只准改頭髮，不准偷偷整形——AI 有作弊嗎？</p></div></li>
+      <li class="play"><span class="t">34–44</span><div><h3>第三關｜另一個版本的我</h3><p>你想讓別人感覺你是怎樣的人？</p></div></li>
+      <li><span class="t">44–49</span><div><h3>AI 審美陷阱</h3><p>為什麼 AI 老是偷偷把臉變小、眼睛變大？</p></div></li>
+      <li><span class="t">49–55</span><div><h3>我的版本，我決定＋平台小挑戰</h3><p>同一個人，在不同地方，可以選擇不同的呈現方式。</p></div></li>
+      <li><span class="t">55–60</span><div><h3>最後揭曉</h3><p>你剛才其實玩了色彩、AI、影像、設計、人機互動與媒體。</p></div></li>
+    </ol>
+  </section>
+
+  <section class="band">
+    <h2>帶走三句話</h2>
+    <div class="three">
+      <p>AI 可以幫我快速試很多可能。</p>
+      <p>AI 生成的版本不等於真實的我。</p>
+      <p>最後選哪一個，應該由我決定。</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <h2>你剛才其實學了……</h2>
+    <div class="reveal-map">
+      <div>換顏色 → <b>色彩與視覺感知</b></div>
+      <div>換髮型 → <b>AI 影像生成</b></div>
+      <div>要求 AI 不要亂改 → <b>Prompt／需求定義</b></div>
+      <div>比較版本 → <b>設計與使用者判斷</b></div>
+      <div>發現 AI 偷偷美顏 → <b>AI Bias／媒體素養</b></div>
+      <div>不同平台不同形象 → <b>數位媒體與傳播</b></div>
+    </div>
+    <p style="margin-top:1.4em;font-size:1.2rem">資傳不是單純做影片、修圖片。我們會問：<b style="color:var(--cobalt)">科技怎麼影響人的感覺、選擇與溝通？</b></p>
+  </section>
+</main>
+
+<footer class="site-foot">
+  中國文化大學 資訊傳播學系｜AI 形象實驗室｜示範人物為 AI 生成之虛構人物（Figma AI），僅供教學使用。<a href="../">← AI 文創實驗室</a>
+</footer>
+<script src="assets/common.js"></script>
+<script>
+  document.getElementById("heroGrid").innerHTML =
+    ["color-warm-high","hair-short","color-cool-low","style-natural"].map(k => LAB.fig(k)).join("");
+  LAB.wireImages();
+</script>
+</body>
+</html>
