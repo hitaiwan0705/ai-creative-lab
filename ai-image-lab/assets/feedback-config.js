@@ -1,10 +1,9 @@
-/* 回饋問卷收集設定
-   null = 本機練習模式（學生看得到回饋，但答案不會被收集）
-   執行 feedback/create-form.gs 後，把它印出的設定貼在這裡，例如：
-   window.FEEDBACK_FORM = {
-     action: "https://docs.google.com/forms/d/e/XXXX/formResponse",
-     url: "https://docs.google.com/forms/d/e/XXXX/viewform",
-     entries: { q1: "entry.111", q2: "entry.222", q3: "entry.333", q3r: "entry.444" }
-   };
-*/
-window.FEEDBACK_FORM = null;
+/* 回饋問卷收集設定（由 feedback/create-form.gs 建立，2026-10-13）
+   表單編輯：https://docs.google.com/forms/d/1a0i_VOssFqdtTY9yPhr15n_QluGRQIKuYPjjB3a673E/edit
+   回應試算表：https://docs.google.com/spreadsheets/d/1Txj70IjehQBtFeLljipgSqMM6p1sArMFa-73TcG_zLQ/edit
+   設成 null 即回到本機練習模式（不收集）。 */
+window.FEEDBACK_FORM = {
+  action: "https://docs.google.com/forms/d/e/1FAIpQLSfEdunXKRB2CgnI_DuUltxSCnev7RyoVyGCP7jVw7ySsUL7MQ/formResponse",
+  url: "https://docs.google.com/forms/d/e/1FAIpQLSfEdunXKRB2CgnI_DuUltxSCnev7RyoVyGCP7jVw7ySsUL7MQ/viewform",
+  entries: { q1: "entry.1497173499", q2: "entry.1675491547", q3: "entry.1724155129", q3r: "entry.1328658555" }
+};

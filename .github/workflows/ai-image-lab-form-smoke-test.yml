@@ -1,0 +1,22 @@
+# 回饋表單連線測試：改動 smoke-test.txt 即送出一筆測試答案到 Google 表單
+name: ai-image-lab form smoke test
+on:
+  push:
+    paths: ["ai-image-lab/feedback/smoke-test.txt"]
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Submit one test response
+        run: |
+          ACTION=$(grep -o 'https://docs.google.com/forms/d/e/[^"]*/formResponse' ai-image-lab/assets/feedback-config.js)
+          code=$(curl -s -o /tmp/resp.html -w '%{http_code}' -X POST "$ACTION" \
+            --data-urlencode "entry.1497173499=眼睛變大" \
+            --data-urlencode "entry.1497173499=皮膚變光滑" \
+            --data-urlencode "entry.1675491547=AI 從大量人類照片和修圖習慣中，學到某一種常見的審美，就往那個方向修" \
+            --data-urlencode "entry.1724155129=2 不同意" \
+            --data-urlencode "entry.1328658555=【Claude 連線測試，請刪除】")
+          echo "HTTP $code"
+          grep -o '<title>[^<]*' /tmp/resp.html || true
+          test "$code" = "200"
