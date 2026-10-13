@@ -6,7 +6,7 @@
 <title>AI 資訊實驗室｜學生任務</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css?v=4">
+<link rel="stylesheet" href="../assets/style.css?v=6">
 </head>
 <body>
 <div class="stu">
@@ -17,7 +17,7 @@
   </header>
 
   <nav class="stu-tabs" aria-label="任務">
-    <a href="#bubble">任務1 推薦泡泡</a><a href="#photo">任務2 真假照片</a><a href="#news">任務3 假新聞偵探</a><a href="#lie">AI 會說謊？</a><a href="#mine">轉傳前三秒</a>
+    <a href="#bubble">任務1 推薦泡泡</a><a href="#photo">任務2 真假照片</a><a href="#news">任務3 假新聞偵探</a><a href="#lie">AI 會說謊？</a><a href="#mine">轉傳前三秒</a><a href="#feedback">回饋</a>
   </nav>
 
   <section id="bubble">
@@ -63,10 +63,19 @@
     </div>
     <p><a href="../student.html">← 上週的任務頁（AI 形象實驗室）</a></p>
   </section>
+
+  <section id="feedback">
+    <h2><small>1 MINUTE</small>課後回饋（3 題）</h2>
+    <p>沒有對錯壓力，送出後才會看到說明。</p>
+    <div id="fb"></div>
+  </section>
 </div>
 <script src="../assets/common.js?v=4"></script>
 <script src="assets/data.js?v=1"></script>
 <script src="assets/w2.js?v=1"></script>
+<script src="../assets/feedback.js?v=5"></script>
+<script src="assets/feedback2.js?v=1"></script>
+<script src="assets/feedback-config.js?v=1"></script>
 <script>
 (function(){
   var L = window.LAB, D = window.W2;
@@ -77,6 +86,11 @@
   document.getElementById("fc").innerHTML = D.factcheck.map(function (c) { return '<li><a href="' + c[1] + '" target="_blank" rel="noopener">' + c[0] + "</a></li>"; }).join("");
   document.getElementById("hp").textContent = D.hallucinationPrompt;
   document.querySelector("[data-copy=hp]").onclick = function (e) { L.copy(D.hallucinationPrompt, e.target); };
+  window.FEEDBACK.render(document.getElementById("fb"), {
+    Q: window.FEEDBACK2.Q,
+    cfg: window.FEEDBACK_FORM_W2 || null,
+    media: function () { return '<div class="det box" style="margin:8px 0"><p class="det-meta mono">來源：LINE 群組轉傳</p><p style="margin:0;font-weight:700">' + window.FEEDBACK2.message.replace("（來源：LINE 群組轉傳）", "") + '</p></div>'; }
+  });
   var rule = document.getElementById("rule");
   rule.addEventListener("input", function () { document.getElementById("rulep").textContent = "轉傳之前，我會先" + (rule.value.trim() || "＿＿＿＿＿＿") + "。"; });
   var tabs = [].slice.call(document.querySelectorAll(".stu-tabs a"));

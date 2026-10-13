@@ -27,3 +27,9 @@
 3. 跟 Claude 說「跑完了」，Claude 會讀取設定並寫入 `assets/feedback-config.js`；或自行複製執行紀錄中的 `window.FEEDBACK_FORM = {...}` 貼上
 
 未啟用時，學生頁仍可作答並看到說明，只是答案不會被收集。
+
+## 第二堂問卷＋即時統計（backend.gs）
+`backend.gs` 取代原本的 create-form.gs，放進同一個 Apps Script 專案：
+- `createWeek2Form()`：建立第二堂表單（Q1 用課堂沒看過的新訊息找警訊、Q2 推薦歸因、Q3「很多人分享＝真的」從眾捷思）
+- `doGet`：即時統計 API，只回傳次數，不回傳學生文字；`stats.html?s=1|2` 每 10 秒更新，可「從現在開始算」只看單一班
+- `stats.html?demo=1`：示範資料預覽

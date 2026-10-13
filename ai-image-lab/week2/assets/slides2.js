@@ -144,8 +144,9 @@
       <h2>兩堂課，一句話</h2>
       <p class="big">AI 會改變我們看到的<span style="color:var(--terra)">自己</span>，<br>也會改變我們看到的<span style="color:var(--cobalt)">世界</span>。</p>
       <p class="lead">所以，最後要不要相信、要怎麼呈現自己——<b>由你決定</b>。</p>
-      <div class="three" style="margin-top:1em"><p>我看到的世界，是被挑選過的。</p><p>眼見不一定為憑，先查來源。</p><p>轉傳之前，停三秒。</p></div>`,
-      notes: "把兩堂課收在同一句話。這頁停久一點，讓學生拍照。" }
+      <div class="three" style="margin-top:1em"><p>我看到的世界，是被挑選過的。</p><p>眼見不一定為憑，先查來源。</p><p>轉傳之前，停三秒。</p></div>
+      <div class="qr-box" style="margin-top:1em"><div class="qr" data-qr="#feedback"></div><p class="lead" style="margin:0"><b style="color:var(--cobalt)">掃碼填 1 分鐘回饋 →</b><br><a class="btn ghost" href="../stats.html?s=2" target="_blank" style="margin-top:.4em">看全班結果</a></p></div>`,
+      notes: "把兩堂課收在同一句話。學生掃碼填回饋後，按「看全班結果」投影即時統計（先按「從現在開始算」只看這一班）。" }
   ];
 
   window.DECK(SEGS, S, () => {

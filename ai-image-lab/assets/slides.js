@@ -228,8 +228,8 @@
         ${[["換顏色","色彩與視覺感知"],["換髮型","AI 影像生成"],["要求 AI 不要亂改","Prompt／需求定義"],["比較版本","設計與使用者判斷"],["發現 AI 偷偷美顏","AI Bias／媒體素養"],["不同平台不同形象","數位媒體與傳播"]].map(([a,b])=>`<button type="button">${a}<span class="to">${b}</span></button>`).join("")}
       </div>
       <p class="big" style="margin-top:.8em;font-size:clamp(1.3rem,3vw,2.4rem)">原來這些都是<span style="color:var(--terra)">資訊傳播</span>。</p>
-      <div class="qr-box" style="margin-top:.6em"><div class="qr" data-qr="#feedback"></div><p class="lead" style="margin:0">科技怎麼影響人的感覺、選擇與溝通？<br><b style="color:var(--cobalt)">掃碼填 1 分鐘回饋 →</b></p></div>`,
-      notes: "逐張點開，每點一張唸一次。最後收三句：<b>① AI 可以幫我快速試很多可能 ② AI 生成的版本不等於真實的我 ③ 最後選哪一個，應該由我決定。</b><br>10/20 接續句：「上週我們發現 AI 可能偷偷改變我們看到的自己；今天來看看，它會不會也偷偷改變我們看到的世界。」" }
+      <div class="qr-box" style="margin-top:.6em"><div class="qr" data-qr="#feedback"></div><p class="lead" style="margin:0">科技怎麼影響人的感覺、選擇與溝通？<br><b style="color:var(--cobalt)">掃碼填 1 分鐘回饋 →</b><br><a class="btn ghost" href="stats.html?s=1" target="_blank" style="margin-top:.4em">看全班結果</a></p></div>`,
+      notes: "逐張點開，每點一張唸一次。最後學生填完回饋後，按「看全班結果」投影即時統計（先按「從現在開始算」只看這一班）。收三句：<b>① AI 可以幫我快速試很多可能 ② AI 生成的版本不等於真實的我 ③ 最後選哪一個，應該由我決定。</b><br>10/20 接續句：「上週我們發現 AI 可能偷偷改變我們看到的自己；今天來看看，它會不會也偷偷改變我們看到的世界。」" }
   ];
 
   // ---------- 建構 ----------

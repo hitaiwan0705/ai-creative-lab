@@ -35,20 +35,25 @@ window.FEEDBACK = (function () {
     }
   };
 
-  function scoreQ1(sel) {
+  function scoreQ1(sel, QQ) {
+    const Q = QQ || window.FEEDBACK.Q;
     const hit = sel.filter(s => Q.q1.correct.includes(s)).length;
     const fa = sel.filter(s => !Q.q1.correct.includes(s)).length;
     return Math.max(0, hit - fa);
   }
 
-  function render(el) {
+  // opts: { Q, cfg, media }，未給則用第一堂的題目、設定與比較圖
+  function render(el, opts) {
+    opts = opts || {};
     const L = window.LAB;
-    const cfg = window.FEEDBACK_FORM || null;
+    const Q = opts.Q || window.FEEDBACK.Q;
+    const cfg = opts.cfg !== undefined ? opts.cfg : (window.FEEDBACK_FORM || null);
+    const media = opts.media || (() => `<div class="grid2" style="margin:8px 0">${L.fig("original", { caption: "左" })}${L.fig("beautified-heavy", { caption: "右" })}</div>`);
     el.innerHTML = `
       <form class="fb" novalidate>
         <fieldset class="box">
           <legend><b>${Q.q1.title}</b></legend>
-          <div class="grid2" style="margin:8px 0">${L.fig("original", { caption: "左" })}${L.fig("beautified-heavy", { caption: "右" })}</div>
+          ${media()}
           <div class="opts">${Q.q1.options.map((o, i) => `<label class="opt"><input type="checkbox" name="q1" value="${o}"> ${o}</label>`).join("")}</div>
           <p class="fb-explain" hidden>${Q.q1.explain}</p>
         </fieldset>
@@ -88,7 +93,7 @@ window.FEEDBACK = (function () {
       }
       form.querySelectorAll("input").forEach(i => (i.disabled = true));
       form.querySelectorAll(".fb-explain").forEach(p => (p.hidden = false));
-      const s1 = scoreQ1(q1), ok2 = Q.q2.correct.includes(q2);
+      const s1 = scoreQ1(q1, Q), ok2 = Q.q2.correct.includes(q2);
       msg.innerHTML = (sent ? "已送出，謝謝！" : cfg ? "送出失敗，請截圖給老師。" : "完成！") +
         `<br>第 1 題得分 ${s1} / 4（勾錯的會扣分）；第 2 題${ok2 ? "答對" : "再想想：看下面的說明"}。`;
       btn.hidden = true;
