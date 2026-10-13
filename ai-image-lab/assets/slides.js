@@ -270,7 +270,7 @@
   stage.addEventListener("touchstart", e => { if (!e.target.closest(".ba,input")) sx = e.touches[0].clientX; }, { passive: true });
   stage.addEventListener("touchend", e => { if (sx == null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 60) go(cur + (dx < 0 ? 1 : -1)); sx = null; });
 
-  function fullscreen() { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); }
+  function fullscreen() { document.fullscreenElement ? document.exitFullscreen() : (document.documentElement.requestFullscreen && document.documentElement.requestFullscreen()); }
 
   // 全場計時（對照 60 分鐘段落）
   const clockEl = document.querySelector(".deck-top .timer");

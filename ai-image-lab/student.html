@@ -6,7 +6,7 @@
 <title>AI 形象實驗室｜學生任務</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=3">
 </head>
 <body>
 <div class="stu">
@@ -26,7 +26,7 @@
     <p><b>工具：</b><a href="https://firefly.adobe.com/" target="_blank" rel="noopener">Adobe Firefly</a>　或　<a href="https://new.express.adobe.com/" target="_blank" rel="noopener">Adobe Express</a>（需登入 Adobe 帳號）</p>
     <p>登入不了？跟旁邊同學一組，或直接用老師的示範圖做比較。</p>
     <details class="box"><summary><b>下載老師提供的人物原圖</b></summary>
-      <div id="dl" style="margin-top:10px;max-width:220px"></div>
+      <div id="dl" style="margin-top:10px;max-width:220px"><figure class="ph" data-file="original.jpg"><img src="images/original.jpg" alt="示範人物：原圖" loading="lazy"><figcaption>原圖</figcaption></figure></div>
       <p><a class="btn ghost" href="images/original.jpg" download>下載原圖</a></p>
     </details>
   </section>
@@ -37,7 +37,7 @@
     <div data-pick="color">
       <button type="button" class="chip" aria-pressed="true">冷色、低彩度</button><button type="button" class="chip" aria-pressed="false">冷色、高彩度</button><button type="button" class="chip" aria-pressed="false">暖色、低彩度</button><button type="button" class="chip" aria-pressed="false">暖色、高彩度</button>
     </div>
-    <div class="box"><p id="p1"></p><div class="row"><button class="btn" data-copy="p1">複製 Prompt</button></div></div>
+    <div class="box"><p id="p1">請以這張照片中的人物為基礎，保留人物的五官、臉型、髮型、膚色及身份特徵，只改變服裝與周邊色彩。請將整體色彩調整為冷色、低彩度的視覺風格，保持自然照片質感，不進行美顏或改變人物長相。</p><div class="row"><button class="btn" data-copy="p1">複製 Prompt</button></div></div>
     <p><b>看完四種之後問自己：</b>哪一個版本讓你覺得「這比較<b>像我</b>」？（不是哪一個最漂亮）</p>
   </section>
 
@@ -52,7 +52,7 @@
     <p style="margin-top:16px"><b>第二次</b>換成這個，再比一次：</p>
     <label class="f" for="hair">我想試的髮型</label>
     <input id="hair" type="text" value="短髮" placeholder="例：有瀏海的短髮、捲髮、銀灰色頭髮">
-    <div class="box"><p id="p2b"></p><div class="row"><button class="btn" data-copy="p2b">複製 Prompt</button></div></div>
+    <div class="box"><p id="p2b">保留照片中人物原本的五官、臉型、膚色、年齡、表情與身份特徵，只將髮型修改為短髮。不要改變眼睛、鼻子、嘴巴、臉型及身材，也不要進行美顏。</p><div class="row"><button class="btn" data-copy="p2b">複製 Prompt</button></div></div>
     <div class="box note"><b>重要發現：</b>AI 不是幫你「戴假髮」，它是在重新畫出「一個很像你的人」。所以 AI 模擬 ≠ 真實預測。</div>
   </section>
 
@@ -64,7 +64,7 @@
     </div>
     <label class="f" for="feelx">或自己寫</label>
     <input id="feelx" type="text" placeholder="例：像獨立樂團主唱">
-    <div class="box"><p id="p3"></p><div class="row"><button class="btn" data-copy="p3">複製 Prompt</button></div></div>
+    <div class="box"><p id="p3">保留人物原本身份與主要外貌特徵。透過髮型、服裝、配色、配件與背景，讓整體呈現「親切」的感覺。不要改變人物五官與臉型。</p><div class="row"><button class="btn" data-copy="p3">複製 Prompt</button></div></div>
     <p class="soft" style="color:var(--ink-soft)">可以動的：髮型、服裝、配色、配件、眼鏡、背景、角色設定。妝容想加再加。</p>
   </section>
 
@@ -75,7 +75,7 @@
     <label class="f" for="change">我想改變</label><input id="change" type="text" placeholder="例：髮色換成深藍、穿牛仔外套">
     <label class="f" for="feel2">我希望給人的感覺</label><input id="feel2" type="text" placeholder="例：有精神、好相處">
     <label class="f" for="nope">我不希望 AI 改</label><input id="nope" type="text" value="不要美顏、不要把臉變小">
-    <div class="box"><p id="p4"></p><div class="row"><button class="btn" data-copy="p4">複製 Prompt</button></div></div>
+    <div class="box"><p id="p4">以這張照片的人物為基礎。請保留：五官、臉型、膚色、年齡。請改變：＿＿。整體希望給人「＿＿」的感覺。請不要：不要美顏、不要把臉變小。保持自然照片質感。</p><div class="row"><button class="btn" data-copy="p4">複製 Prompt</button></div></div>
     <p>也可以把上面四格貼給 AI，請它幫你整理成生成指令。</p>
   </section>
 
@@ -84,7 +84,7 @@
     <p>從所有結果選一張——不是最漂亮的，是<b>你最喜歡呈現自己的版本</b>。</p>
     <label class="f" for="why">我選這張，因為我希望讓別人感覺我……</label>
     <input id="why" type="text" placeholder="例：很好聊、有點酷">
-    <div class="box"><p id="p5"></p></div>
+    <div class="box"><p id="p5">我選這張，因為我希望讓別人感覺我＿＿＿＿＿＿。</p></div>
     <p><b>平台小挑戰：</b>這張放在 LINE、Instagram、遊戲帳號、學校帳號、未來履歷，五個地方都適合嗎？</p>
     <div class="box note">
       <b>今天帶走三句話</b><br>
@@ -96,15 +96,14 @@
   </section>
 </div>
 
-<script src="assets/common.js"></script>
+<script src="assets/common.js?v=3"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
   const v = id => ($(id).value || "").trim();
-  document.getElementById("dl").innerHTML = LAB.fig("original");
   LAB.wireImages();
 
-  const pick = name => document.querySelector(`[data-pick=${name}] [aria-pressed=true]`)?.textContent || "";
+  const pick = name => { const el = document.querySelector(`[data-pick=${name}] [aria-pressed=true]`); return el ? el.textContent : ""; };
   document.querySelectorAll("[data-pick] button").forEach(b => b.onclick = () => {
     b.parentElement.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
     if (b.closest("[data-pick=feel]")) $("#feelx").value = "";
@@ -126,6 +125,7 @@
 
   // 分頁標記
   const tabs = [...document.querySelectorAll(".stu-tabs a")];
+  if (!("IntersectionObserver" in window)) return;
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) tabs.forEach(t => t.classList.toggle("on", t.hash === "#" + e.target.id));
   }), { rootMargin: "-40% 0px -55% 0px" });

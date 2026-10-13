@@ -207,3 +207,16 @@ body.deck{overflow:hidden;height:100vh;height:100dvh}
 .stu .check button{font-size:1rem;padding:10px}
 .stu .check button[aria-pressed="true"]{font-size:1rem}
 .fab{position:fixed;right:16px;bottom:16px;z-index:6}
+
+/* 舊版 Safari（iOS 14 以前）不支援 aspect-ratio / inset：改用 padding 比例與四邊定位 */
+@supports not (aspect-ratio:3/4){
+  .ph,.ba{height:0;padding-top:133.333%}
+  .ph img{position:absolute;top:0;left:0}
+  .ba .ph,.grid2x2 .ph{padding-top:0;height:auto}
+  .ba .ph{position:absolute;top:0;right:0;bottom:0;left:0}
+  .grid2x2 .ph{height:0;padding-top:133.333%}
+  .grid2x2{aspect-ratio:auto}
+  .swatch-stage{height:60vh}
+  .ph.missing::before{top:0;right:0;bottom:0;left:0}
+  .ba input[type=range]{top:0;left:0}
+}
