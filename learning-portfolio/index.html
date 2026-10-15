@@ -64,6 +64,19 @@ button{font:inherit;font-weight:700;font-size:15px;border-radius:4px;padding:10p
 .revealed .opt.best .lv{color:var(--accent);font-weight:700}
 .verdict{font-size:14px}
 
+/* ladder */
+.ladder{display:flex;flex-direction:column;gap:0}
+.step{display:flex;flex-direction:column;gap:6px;padding:12px 0;border-top:1px dashed var(--soft)}
+.step:first-child{border-top:none}
+.step .lvl{font-weight:700;font-size:13px;color:var(--paper);background:var(--muted);border-radius:4px;padding:2px 8px;align-self:flex-start}
+.step.l2 .lvl{background:var(--ink)}
+.step.l3 .lvl{background:var(--accent)}
+.step.l3 blockquote{border-left-color:var(--accent)}
+.step blockquote{margin:0;border-left:4px solid var(--soft);padding:2px 0 2px 10px;font-size:15px}
+.step .add{font-size:13px;color:var(--muted)}
+.step .add b{color:var(--ink)}
+.step .why{font-size:14px;color:var(--muted)}
+.ghint{font-size:14px;font-weight:500;border-left:4px solid var(--accent);padding:2px 0 2px 10px}
 /* field comparison */
 .facts{background:var(--tint);border-radius:4px;padding:10px 12px;font-size:14px}
 .seg{display:flex;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
@@ -129,8 +142,8 @@ footer a{color:var(--muted)}
   </section>
 
   <section id="s-three" aria-labelledby="h-three">
-    <h2 id="h-three"><span class="num">2</span>三種寫法，哪一個最好？</h2>
-    <p class="hint">每一題點選你覺得最有說服力的版本，就會看到三個版本的差別。</p>
+    <h2 id="h-three"><span class="num">2</span>三種寫法：從流水帳到有說服力</h2>
+    <p class="hint">由上往下讀，每一級都比上一級多了一些東西。注意看「加入了什麼」。</p>
     <div id="cases"></div>
     <p class="hint">好的寫法有五個元素：<b>具體的問題</b>、<b>自己的行動</b>、<b>證據或數字</b>、<b>反思</b>、<b>和科系的連結</b>。</p>
   </section>
@@ -217,7 +230,7 @@ footer a{color:var(--muted)}
       <a href="https://www.unews.com.tw/News/Info/7807" target="_blank" rel="noopener">大學問：學習歷程上傳限制</a>、
       <a href="https://www.cac.edu.tw/cacportal/jbcrc/LearningPortfolios_MultiQuery_ppa/index.php" target="_blank" rel="noopener">招聯會學習準備建議方向查詢</a>
     </p>
-    <p><a href="slides.pdf" target="_blank" rel="noopener">下載講座簡報（PDF）</a></p>
+    <p><a href="slides.pdf" target="_blank" rel="noopener">下載講座簡報（PDF）</a>　<a href="feedback.pdf" target="_blank" rel="noopener">講座回饋問卷（PDF）</a></p>
     <p>本頁內容只存在你自己的瀏覽器，講師與其他人看不到。</p>
   </footer>
 </div>
@@ -227,65 +240,70 @@ footer a{color:var(--muted)}
   const $=id=>document.getElementById(id);
   const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-  /* ---------- 2. three versions ---------- */
-  const LV=['第 1 級：流水帳','第 2 級：有細節','第 3 級：有說服力'];
+  /* ---------- 2. three versions, low to high ---------- */
+  const LV=['第 1 級','第 2 級','第 3 級'];
+  const LVN=['流水帳','有細節','有說服力'];
   const CASES=[
-    {title:'熱舞社幹部',order:[1,2,0],v:[
-      ['我擔任熱舞社幹部，參加了很多表演，學到團隊合作的重要，也讓我成長很多。','只有「做了什麼」和心情。每個熱舞社幹部都能寫出這句話，看不出你是誰。'],
-      ['我擔任熱舞社活動長，負責成發排練。成發前三週只有 5 人能準時練習，我把排練改成分組時段，最後全員上台。','有角色、問題、行動和結果。但停在事件本身，沒有說出你從中發現了什麼。'],
-      ['成發前三週，12 位社員只有 5 人能準時練習。我把排練改成分組時段，用共用表單追蹤進度，最後全員上台。我發現自己擅長把混亂的事整理成大家看得懂的流程，這也是我想學資訊設計的原因。','問題、行動、證據、反思、科系連結都有。最後一句把經歷變成「我是誰」。']]},
-    {title:'課堂小組報告',order:[2,0,1],v:[
-      ['我和同學做了一份關於塑膠袋的報告，大家分工合作，最後得到很好的成績。','「分工合作」「很好的成績」是結論，沒有過程。老師看不到你負責什麼。'],
-      ['我們調查合作社一週的塑膠袋用量，我負責設計問卷，整理了 120 份回收結果。','說清楚自己的角色與數量。但沒有困難、沒有調整，看起來一切都很順利。'],
-      ['我們調查合作社一週的塑膠袋用量。我負責問卷，第一版題目太模糊，答案無法比較，改成選擇題重新發放後，整理出 120 份有效問卷。這讓我理解「問對問題」比「收很多資料」重要。','寫出失敗與修正，反思是自己的體會，不是口號。適合社會、傳播、管理等重視研究方法的學門。']]},
-    {title:'自主學習：影片剪輯',order:[0,2,1],v:[
-      ['我利用自主學習時間學習影片剪輯，學到很多技巧，覺得很有趣。','「很多技巧」「很有趣」無法驗證。自主學習最怕寫成心得日記。'],
-      ['我用 8 週自學剪輯軟體，完成 3 支班級活動影片，最長 3 分鐘。','有時間、數量、成果，可以附上作品連結。但看不出你在過程中學會判斷什麼。'],
-      ['我用 8 週自學剪輯，完成 3 支班級影片。第一支被同學說節奏太慢，我開始記錄觀眾在哪一秒離開，第三支把開頭縮短到 5 秒內。我想知道影像如何抓住觀眾的注意力。','從回饋到行動到改變，最後提出自己的好奇。記得附上作品連結，並開放公開閱覽。']]}
+    {title:'熱舞社幹部',v:[
+      ['我擔任熱舞社幹部，參加了很多表演，學到團隊合作的重要，也讓我成長很多。',[],'只有「做了什麼」和心情。每個熱舞社幹部都寫得出這句話，看不出你是誰。'],
+      ['我擔任熱舞社活動長，負責成發排練。成發前三週只有 5 人能準時練習，我把排練改成分組時段，最後全員上台。',['具體角色','遇到的問題','自己的行動','數字與結果'],'事件清楚了，但停在事件本身，沒有說出你從中發現了什麼。'],
+      ['成發前三週，12 位社員只有 5 人能準時練習。我把排練改成分組時段，用共用表單追蹤進度，最後全員上台。我發現自己擅長把混亂的事整理成大家看得懂的流程，這也是我想學資訊設計的原因。',['方法細節','對自己的發現','科系連結'],'問題、行動、證據、反思、科系連結都有。最後一句把經歷變成「我是誰」。']]},
+    {title:'課堂小組報告',v:[
+      ['我和同學做了一份關於塑膠袋的報告，大家分工合作，最後得到很好的成績。',[],'「分工合作」「很好的成績」是結論，沒有過程。老師看不到你負責什麼。'],
+      ['我們調查合作社一週的塑膠袋用量，我負責設計問卷，整理了 120 份回收結果。',['自己的分工','研究方法','數量'],'說清楚自己的角色與數量。但沒有困難、沒有調整，看起來一切都很順利。'],
+      ['我們調查合作社一週的塑膠袋用量。我負責問卷，第一版題目太模糊，答案無法比較，改成選擇題重新發放後，整理出 120 份有效問卷。這讓我理解「問對問題」比「收很多資料」重要。',['失敗與修正','自己的體會'],'寫出失敗與修正，反思是自己的體會，不是口號。適合重視研究方法的學門。']]}
   ];
   const casesBox=$('cases');
   CASES.forEach((c,ci)=>{
     const box=document.createElement('div'); box.className='case';
-    box.innerHTML='<h3>範例 '+(ci+1)+'：'+esc(c.title)+'</h3>';
-    const opts=document.createElement('div'); opts.className='opts';
-    const verdict=document.createElement('p'); verdict.className='verdict'; verdict.setAttribute('aria-live','polite');
-    c.order.forEach((lvl,pos)=>{
-      const b=document.createElement('button'); b.type='button'; b.className='opt'+(lvl===2?' best':'');
-      b.setAttribute('aria-pressed','false');
-      b.innerHTML='<span class="tag">'+'ABC'[pos]+'</span><span>'+esc(c.v[lvl][0])+'</span><span class="lv">'+LV[lvl]+'｜'+esc(c.v[lvl][1])+'</span>';
-      b.addEventListener('click',()=>{
-        opts.querySelectorAll('.opt').forEach(o=>o.setAttribute('aria-pressed','false'));
-        b.setAttribute('aria-pressed','true'); box.classList.add('revealed');
-        verdict.innerHTML=lvl===2?'<span class="ok">答對了。</span>這個版本最能讓老師看見「你是誰」。':'<span class="warn">再看一次。</span>標示「第 3 級」的版本多了什麼？';
-      });
-      opts.appendChild(b);
+    let h='<h3>範例 '+(ci+1)+'：'+esc(c.title)+'</h3><div class="ladder">';
+    c.v.forEach((x,l)=>{
+      h+='<div class="step l'+(l+1)+'"><span class="lvl">'+LV[l]+' '+LVN[l]+'</span><blockquote>'+esc(x[0])+'</blockquote>'+
+        '<p class="add">'+(x[1].length?'加入了：<b>'+x[1].map(esc).join('、')+'</b>':'起點：只有經歷與心情')+'</p><p class="why">'+esc(x[2])+'</p></div>';
     });
-    box.appendChild(opts); box.appendChild(verdict); casesBox.appendChild(box);
+    box.innerHTML=h+'</div>'; casesBox.appendChild(box);
   });
 
   /* ---------- 3. field comparison ---------- */
   const FIELDS=[
-    {title:'設計學門 vs 傳播學門',facts:'經歷：高一下接手熱舞社停更的 IG。參考他校帳號設計固定封面；每次練習錄 15 秒短片；發現觀眾愛看 NG 片段，先徵詢社員同意；一年內追蹤數約 180 增至 412。',
+    {title:'藝術、設計、傳播學門',hint:'藝術重「表達自己的想法」，設計重「替別人解決問題」，傳播重「讓訊息被對的人接收」。',
+     facts:'經歷：高二擔任熱舞社活動長，負責成發。編了一段 1 分鐘的開場舞、設計成發海報與 IG 封面、經營社團 IG 宣傳；一年內追蹤數約 180 增至 412。',
      tabs:[
-      {name:'設計學門',text:'我先分析他校熱舞社帳號的版面，發現經營得好的帳號都有一致的視覺系統，於是為社團設計固定的封面模板，統一字體與色彩。改版三次後，社員說「一眼就認得出是我們的貼文」。這讓我開始注意設計如何建立辨識度。',
-       focus:['視覺決策','設計過程','版本迭代','美感與一致性'],
-       change:'強調「為什麼這樣設計」與改版過程。附上三個版本的封面對照圖，比文字更有說服力。數據只當配角。'},
-      {name:'傳播學門',text:'我發現觀眾比較愛看練習的 NG 片段，於是調整內容策略。但有社員不想入鏡，我先徵詢同意，不願意的只拍背影。一年內追蹤數從約 180 增加到 412。我學到傳播不只追求觸及，也要尊重被拍攝的人。',
+      {name:'藝術',text:'我負責編成發的開場舞。一開始只是把喜歡的動作拼在一起，學姐說「看不出你想說什麼」。我改以「從陌生到默契」為主題，讓舞者從散開的隊形慢慢聚成一個圓，動作也從各跳各的變成同步。演出後我開始思考，身體動作如何傳達情感。',
+       focus:['創作理念','表現手法','美感判斷','演出紀錄'],
+       change:'只寫編舞這一段，強調創作想法的轉變。附上排練與演出影片、編舞筆記。'},
+      {name:'設計',text:'我負責成發海報與 IG 封面。先分析他校帳號，發現經營得好的帳號都有一致的視覺系統，於是統一字體、色彩與版型，讓海報和封面使用同一套設計。改版三次後，社員說「一眼就認得出是我們的貼文」。我開始注意設計如何建立辨識度。',
+       focus:['視覺決策','設計過程','版本迭代','使用者回饋'],
+       change:'只寫海報與封面，強調「為什麼這樣設計」與改版過程。附上三個版本的對照圖。'},
+      {name:'傳播',text:'我發現觀眾比較愛看練習的 NG 片段，於是調整 IG 的內容策略。但有社員不想入鏡，我先徵詢同意，不願意的只拍背影。一年內追蹤數從約 180 增加到 412。我學到傳播不只追求觸及，也要尊重被拍攝的人。',
        focus:['受眾分析','內容策略','成效數據','媒體倫理'],
-       change:'強調「觀眾是誰、訊息怎麼調整」，用數據說明成效，並加入媒體倫理的反思。附上洞察報告截圖。'}]},
-    {title:'語言學門 vs 社會學門',facts:'經歷：一學期擔任社區課輔志工，每週一次，陪新住民家庭的國小生寫功課。',
+       change:'只寫 IG 經營，強調觀眾是誰、訊息怎麼調整，並加入媒體倫理的反思。附上洞察報告截圖。'}]},
+    {title:'語言、人文、社會學門',hint:'語言重「語言怎麼運作」，人文重「這件事對人的意義」，社會重「現象背後的結構與原因」。',
+     facts:'經歷：一學期擔任社區課輔志工，每週一次，陪新住民家庭的國小生寫功課。',
      tabs:[
-      {name:'語言學門',text:'我陪一位母語是越南語的國小生寫國語作業，發現她常把「了」放錯位置。我整理她的錯誤做成小卡，對照越南語的句型解釋。一學期後，她的作業從每頁約 5 個錯誤減少到 1、2 個。我開始好奇不同語言的文法差異如何影響學習。',
-       focus:['語言觀察','跨文化溝通','文法與表達','語言能力證明'],
-       change:'聚焦在「語言本身」：錯誤類型、對照方法、改善幅度。可以附上自製的對照小卡。'},
-      {name:'社會學門',text:'課輔時我發現，8 位學生裡有 5 位的家長晚上要工作，沒有人陪寫功課。我訪談了 2 位家長，才知道他們不是不重視教育，而是工時太長。這讓我想了解家庭的經濟條件，如何影響孩子的學習機會。',
+      {name:'語言',text:'我陪一位母語是越南語的國小生寫國語作業，發現她常把「了」放錯位置。我整理她的錯誤做成小卡，對照越南語的句型解釋。一學期後，她的作業從每頁約 5 個錯誤減少到 1、2 個。我開始好奇不同語言的文法差異如何影響學習。',
+       focus:['語言觀察','文法與表達','跨文化溝通','語言能力證明'],
+       change:'聚焦在語言本身：錯誤類型、對照方法、改善幅度。附上自製的對照小卡。'},
+      {name:'人文',text:'她的媽媽會教她越南童謠，但她說在學校不想被同學聽到她講越南語。這句話讓我很在意。我開始閱讀移民相關的文章與小說，思考語言、記憶與身分認同的關係，也把這段觀察寫成一篇散文，投稿校刊。',
+       focus:['文化詮釋','閱讀與寫作','價值反思','身分與記憶'],
+       change:'聚焦在這件事對人的意義，用閱讀與寫作深化反思。附上散文作品與閱讀清單。'},
+      {name:'社會',text:'課輔時我發現，8 位學生裡有 5 位的家長晚上要工作，沒有人陪寫功課。我訪談了 2 位家長，才知道他們不是不重視教育，而是工時太長。這讓我想了解家庭的經濟條件，如何影響孩子的學習機會。',
        focus:['社會觀察','提出問題','訪談等田野資料','結構性思考'],
-       change:'聚焦在「現象背後的原因」：從個人觀察走到社會結構，並展現蒐集資料的方法。避免寫成單純的愛心故事。'}]}
+       change:'從個人觀察走到社會結構，並展現蒐集資料的方法。避免寫成單純的愛心故事。'}]},
+    {title:'資訊工程、管理學門',hint:'資訊工程重「怎麼把它做出來」，管理重「怎麼讓事情運作得更好」。',
+     facts:'經歷：高二園遊會，負責班上攤位的餐點訂單。改用 Google 表單與試算表收單，並寫了一小段 Apps Script 自動統計；兩天處理 186 筆訂單，錯誤從前一年約 10 筆降到 0。',
+     tabs:[
+      {name:'資訊工程',text:'去年紙本訂單常算錯，我改用 Google 表單收單，並自學 Apps Script 寫了一段自動加總的程式。第一版遇到同一筆訂單重複送出的問題，我加上檢查機制才解決。兩天處理 186 筆訂單沒有出錯。我發現自己喜歡把重複的工作變成程式。',
+       focus:['問題拆解','程式實作','除錯過程','自動化思維'],
+       change:'強調技術做法與除錯經過。附上程式片段截圖與資料流程圖。'},
+      {name:'管理',text:'我發現去年攤位最大的問題不是餐點，而是訂單流程混亂。我重新規劃收單、備餐、取餐三個站，並依尖峰時段排班。兩天處理 186 筆訂單，錯誤從去年約 10 筆降到 0。我學到好的流程比多加人手更有效。',
+       focus:['流程規劃','分工排班','效率與成本','成果指標'],
+       change:'強調流程與人的安排，表單和程式只是工具。附上流程圖與排班表。'}]}
   ];
   const fieldsBox=$('fields');
   FIELDS.forEach((f,fi)=>{
     const box=document.createElement('div'); box.className='case';
-    box.innerHTML='<h3>'+esc(f.title)+'</h3><p class="facts">'+esc(f.facts)+'</p>';
+    box.innerHTML='<h3>'+esc(f.title)+'</h3><p class="ghint">'+esc(f.hint)+'</p><p class="facts">'+esc(f.facts)+'</p>';
     const seg=document.createElement('div'); seg.className='seg'; seg.setAttribute('role','tablist'); seg.setAttribute('aria-label',f.title);
     const panel=document.createElement('div'); panel.className='version'; panel.setAttribute('role','tabpanel');
     const show=i=>{
