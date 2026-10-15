@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap">
 <style>
-/* Layout: one narrow column like an index card stack — header, adjectives, five numbered prompts (a real sequence), summary, take-away. */
+/* Layout: one narrow column of cards — compare three versions, compare by field, evaluate departments, optional home practice. */
 :root{
   --paper:#FAFAF7; --card:#FFFFFF; --ink:#2148B8; --muted:#516FC6; --soft:#98A9D6; --tint:#EDF0FA; --accent:#B65734;
   --field:#FFFFFF;
@@ -22,55 +22,82 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;
   padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:24px 48px}
-.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.wrap{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
 h1,h2,h3{margin:0;text-wrap:balance;line-height:1.35}
 p{margin:0}
 .eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--muted)}
 header{display:flex;flex-direction:column;gap:6px;padding-bottom:16px;border-bottom:2px solid var(--ink)}
 header h1{font-size:30px;font-weight:700}
 header .sub{color:var(--muted);font-size:14px}
-.lead{font-size:16px}
-section{background:var(--card);border:1px solid var(--soft);border-radius:6px;padding:18px 16px;display:flex;flex-direction:column;gap:12px}
-section h2{font-size:19px;font-weight:700;display:flex;align-items:baseline;gap:10px}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{font-size:14px;color:var(--ink);text-decoration:none;border:1px solid var(--soft);border-radius:999px;padding:4px 12px}
+section{background:var(--card);border:1px solid var(--soft);border-radius:6px;padding:18px 16px;display:flex;flex-direction:column;gap:14px}
+section h2{font-size:20px;font-weight:700;display:flex;align-items:baseline;gap:10px}
 .num{font-size:15px;color:var(--paper);background:var(--ink);border-radius:50%;width:28px;height:28px;display:inline-grid;place-items:center;flex:none;font-weight:700}
+h3{font-size:17px;font-weight:700}
 .hint{font-size:14px;color:var(--muted)}
-.hint b{color:var(--accent);font-weight:700}
+.hint b,.warn{color:var(--accent);font-weight:700}
 label{font-weight:500;font-size:15px}
 input[type=text],textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--soft);border-radius:4px;padding:10px 12px}
-textarea{min-height:88px;resize:vertical}
+textarea{min-height:80px;resize:vertical}
 input::placeholder,textarea::placeholder{color:var(--muted);opacity:.85}
-input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .adj{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .adj input{text-align:center;font-weight:700}
-.field{display:flex;flex-direction:column;gap:6px}
-.checks{display:flex;flex-wrap:wrap;gap:8px}
-.checks label{display:flex;align-items:center;gap:6px;border:1px solid var(--soft);border-radius:999px;padding:4px 12px;font-weight:400;font-size:14px;cursor:pointer}
-.checks input{accent-color:var(--ink)}
-.counter{font-size:13px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
-.counter.over{color:var(--accent);font-weight:700}
-.btns{display:flex;flex-wrap:wrap;gap:8px}
 button{font:inherit;font-weight:700;font-size:15px;border-radius:4px;padding:10px 16px;cursor:pointer;border:2px solid var(--ink)}
 .primary{background:var(--ink);color:var(--paper)}
 .ghost{background:transparent;color:var(--ink)}
 .danger{background:transparent;color:var(--accent);border-color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
 .status{font-size:14px;color:var(--muted);min-height:1.4em}
-pre.prompt{margin:0;white-space:pre-wrap;background:var(--tint);border-radius:4px;padding:12px;font:inherit;font-size:14px;line-height:1.7}
+
+/* three-version quiz */
+.case{border-top:1px solid var(--soft);padding-top:14px;display:flex;flex-direction:column;gap:10px}
+.case:first-of-type{border-top:none;padding-top:0}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;text-align:left;font-weight:400;font-size:15px;line-height:1.7;background:var(--field);color:var(--ink);border:1px solid var(--soft);padding:12px}
+.opt .tag{font-weight:700;font-size:15px;color:var(--muted)}
+.opt[aria-pressed="true"]{border:2px solid var(--ink)}
+.opt .lv{display:none}
+.revealed .opt .lv{display:block;grid-column:2;font-size:14px;color:var(--muted);border-top:1px dashed var(--soft);padding-top:6px}
+.revealed .opt.best{border:2px solid var(--accent)}
+.revealed .opt.best .lv{color:var(--accent);font-weight:700}
+.verdict{font-size:14px}
+
+/* field comparison */
+.facts{background:var(--tint);border-radius:4px;padding:10px 12px;font-size:14px}
+.seg{display:flex;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.seg button{flex:1;border:none;border-radius:0;background:transparent;color:var(--ink);padding:8px 10px}
+.seg button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.version{display:flex;flex-direction:column;gap:8px}
+.version blockquote{margin:0;border-left:4px solid var(--ink);padding:4px 0 4px 12px;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-size:13px;border:1px solid var(--soft);border-radius:999px;padding:2px 10px}
+
+/* evaluation */
 table{border-collapse:collapse;width:100%;font-size:14px}
 th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--soft);vertical-align:top}
 th{color:var(--muted);font-weight:700;font-size:13px;letter-spacing:.04em}
 .tablebox{overflow-x:auto}
+.qa{display:flex;flex-direction:column;gap:10px}
+.qcard{border:1px solid var(--soft);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.qcard .q{font-weight:700;font-size:15px}
+.sig{display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:4px 8px;font-size:14px}
+.sig dt{font-weight:700}
+.sig dt.good{color:var(--ink)}
+.sig dt.check{color:var(--accent)}
+.sig dd{margin:0}
+
+details.home{border:1px solid var(--soft);border-radius:6px;background:var(--card)}
+details.home>summary{cursor:pointer;font-weight:700;font-size:18px;padding:16px}
+details.home .inner{padding:0 16px 18px;display:flex;flex-direction:column;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.counter{font-size:13px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.counter.over{color:var(--accent);font-weight:700}
+pre.prompt{margin:0;white-space:pre-wrap;background:var(--tint);border-radius:4px;padding:12px;font:inherit;font-size:14px;line-height:1.7}
 .rule{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:15px}
 .rule dt{font-weight:700;color:var(--accent)}
 .rule dd{margin:0}
-.unis{display:flex;flex-direction:column;gap:12px}
-.uni{border:1px solid var(--soft);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:10px}
-.uni h3{font-size:16px;color:var(--muted)}
-.facet{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
-.facet label{font-weight:400;font-size:14px}
-.facet select{width:auto;padding:6px 8px;font-size:14px}
-details.asks{border-top:1px solid var(--soft);padding-top:12px}
-details.asks summary{cursor:pointer;font-weight:700;font-size:15px}
-details.asks ol{margin:8px 0;padding-left:22px;font-size:15px;display:flex;flex-direction:column;gap:6px}
 footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
 footer a{color:var(--muted)}
 .ok{color:var(--ink);font-weight:700}
@@ -86,11 +113,14 @@ footer a{color:var(--muted)}
     <p class="sub">國立蘭陽女子高級中學　2026.10.16　講師：中國文化大學資訊傳播學系 朱尚禮</p>
   </header>
 
-  <p class="lead">把「做過的事」變成「有證據的能力」。內容會自動存在這支手機的瀏覽器裡，寫完按最下方的「複製全部」，貼到記事本或 LINE 傳給自己就能帶走。</p>
+  <p>這張卡不用你寫經歷。跟著比較、判斷，看懂「同一件事，怎麼寫才有說服力」。所有範例都是虛構的，數字只供示範。</p>
+  <nav class="toc" aria-label="段落">
+    <a href="#s-adj">3 個形容詞</a><a href="#s-three">三種寫法</a><a href="#s-field">不同學門</a><a href="#s-eval">校系評估</a><a href="#s-home">回家練習</a>
+  </nav>
 
-  <section aria-labelledby="h-adj">
-    <h2 id="h-adj">先想 3 個形容詞</h2>
-    <p class="hint">希望教授讀完你的資料後，腦中留下哪 3 個詞？每個詞之後都要有一段經歷能證明它。</p>
+  <section id="s-adj" aria-labelledby="h-adj">
+    <h2 id="h-adj"><span class="num">1</span>先想 3 個形容詞</h2>
+    <p class="hint">希望教授讀完你的資料後，腦中留下哪 3 個詞？之後看範例時，想想哪一種寫法最能證明這些詞。</p>
     <div class="adj">
       <input type="text" id="adj1" aria-label="形容詞 1" placeholder="例：好奇" maxlength="8">
       <input type="text" id="adj2" aria-label="形容詞 2" placeholder="例：耐心" maxlength="8">
@@ -98,106 +128,69 @@ footer a{color:var(--muted)}
     </div>
   </section>
 
-  <section aria-labelledby="h-pick">
-    <h2 id="h-pick">選一段經歷</h2>
-    <div class="field">
-      <label for="exp">經歷名稱</label>
-      <input type="text" id="exp" placeholder="例：幫熱舞社經營 IG 帳號">
+  <section id="s-three" aria-labelledby="h-three">
+    <h2 id="h-three"><span class="num">2</span>三種寫法，哪一個最好？</h2>
+    <p class="hint">每一題點選你覺得最有說服力的版本，就會看到三個版本的差別。</p>
+    <div id="cases"></div>
+    <p class="hint">好的寫法有五個元素：<b>具體的問題</b>、<b>自己的行動</b>、<b>證據或數字</b>、<b>反思</b>、<b>和科系的連結</b>。</p>
+  </section>
+
+  <section id="s-field" aria-labelledby="h-field">
+    <h2 id="h-field"><span class="num">3</span>同一段經歷，不同學門怎麼寫</h2>
+    <p class="hint">事實不變，改變的是「強調哪一面」。先查清楚你想讀的學門看重什麼，再決定重點。</p>
+    <div id="fields"></div>
+  </section>
+
+  <section id="s-eval" aria-labelledby="h-eval">
+    <h2 id="h-eval"><span class="num">4</span>校系評估表：你也在面試這個系</h2>
+    <h3>評估項目</h3>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>面向</th><th>評估項目</th><th>去哪裡查</th></tr></thead>
+        <tbody>
+          <tr><td>專業與就業</td><td>課程地圖能否對應到能力與工作；有沒有業師、實習課程；系友多在哪些領域</td><td>系網課程地圖、招生說明會</td></tr>
+          <tr><td>教學設備</td><td>專業教室與器材；開放時間與借用規則；有沒有持續更新與維護</td><td>參訪教室、問系辦</td></tr>
+          <tr><td>系友關係</td><td>系友是否回校分享、帶實習、參與畢業展或提供工作機會</td><td>系網活動紀錄、系友講座、系上社群</td></tr>
+          <tr><td>學習資源</td><td>交換學生、雙主修與輔系；導師與學習輔導；獎學金</td><td>學校國際處、教務處網頁</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="field">
-      <label for="kind">它比較適合放在哪裡？</label>
-      <select id="kind">
-        <option value="">還不確定</option>
-        <option>課程學習成果（課堂產出的作業、作品）</option>
-        <option>多元表現（社團、自主學習、服務、競賽、幹部）</option>
-        <option>學習歷程自述的素材</option>
-      </select>
-      <p class="hint">社團、活動、興趣屬於<b>多元表現</b>或自述素材，不能上傳成課程學習成果。</p>
-    </div>
+    <p class="hint">系網與簡章是系上自己寫的，最好對照<a href="https://udb.moe.edu.tw/" target="_blank" rel="noopener">教育部大專校院校務資訊公開平臺</a>的數據，或直接問系友。</p>
+
+    <h3>口試時可以問的好問題，以及怎麼解讀回答</h3>
+    <p class="hint">面試最後老師問「你有什麼問題？」，就是你評估這個系的時間。用好奇的語氣問，不要質問。</p>
+    <div class="qa" id="qa"></div>
   </section>
 
-  <section aria-labelledby="h-q1">
-    <h2 id="h-q1"><span class="num">1</span>做了什麼？</h2>
-    <p class="hint">描述一項真實經歷：什麼時候、什麼角色、負責什麼。</p>
-    <textarea id="q1" aria-labelledby="h-q1" placeholder="例：高一下開始，負責熱舞社 IG 的拍照與發文，一週兩三篇。"></textarea>
-  </section>
-
-  <section aria-labelledby="h-q2">
-    <h2 id="h-q2"><span class="num">2</span>為什麼做？</h2>
-    <p class="hint">當時的動機、目標，或遇到了什麼問題。</p>
-    <textarea id="q2" aria-labelledby="h-q2" placeholder="例：帳號很久沒更新，成發來看的人很少。"></textarea>
-  </section>
-
-  <section aria-labelledby="h-q3">
-    <h2 id="h-q3"><span class="num">3</span>怎麼完成？</h2>
-    <p class="hint">寫<b>你自己</b>做的部分。遇到什麼困難？你怎麼調整？失敗經驗也可以寫。</p>
-    <textarea id="q3" aria-labelledby="h-q3" placeholder="例：參考他校帳號做固定封面；發現大家愛看 NG 片段，但有人不想入鏡，所以先徵詢同意，不願意的只拍背影。"></textarea>
-  </section>
-
-  <section aria-labelledby="h-q4">
-    <h2 id="h-q4"><span class="num">4</span>如何證明？</h2>
-    <p class="hint">作品、照片、數據、修改紀錄、他人回饋。得獎<b>不要只放獎狀</b>，要放成果或過程的紀錄照片。沒有數字就寫「待確認」，不要估。</p>
-    <textarea id="q4" aria-labelledby="h-q4" placeholder="例：追蹤數由約 180 增至 412（附洞察截圖）；封面改版前後對照圖。"></textarea>
-  </section>
-
-  <section aria-labelledby="h-q5">
-    <h2 id="h-q5"><span class="num">5</span>學到什麼？</h2>
-    <p class="hint">能力的成長、對自己的新認識，以及和想讀的科系有什麼關係。</p>
-    <textarea id="q5" aria-labelledby="h-q5" placeholder="例：發現自己喜歡研究「別人為什麼會想看」，想讀傳播相關科系。"></textarea>
-    <div class="field">
-      <span class="hint">這段經歷支持了你的哪個形容詞？</span>
-      <div class="checks" id="supports"></div>
-    </div>
-  </section>
-
-  <section aria-labelledby="h-sum">
-    <h2 id="h-sum">寫成 100 字摘要</h2>
-    <p class="hint">上傳學習歷程時的簡述大約 100 字。用自己的口吻，保留你原本的說法。</p>
-    <textarea id="sum" aria-labelledby="h-sum" placeholder="例：高一下我接手熱舞社停更的IG，參考他校帳號設計固定封面，每次練習錄15秒短片……"></textarea>
-    <p class="counter" id="count" aria-live="polite">0 / 100 字</p>
-  </section>
-
-  <section aria-labelledby="h-ai">
-    <h2 id="h-ai">回家用 AI 繼續追問</h2>
-    <p class="hint">複製下面的提示詞，貼到你可以使用的 AI 工具。不要輸入真實姓名、學校或身分證號。</p>
-    <pre class="prompt" id="prompt">你是一位學習歷程訪談教練。請用提問幫我整理一段真實經歷，規則如下：
+  <details class="home" id="s-home">
+    <summary>回家練習（選用）：寫下自己的一段經歷</summary>
+    <div class="inner">
+      <p class="hint">內容會存在這支手機的瀏覽器，寫完按「複製全部」帶走。</p>
+      <div class="field"><label for="exp">經歷名稱</label><input type="text" id="exp" placeholder="例：幫熱舞社經營 IG 帳號"></div>
+      <div class="field"><label for="q1">① 做了什麼？</label><textarea id="q1" placeholder="什麼時候、什麼角色、負責什麼"></textarea></div>
+      <div class="field"><label for="q2">② 為什麼做？</label><textarea id="q2" placeholder="動機、目標，或遇到的問題"></textarea></div>
+      <div class="field"><label for="q3">③ 怎麼完成？</label><textarea id="q3" placeholder="你自己做的部分、困難與調整"></textarea></div>
+      <div class="field"><label for="q4">④ 如何證明？</label><textarea id="q4" placeholder="作品、照片、數據、他人回饋；得獎不要只放獎狀"></textarea></div>
+      <div class="field"><label for="q5">⑤ 學到什麼？</label><textarea id="q5" placeholder="能力成長，以及和想讀的科系的關係"></textarea></div>
+      <div class="field"><label for="sum">100 字摘要</label><textarea id="sum" placeholder="用自己的口吻，保留原本的說法"></textarea><p class="counter" id="count" aria-live="polite">0 / 100 字</p></div>
+      <h3>用 AI 繼續追問</h3>
+      <p class="hint">複製提示詞，貼到你可以使用的 AI 工具。不要輸入真實姓名、學校或身分證號。</p>
+      <pre class="prompt" id="prompt">你是一位學習歷程訪談教練。請用提問幫我整理一段真實經歷，規則如下：
 1. 每次只問一個問題，等我回答再問下一題。
 2. 依序釐清：做了什麼、為什麼做、我自己負責哪些部分、遇到什麼困難、有什麼證據、學到什麼。
 3. 我的回答太籠統時，請追問具體的時間、數字或例子。
 4. 不可以虛構我沒說過的內容，也不要誇大我的貢獻；我不確定的地方，請標成「待確認」。
 5. 最後請：(1) 用我的口吻、盡量保留我的原話，寫一段 100 字以內的摘要；(2) 列出這段經歷可能展現的 2–3 項能力，並說明各自由哪個事例支持；(3) 列出我還需要補的證據。
 6. 我不會提供真實姓名與學校名稱。</pre>
-    <div class="btns"><button type="button" class="ghost" id="copyPrompt">複製提示詞</button></div>
-  </section>
-
-  <section aria-labelledby="h-eval">
-    <h2 id="h-eval">校系評估表：比較 2–3 個志願</h2>
-    <p class="hint">你也在面試這個系。從三個面向評估它有沒有認真辦學，以及適不適合你。查不到就選「還沒查」，回家補。</p>
-    <div class="unis" id="unis"></div>
-    <details class="asks">
-      <summary>面試最後，可以問老師的 5 個問題</summary>
-      <ol>
-        <li>學長姐畢業後，大多在哪些領域工作？系上有哪些實習或業界合作的機會？</li>
-        <li>系上的電腦教室、攝影或 XR 等設備，學生課外可以借用嗎？</li>
-        <li>大一、大二想提早參與專題或老師的研究，有什麼管道？</li>
-        <li>系上同學申請交換、雙主修或輔系的多嗎？通常怎麼準備？</li>
-        <li>我已經開始自學＿＿，入學前還建議我加強哪一方面？</li>
-      </ol>
-      <p class="hint">用好奇的語氣問。會問好問題，代表你做過功課，也是就讀意願的證明。</p>
-    </details>
-  </section>
-
-  <section aria-labelledby="h-take">
-    <h2 id="h-take">帶走我的草稿</h2>
-    <p class="hint">按「複製全部」後，貼到記事本、Google 文件或 LINE 的「與自己聊天」保存。</p>
-    <div class="btns">
-      <button type="button" class="primary" id="copyAll">複製全部</button>
-      <button type="button" class="ghost" id="sample">看範例</button>
-      <button type="button" class="danger" id="clear">清空</button>
+      <div class="btns">
+        <button type="button" class="ghost" id="copyPrompt">複製提示詞</button>
+        <button type="button" class="primary" id="copyAll">複製全部</button>
+        <button type="button" class="danger" id="clear">清空</button>
+      </div>
+      <p class="status" id="status" role="status"></p>
+      <textarea id="fallback" aria-label="草稿全文" hidden readonly></textarea>
     </div>
-    <p class="status" id="status" role="status"></p>
-    <textarea id="fallback" aria-label="草稿全文" hidden readonly></textarea>
-  </section>
+  </details>
 
   <section aria-labelledby="h-cheat">
     <h2 id="h-cheat">審查小抄</h2>
@@ -215,13 +208,14 @@ footer a{color:var(--muted)}
         </tbody>
       </table>
     </div>
-    <p class="hint">各校系實際要求以甄選會公布的校系分則為準。</p>
+    <p class="hint">社團、活動、興趣屬於多元表現或自述素材，不能上傳成課程學習成果。各校系要求以甄選會公布的校系分則為準。</p>
   </section>
 
   <footer>
     <p>資料來源：
       <a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001916" target="_blank" rel="noopener">教育部學習歷程檔案作業要點</a>、
-      <a href="https://www.unews.com.tw/News/Info/7807" target="_blank" rel="noopener">大學問：學習歷程上傳限制</a>
+      <a href="https://www.unews.com.tw/News/Info/7807" target="_blank" rel="noopener">大學問：學習歷程上傳限制</a>、
+      <a href="https://www.cac.edu.tw/cacportal/jbcrc/LearningPortfolios_MultiQuery_ppa/index.php" target="_blank" rel="noopener">招聯會學習準備建議方向查詢</a>
     </p>
     <p><a href="slides.pdf" target="_blank" rel="noopener">下載講座簡報（PDF）</a></p>
     <p>本頁內容只存在你自己的瀏覽器，講師與其他人看不到。</p>
@@ -230,117 +224,121 @@ footer a{color:var(--muted)}
 
 <script>
 (function(){
-  const ids=['adj1','adj2','adj3','exp','kind','q1','q2','q3','q4','q5','sum'];
-  const KEY='jingli-card-v1';
   const $=id=>document.getElementById(id);
+  const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  /* ---------- 2. three versions ---------- */
+  const LV=['第 1 級：流水帳','第 2 級：有細節','第 3 級：有說服力'];
+  const CASES=[
+    {title:'熱舞社幹部',order:[1,2,0],v:[
+      ['我擔任熱舞社幹部，參加了很多表演，學到團隊合作的重要，也讓我成長很多。','只有「做了什麼」和心情。每個熱舞社幹部都能寫出這句話，看不出你是誰。'],
+      ['我擔任熱舞社活動長，負責成發排練。成發前三週只有 5 人能準時練習，我把排練改成分組時段，最後全員上台。','有角色、問題、行動和結果。但停在事件本身，沒有說出你從中發現了什麼。'],
+      ['成發前三週，12 位社員只有 5 人能準時練習。我把排練改成分組時段，用共用表單追蹤進度，最後全員上台。我發現自己擅長把混亂的事整理成大家看得懂的流程，這也是我想學資訊設計的原因。','問題、行動、證據、反思、科系連結都有。最後一句把經歷變成「我是誰」。']]},
+    {title:'課堂小組報告',order:[2,0,1],v:[
+      ['我和同學做了一份關於塑膠袋的報告，大家分工合作，最後得到很好的成績。','「分工合作」「很好的成績」是結論，沒有過程。老師看不到你負責什麼。'],
+      ['我們調查合作社一週的塑膠袋用量，我負責設計問卷，整理了 120 份回收結果。','說清楚自己的角色與數量。但沒有困難、沒有調整，看起來一切都很順利。'],
+      ['我們調查合作社一週的塑膠袋用量。我負責問卷，第一版題目太模糊，答案無法比較，改成選擇題重新發放後，整理出 120 份有效問卷。這讓我理解「問對問題」比「收很多資料」重要。','寫出失敗與修正，反思是自己的體會，不是口號。適合社會、傳播、管理等重視研究方法的學門。']]},
+    {title:'自主學習：影片剪輯',order:[0,2,1],v:[
+      ['我利用自主學習時間學習影片剪輯，學到很多技巧，覺得很有趣。','「很多技巧」「很有趣」無法驗證。自主學習最怕寫成心得日記。'],
+      ['我用 8 週自學剪輯軟體，完成 3 支班級活動影片，最長 3 分鐘。','有時間、數量、成果，可以附上作品連結。但看不出你在過程中學會判斷什麼。'],
+      ['我用 8 週自學剪輯，完成 3 支班級影片。第一支被同學說節奏太慢，我開始記錄觀眾在哪一秒離開，第三支把開頭縮短到 5 秒內。我想知道影像如何抓住觀眾的注意力。','從回饋到行動到改變，最後提出自己的好奇。記得附上作品連結，並開放公開閱覽。']]}
+  ];
+  const casesBox=$('cases');
+  CASES.forEach((c,ci)=>{
+    const box=document.createElement('div'); box.className='case';
+    box.innerHTML='<h3>範例 '+(ci+1)+'：'+esc(c.title)+'</h3>';
+    const opts=document.createElement('div'); opts.className='opts';
+    const verdict=document.createElement('p'); verdict.className='verdict'; verdict.setAttribute('aria-live','polite');
+    c.order.forEach((lvl,pos)=>{
+      const b=document.createElement('button'); b.type='button'; b.className='opt'+(lvl===2?' best':'');
+      b.setAttribute('aria-pressed','false');
+      b.innerHTML='<span class="tag">'+'ABC'[pos]+'</span><span>'+esc(c.v[lvl][0])+'</span><span class="lv">'+LV[lvl]+'｜'+esc(c.v[lvl][1])+'</span>';
+      b.addEventListener('click',()=>{
+        opts.querySelectorAll('.opt').forEach(o=>o.setAttribute('aria-pressed','false'));
+        b.setAttribute('aria-pressed','true'); box.classList.add('revealed');
+        verdict.innerHTML=lvl===2?'<span class="ok">答對了。</span>這個版本最能讓老師看見「你是誰」。':'<span class="warn">再看一次。</span>標示「第 3 級」的版本多了什麼？';
+      });
+      opts.appendChild(b);
+    });
+    box.appendChild(opts); box.appendChild(verdict); casesBox.appendChild(box);
+  });
+
+  /* ---------- 3. field comparison ---------- */
+  const FIELDS=[
+    {title:'設計學門 vs 傳播學門',facts:'經歷：高一下接手熱舞社停更的 IG。參考他校帳號設計固定封面；每次練習錄 15 秒短片；發現觀眾愛看 NG 片段，先徵詢社員同意；一年內追蹤數約 180 增至 412。',
+     tabs:[
+      {name:'設計學門',text:'我先分析他校熱舞社帳號的版面，發現經營得好的帳號都有一致的視覺系統，於是為社團設計固定的封面模板，統一字體與色彩。改版三次後，社員說「一眼就認得出是我們的貼文」。這讓我開始注意設計如何建立辨識度。',
+       focus:['視覺決策','設計過程','版本迭代','美感與一致性'],
+       change:'強調「為什麼這樣設計」與改版過程。附上三個版本的封面對照圖，比文字更有說服力。數據只當配角。'},
+      {name:'傳播學門',text:'我發現觀眾比較愛看練習的 NG 片段，於是調整內容策略。但有社員不想入鏡，我先徵詢同意，不願意的只拍背影。一年內追蹤數從約 180 增加到 412。我學到傳播不只追求觸及，也要尊重被拍攝的人。',
+       focus:['受眾分析','內容策略','成效數據','媒體倫理'],
+       change:'強調「觀眾是誰、訊息怎麼調整」，用數據說明成效，並加入媒體倫理的反思。附上洞察報告截圖。'}]},
+    {title:'語言學門 vs 社會學門',facts:'經歷：一學期擔任社區課輔志工，每週一次，陪新住民家庭的國小生寫功課。',
+     tabs:[
+      {name:'語言學門',text:'我陪一位母語是越南語的國小生寫國語作業，發現她常把「了」放錯位置。我整理她的錯誤做成小卡，對照越南語的句型解釋。一學期後，她的作業從每頁約 5 個錯誤減少到 1、2 個。我開始好奇不同語言的文法差異如何影響學習。',
+       focus:['語言觀察','跨文化溝通','文法與表達','語言能力證明'],
+       change:'聚焦在「語言本身」：錯誤類型、對照方法、改善幅度。可以附上自製的對照小卡。'},
+      {name:'社會學門',text:'課輔時我發現，8 位學生裡有 5 位的家長晚上要工作，沒有人陪寫功課。我訪談了 2 位家長，才知道他們不是不重視教育，而是工時太長。這讓我想了解家庭的經濟條件，如何影響孩子的學習機會。',
+       focus:['社會觀察','提出問題','訪談等田野資料','結構性思考'],
+       change:'聚焦在「現象背後的原因」：從個人觀察走到社會結構，並展現蒐集資料的方法。避免寫成單純的愛心故事。'}]}
+  ];
+  const fieldsBox=$('fields');
+  FIELDS.forEach((f,fi)=>{
+    const box=document.createElement('div'); box.className='case';
+    box.innerHTML='<h3>'+esc(f.title)+'</h3><p class="facts">'+esc(f.facts)+'</p>';
+    const seg=document.createElement('div'); seg.className='seg'; seg.setAttribute('role','tablist'); seg.setAttribute('aria-label',f.title);
+    const panel=document.createElement('div'); panel.className='version'; panel.setAttribute('role','tabpanel');
+    const show=i=>{
+      seg.querySelectorAll('button').forEach((b,j)=>b.setAttribute('aria-selected',j===i?'true':'false'));
+      const t=f.tabs[i];
+      panel.innerHTML='<blockquote>'+esc(t.text)+'</blockquote><p class="hint">這個學門看重</p><div class="chips">'+t.focus.map(x=>'<span>'+esc(x)+'</span>').join('')+'</div><p class="hint"><b>改了什麼：</b>'+esc(t.change)+'</p>';
+    };
+    f.tabs.forEach((t,i)=>{const b=document.createElement('button'); b.type='button'; b.setAttribute('role','tab'); b.textContent=t.name; b.addEventListener('click',()=>show(i)); seg.appendChild(b);});
+    box.appendChild(seg); box.appendChild(panel); fieldsBox.appendChild(box); show(0);
+  });
+
+  /* ---------- 4. interview questions ---------- */
+  const QA=[
+    ['學長姐畢業後，大多在哪些領域工作？','說得出具體領域、公司類型或大約比例：系上有在追蹤系友。','只說「各行各業都有」：追蹤可能較少，回家查系網或問系友。'],
+    ['系上的設備，學生課外可以借用嗎？','說得出開放時間或借用流程：設備真的在被使用。','「要看情況」「上課才能用」：實際使用的機會可能有限。'],
+    ['大一、大二想參與專題或老師的研究，有什麼管道？','舉得出專題、研究助理或競賽團隊的例子：鼓勵學生提早投入。','「大三再說」：前兩年以基礎課為主，想早點做專題要自己爭取。'],
+    ['系上同學申請交換或雙主修的多嗎？','有人數或學長姐的例子：制度實際有在運作。','只說「學校有這個制度」：實際申請的人可能不多。'],
+    ['系友會回來分享，或提供實習機會嗎？','說得出活動名稱或合作單位：系所與系友連結緊密。','想不出例子：系友連結可能較弱，可再看系網活動紀錄。'],
+    ['我已經開始自學＿＿，入學前還建議我加強什麼？','給出具體建議：老師願意投入，也記住了你的行動。','這題沒有壞答案。重點是你提問時，已經展現了準備行動。']
+  ];
+  const qa=$('qa');
+  QA.forEach(([q,g,c],i)=>{
+    const d=document.createElement('div'); d.className='qcard';
+    d.innerHTML='<p class="q">'+(i+1)+'. '+esc(q)+'</p><dl class="sig"><dt class="good">好訊號</dt><dd>'+esc(g)+'</dd><dt class="check">再留意</dt><dd>'+esc(c)+'</dd></dl>';
+    qa.appendChild(d);
+  });
+
+  /* ---------- storage, home practice ---------- */
+  const ids=['adj1','adj2','adj3','exp','q1','q2','q3','q4','q5','sum'];
+  const KEY='jingli-card-v2';
   const status=$('status');
-  let supports=[];
-
-  const FACETS=[['f1','專業與就業市場的契合度'],['f2','教學軟硬體設備的投資與使用'],['f3','系所與系友的關係'],['fit','和我的 3 個形容詞合不合']];
-  const LEVELS=['還沒查','普通','不錯','很好'];
-  const unis=$('unis');
-  for(let n=1;n<=3;n++){
-    const card=document.createElement('div'); card.className='uni';
-    const h=document.createElement('h3'); h.textContent='志願 '+n; card.appendChild(h);
-    const name=document.createElement('input'); name.type='text'; name.id='u'+n+'name';
-    name.setAttribute('aria-label','志願 '+n+' 校系名稱'); name.placeholder=n===1?'例：中國文化大學 資訊傳播學系':'校系名稱';
-    card.appendChild(name); ids.push(name.id);
-    FACETS.forEach(([k,label])=>{
-      const row=document.createElement('div'); row.className='facet';
-      const sel=document.createElement('select'); sel.id='u'+n+k;
-      LEVELS.forEach(l=>{const o=document.createElement('option'); o.textContent=l; sel.appendChild(o);});
-      const lab=document.createElement('label'); lab.htmlFor=sel.id; lab.textContent=label;
-      row.appendChild(lab); row.appendChild(sel); card.appendChild(row); ids.push(sel.id);
-    });
-    const note=document.createElement('textarea'); note.id='u'+n+'note'; note.style.minHeight='64px';
-    note.setAttribute('aria-label','志願 '+n+' 備註'); note.placeholder='查到的證據或想問的問題';
-    card.appendChild(note); ids.push(note.id);
-    unis.appendChild(card);
-  }
-
-  function save(){
-    const data={supports};
-    ids.forEach(i=>data[i]=$(i).value);
-    try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}
-  }
-  function load(data){
-    ids.forEach(i=>{ if(data && typeof data[i]==='string') $(i).value=data[i]; });
-    supports=(data && Array.isArray(data.supports))?data.supports:[];
-    renderChecks(); updateCount();
-  }
-  function renderChecks(){
-    const box=$('supports'); box.innerHTML='';
-    const adjs=['adj1','adj2','adj3'].map(i=>$(i).value.trim());
-    let any=false;
-    adjs.forEach((a,idx)=>{
-      if(!a) return; any=true;
-      const id='sup'+idx;
-      const lab=document.createElement('label');
-      const cb=document.createElement('input'); cb.type='checkbox'; cb.id=id; cb.checked=supports.includes(a);
-      cb.addEventListener('change',()=>{ supports=supports.filter(s=>s!==a); if(cb.checked) supports.push(a); save(); });
-      lab.appendChild(cb); lab.appendChild(document.createTextNode(a)); box.appendChild(lab);
-    });
-    if(!any){ const p=document.createElement('span'); p.className='hint'; p.textContent='先在最上方填寫 3 個形容詞，這裡就會出現選項。'; box.appendChild(p); }
-  }
-  function updateCount(){
-    const n=[...$('sum').value.replace(/\s/g,'')].length;
-    const c=$('count'); c.textContent=n+' / 100 字'+(n>100?'，請再精簡':'');
-    c.classList.toggle('over',n>100);
-  }
+  function save(){const d={}; ids.forEach(i=>d[i]=$(i).value); try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
+  function updateCount(){const n=[...$('sum').value.replace(/\s/g,'')].length; const c=$('count'); c.textContent=n+' / 100 字'+(n>100?'，請再精簡':''); c.classList.toggle('over',n>100);}
+  try{const raw=localStorage.getItem(KEY); if(raw){const d=JSON.parse(raw); ids.forEach(i=>{if(typeof d[i]==='string')$(i).value=d[i];});}}catch(e){}
+  updateCount();
+  ids.forEach(i=>$(i).addEventListener('input',()=>{if(i==='sum')updateCount(); save();}));
   function compose(){
     const v=i=>$(i).value.trim()||'（未填）';
-    const lines=[
-      '【經歷轉譯卡】讓經歷會說話：學習歷程設計術',
+    return ['【經歷轉譯卡】讓經歷會說話：學習歷程設計術',
       '我的 3 個形容詞：'+['adj1','adj2','adj3'].map(i=>$(i).value.trim()||'＿').join('、'),
-      '經歷：'+v('exp'),
-      '放在哪裡：'+($('kind').value||'還不確定'),
-      '① 做了什麼：'+v('q1'),
-      '② 為什麼做：'+v('q2'),
-      '③ 怎麼完成：'+v('q3'),
-      '④ 如何證明：'+v('q4'),
-      '⑤ 學到什麼：'+v('q5'),
-      '支持的形容詞：'+(supports.length?supports.join('、'):'（未勾選）'),
-      '100 字摘要：'+v('sum')
-    ];
-    for(let n=1;n<=3;n++){
-      const nm=$('u'+n+'name').value.trim(); if(!nm) continue;
-      lines.push('【志願 '+n+'】'+nm);
-      FACETS.forEach(([k,label])=>lines.push('・'+label+'：'+$('u'+n+k).value));
-      const note=$('u'+n+'note').value.trim(); if(note) lines.push('・備註：'+note);
-    }
-    return lines.join('\n');
+      '經歷：'+v('exp'),'① 做了什麼：'+v('q1'),'② 為什麼做：'+v('q2'),'③ 怎麼完成：'+v('q3'),'④ 如何證明：'+v('q4'),'⑤ 學到什麼：'+v('q5'),'100 字摘要：'+v('sum')].join('\n');
   }
   async function copyText(text,label){
-    try{ await navigator.clipboard.writeText(text); status.innerHTML='<span class="ok">已複製'+label+'</span>，現在可以貼到記事本或 LINE。'; $('fallback').hidden=true; }
-    catch(e){ const f=$('fallback'); f.value=text; f.hidden=false; f.focus(); f.select(); status.textContent='這個瀏覽器不允許自動複製。已選取下方文字，請長按或按 Ctrl+C 複製。'; }
+    try{await navigator.clipboard.writeText(text); status.innerHTML='<span class="ok">已複製'+label+'</span>，現在可以貼到記事本或 LINE。'; $('fallback').hidden=true;}
+    catch(e){const f=$('fallback'); f.value=text; f.hidden=false; f.focus(); f.select(); status.textContent='這個瀏覽器不允許自動複製。已選取下方文字，請長按或按 Ctrl+C 複製。';}
   }
-
-  try{ const raw=localStorage.getItem(KEY); if(raw) load(JSON.parse(raw)); else load(null);}catch(e){ load(null); }
-
-  ids.forEach(i=>{ const el=$(i); el.addEventListener('input',()=>{ if(i.startsWith('adj')) renderChecks(); if(i==='sum') updateCount(); save(); }); if(el.tagName==='SELECT') el.addEventListener('change',save); });
   $('copyAll').addEventListener('click',()=>copyText(compose(),'全部內容'));
   $('copyPrompt').addEventListener('click',()=>copyText($('prompt').textContent,'提示詞'));
-
-  const SAMPLE={adj1:'好奇',adj2:'會溝通',adj3:'重細節',exp:'幫熱舞社經營 IG 帳號（範例）',kind:'多元表現（社團、自主學習、服務、競賽、幹部）',
-    q1:'高一下開始負責熱舞社 IG 的拍照與發文，一週兩三篇。',
-    q2:'帳號很久沒更新，成發來看的人很少，社長問誰會修圖，我自願接下。',
-    q3:'先研究他校熱舞社帳號，做出固定封面模板，每次練習錄 15 秒短片。發現大家愛看 NG 片段，但有社員不想入鏡，我在群組徵詢同意，不願意的只拍背影，發文前先給當事人看。',
-    q4:'追蹤數由約 180 增至 412（附 IG 洞察截圖）；封面改版前後對照圖；成發觀眾人數：待確認。',
-    q5:'我發現自己喜歡研究「別人為什麼會想看」，也學到經營社群要先尊重被拍的人。想讀傳播相關科系。',
-    sum:'高一下我接手熱舞社停更的IG，參考他校帳號設計固定封面，每次練習錄15秒短片。發現觀眾愛看NG片段，我先徵詢社員同意，不願入鏡者只拍背影。一年內追蹤數由約180增至412，發現自己喜歡研究人為何想看。',
-    supports:['好奇','會溝通']};
-  let backup=null;
-  $('sample').addEventListener('click',()=>{
-    if(backup){ load(backup); backup=null; $('sample').textContent='看範例'; status.textContent='已回到你自己的草稿。'; save(); return; }
-    const cur={supports:[...supports]}; ids.forEach(i=>cur[i]=$(i).value); backup=cur;
-    load(SAMPLE); $('sample').textContent='回到我的草稿'; status.textContent='這是範例內容。按「回到我的草稿」就能恢復你寫的內容。';
-  });
-  let armed=false, timer=null;
+  let armed=false,timer=null;
   $('clear').addEventListener('click',()=>{
-    if(!armed){ armed=true; $('clear').textContent='再按一次確認清空'; status.textContent='清空後無法復原。'; timer=setTimeout(()=>{armed=false;$('clear').textContent='清空';status.textContent='';},4000); return; }
+    if(!armed){armed=true; $('clear').textContent='再按一次確認清空'; status.textContent='清空後無法復原。'; timer=setTimeout(()=>{armed=false;$('clear').textContent='清空';status.textContent='';},4000); return;}
     clearTimeout(timer); armed=false; $('clear').textContent='清空';
-    ids.forEach(i=>{ const el=$(i); if(el.tagName==='SELECT') el.selectedIndex=0; else el.value=''; }); supports=[]; backup=null; $('sample').textContent='看範例';
-    renderChecks(); updateCount(); save(); status.textContent='已清空。';
+    ids.forEach(i=>$(i).value=''); updateCount(); save(); status.textContent='已清空。';
   });
 })();
 </script>
