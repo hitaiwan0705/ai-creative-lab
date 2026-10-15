@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>經歷轉譯卡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: one narrow column like an index card stack — header, adjectives, five numbered prompts (a real sequence), summary, take-away. */
+:root{
+  --paper:#FAFAF7; --card:#FFFFFF; --ink:#2148B8; --muted:#516FC6; --soft:#98A9D6; --tint:#EDF0FA; --accent:#B65734;
+  --field:#FFFFFF;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#11152A; --card:#181E38; --ink:#C3D0F7; --muted:#97A9E2; --soft:#4A5A92; --tint:#1F2747; --accent:#F0A07F; --field:#0D1124; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11152A; --card:#181E38; --ink:#C3D0F7; --muted:#97A9E2; --soft:#4A5A92; --tint:#1F2747; --accent:#F0A07F; --field:#0D1124; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:24px 48px}
+.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{margin:0;text-wrap:balance;line-height:1.35}
+p{margin:0}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:6px;padding-bottom:16px;border-bottom:2px solid var(--ink)}
+header h1{font-size:30px;font-weight:700}
+header .sub{color:var(--muted);font-size:14px}
+.lead{font-size:16px}
+section{background:var(--card);border:1px solid var(--soft);border-radius:6px;padding:18px 16px;display:flex;flex-direction:column;gap:12px}
+section h2{font-size:19px;font-weight:700;display:flex;align-items:baseline;gap:10px}
+.num{font-size:15px;color:var(--paper);background:var(--ink);border-radius:50%;width:28px;height:28px;display:inline-grid;place-items:center;flex:none;font-weight:700}
+.hint{font-size:14px;color:var(--muted)}
+.hint b{color:var(--accent);font-weight:700}
+label{font-weight:500;font-size:15px}
+input[type=text],textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--soft);border-radius:4px;padding:10px 12px}
+textarea{min-height:88px;resize:vertical}
+input::placeholder,textarea::placeholder{color:var(--muted);opacity:.85}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.adj{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.adj input{text-align:center;font-weight:700}
+.field{display:flex;flex-direction:column;gap:6px}
+.checks{display:flex;flex-wrap:wrap;gap:8px}
+.checks label{display:flex;align-items:center;gap:6px;border:1px solid var(--soft);border-radius:999px;padding:4px 12px;font-weight:400;font-size:14px;cursor:pointer}
+.checks input{accent-color:var(--ink)}
+.counter{font-size:13px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.counter.over{color:var(--accent);font-weight:700}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;font-weight:700;font-size:15px;border-radius:4px;padding:10px 16px;cursor:pointer;border:2px solid var(--ink)}
+.primary{background:var(--ink);color:var(--paper)}
+.ghost{background:transparent;color:var(--ink)}
+.danger{background:transparent;color:var(--accent);border-color:var(--accent)}
+.status{font-size:14px;color:var(--muted);min-height:1.4em}
+pre.prompt{margin:0;white-space:pre-wrap;background:var(--tint);border-radius:4px;padding:12px;font:inherit;font-size:14px;line-height:1.7}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--soft);vertical-align:top}
+th{color:var(--muted);font-weight:700;font-size:13px;letter-spacing:.04em}
+.tablebox{overflow-x:auto}
+.rule{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:15px}
+.rule dt{font-weight:700;color:var(--accent)}
+.rule dd{margin:0}
+.unis{display:flex;flex-direction:column;gap:12px}
+.uni{border:1px solid var(--soft);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.uni h3{font-size:16px;color:var(--muted)}
+.facet{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.facet label{font-weight:400;font-size:14px}
+.facet select{width:auto;padding:6px 8px;font-size:14px}
+details.asks{border-top:1px solid var(--soft);padding-top:12px}
+details.asks summary{cursor:pointer;font-weight:700;font-size:15px}
+details.asks ol{margin:8px 0;padding-left:22px;font-size:15px;display:flex;flex-direction:column;gap:6px}
+footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+footer a{color:var(--muted)}
+.ok{color:var(--ink);font-weight:700}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">讓經歷會說話｜學習歷程設計術</p>
+    <h1>經歷轉譯卡</h1>
+    <p class="sub">國立蘭陽女子高級中學　2026.10.16　講師：中國文化大學資訊傳播學系 朱尚禮</p>
+  </header>
+
+  <p class="lead">把「做過的事」變成「有證據的能力」。內容會自動存在這支手機的瀏覽器裡，寫完按最下方的「複製全部」，貼到記事本或 LINE 傳給自己就能帶走。</p>
+
+  <section aria-labelledby="h-adj">
+    <h2 id="h-adj">先想 3 個形容詞</h2>
+    <p class="hint">希望教授讀完你的資料後，腦中留下哪 3 個詞？每個詞之後都要有一段經歷能證明它。</p>
+    <div class="adj">
+      <input type="text" id="adj1" aria-label="形容詞 1" placeholder="例：好奇" maxlength="8">
+      <input type="text" id="adj2" aria-label="形容詞 2" placeholder="例：耐心" maxlength="8">
+      <input type="text" id="adj3" aria-label="形容詞 3" placeholder="例：會整理" maxlength="8">
+    </div>
+  </section>
+
+  <section aria-labelledby="h-pick">
+    <h2 id="h-pick">選一段經歷</h2>
+    <div class="field">
+      <label for="exp">經歷名稱</label>
+      <input type="text" id="exp" placeholder="例：幫熱舞社經營 IG 帳號">
+    </div>
+    <div class="field">
+      <label for="kind">它比較適合放在哪裡？</label>
+      <select id="kind">
+        <option value="">還不確定</option>
+        <option>課程學習成果（課堂產出的作業、作品）</option>
+        <option>多元表現（社團、自主學習、服務、競賽、幹部）</option>
+        <option>學習歷程自述的素材</option>
+      </select>
+      <p class="hint">社團、活動、興趣屬於<b>多元表現</b>或自述素材，不能上傳成課程學習成果。</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-q1">
+    <h2 id="h-q1"><span class="num">1</span>做了什麼？</h2>
+    <p class="hint">描述一項真實經歷：什麼時候、什麼角色、負責什麼。</p>
+    <textarea id="q1" aria-labelledby="h-q1" placeholder="例：高一下開始，負責熱舞社 IG 的拍照與發文，一週兩三篇。"></textarea>
+  </section>
+
+  <section aria-labelledby="h-q2">
+    <h2 id="h-q2"><span class="num">2</span>為什麼做？</h2>
+    <p class="hint">當時的動機、目標，或遇到了什麼問題。</p>
+    <textarea id="q2" aria-labelledby="h-q2" placeholder="例：帳號很久沒更新，成發來看的人很少。"></textarea>
+  </section>
+
+  <section aria-labelledby="h-q3">
+    <h2 id="h-q3"><span class="num">3</span>怎麼完成？</h2>
+    <p class="hint">寫<b>你自己</b>做的部分。遇到什麼困難？你怎麼調整？失敗經驗也可以寫。</p>
+    <textarea id="q3" aria-labelledby="h-q3" placeholder="例：參考他校帳號做固定封面；發現大家愛看 NG 片段，但有人不想入鏡，所以先徵詢同意，不願意的只拍背影。"></textarea>
+  </section>
+
+  <section aria-labelledby="h-q4">
+    <h2 id="h-q4"><span class="num">4</span>如何證明？</h2>
+    <p class="hint">作品、照片、數據、修改紀錄、他人回饋。得獎<b>不要只放獎狀</b>，要放成果或過程的紀錄照片。沒有數字就寫「待確認」，不要估。</p>
+    <textarea id="q4" aria-labelledby="h-q4" placeholder="例：追蹤數由約 180 增至 412（附洞察截圖）；封面改版前後對照圖。"></textarea>
+  </section>
+
+  <section aria-labelledby="h-q5">
+    <h2 id="h-q5"><span class="num">5</span>學到什麼？</h2>
+    <p class="hint">能力的成長、對自己的新認識，以及和想讀的科系有什麼關係。</p>
+    <textarea id="q5" aria-labelledby="h-q5" placeholder="例：發現自己喜歡研究「別人為什麼會想看」，想讀傳播相關科系。"></textarea>
+    <div class="field">
+      <span class="hint">這段經歷支持了你的哪個形容詞？</span>
+      <div class="checks" id="supports"></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-sum">
+    <h2 id="h-sum">寫成 100 字摘要</h2>
+    <p class="hint">上傳學習歷程時的簡述大約 100 字。用自己的口吻，保留你原本的說法。</p>
+    <textarea id="sum" aria-labelledby="h-sum" placeholder="例：高一下我接手熱舞社停更的IG，參考他校帳號設計固定封面，每次練習錄15秒短片……"></textarea>
+    <p class="counter" id="count" aria-live="polite">0 / 100 字</p>
+  </section>
+
+  <section aria-labelledby="h-ai">
+    <h2 id="h-ai">回家用 AI 繼續追問</h2>
+    <p class="hint">複製下面的提示詞，貼到你可以使用的 AI 工具。不要輸入真實姓名、學校或身分證號。</p>
+    <pre class="prompt" id="prompt">你是一位學習歷程訪談教練。請用提問幫我整理一段真實經歷，規則如下：
+1. 每次只問一個問題，等我回答再問下一題。
+2. 依序釐清：做了什麼、為什麼做、我自己負責哪些部分、遇到什麼困難、有什麼證據、學到什麼。
+3. 我的回答太籠統時，請追問具體的時間、數字或例子。
+4. 不可以虛構我沒說過的內容，也不要誇大我的貢獻；我不確定的地方，請標成「待確認」。
+5. 最後請：(1) 用我的口吻、盡量保留我的原話，寫一段 100 字以內的摘要；(2) 列出這段經歷可能展現的 2–3 項能力，並說明各自由哪個事例支持；(3) 列出我還需要補的證據。
+6. 我不會提供真實姓名與學校名稱。</pre>
+    <div class="btns"><button type="button" class="ghost" id="copyPrompt">複製提示詞</button></div>
+  </section>
+
+  <section aria-labelledby="h-eval">
+    <h2 id="h-eval">校系評估表：比較 2–3 個志願</h2>
+    <p class="hint">你也在面試這個系。從三個面向評估它有沒有認真辦學，以及適不適合你。查不到就選「還沒查」，回家補。</p>
+    <div class="unis" id="unis"></div>
+    <details class="asks">
+      <summary>面試最後，可以問老師的 5 個問題</summary>
+      <ol>
+        <li>學長姐畢業後，大多在哪些領域工作？系上有哪些實習或業界合作的機會？</li>
+        <li>系上的電腦教室、攝影或 XR 等設備，學生課外可以借用嗎？</li>
+        <li>大一、大二想提早參與專題或老師的研究，有什麼管道？</li>
+        <li>系上同學申請交換、雙主修或輔系的多嗎？通常怎麼準備？</li>
+        <li>我已經開始自學＿＿，入學前還建議我加強哪一方面？</li>
+      </ol>
+      <p class="hint">用好奇的語氣問。會問好問題，代表你做過功課，也是就讀意願的證明。</p>
+    </details>
+  </section>
+
+  <section aria-labelledby="h-take">
+    <h2 id="h-take">帶走我的草稿</h2>
+    <p class="hint">按「複製全部」後，貼到記事本、Google 文件或 LINE 的「與自己聊天」保存。</p>
+    <div class="btns">
+      <button type="button" class="primary" id="copyAll">複製全部</button>
+      <button type="button" class="ghost" id="sample">看範例</button>
+      <button type="button" class="danger" id="clear">清空</button>
+    </div>
+    <p class="status" id="status" role="status"></p>
+    <textarea id="fallback" aria-label="草稿全文" hidden readonly></textarea>
+  </section>
+
+  <section aria-labelledby="h-cheat">
+    <h2 id="h-cheat">審查小抄</h2>
+    <dl class="rule">
+      <dt>三重</dt><dd>重視核心能力、重視校內學習、重視真實性與自主準備</dd>
+      <dt>二不</dt><dd>不是每一項都要有、不是以量取勝，看的是反思</dd>
+    </dl>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>文件</th><th>申請時件數</th><th>文字規格</th></tr></thead>
+        <tbody>
+          <tr><td>課程學習成果</td><td>大學至多 3 件</td><td>上傳時附約 100 字簡述，需老師認證</td></tr>
+          <tr><td>多元表現</td><td>至多 10 件</td><td>另交綜整心得：合計至多 800 字、圖片至多 3 張</td></tr>
+          <tr><td>學習歷程自述</td><td>依校系要求</td><td>就讀動機、讀書計畫、生涯規劃</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hint">各校系實際要求以甄選會公布的校系分則為準。</p>
+  </section>
+
+  <footer>
+    <p>資料來源：
+      <a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001916" target="_blank" rel="noopener">教育部學習歷程檔案作業要點</a>、
+      <a href="https://www.unews.com.tw/News/Info/7807" target="_blank" rel="noopener">大學問：學習歷程上傳限制</a>
+    </p>
+    <p><a href="slides.pdf" target="_blank" rel="noopener">下載講座簡報（PDF）</a></p>
+    <p>本頁內容只存在你自己的瀏覽器，講師與其他人看不到。</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const ids=['adj1','adj2','adj3','exp','kind','q1','q2','q3','q4','q5','sum'];
+  const KEY='jingli-card-v1';
+  const $=id=>document.getElementById(id);
+  const status=$('status');
+  let supports=[];
+
+  const FACETS=[['f1','專業與就業市場的契合度'],['f2','教學軟硬體設備的投資與使用'],['f3','系所與系友的關係'],['fit','和我的 3 個形容詞合不合']];
+  const LEVELS=['還沒查','普通','不錯','很好'];
+  const unis=$('unis');
+  for(let n=1;n<=3;n++){
+    const card=document.createElement('div'); card.className='uni';
+    const h=document.createElement('h3'); h.textContent='志願 '+n; card.appendChild(h);
+    const name=document.createElement('input'); name.type='text'; name.id='u'+n+'name';
+    name.setAttribute('aria-label','志願 '+n+' 校系名稱'); name.placeholder=n===1?'例：中國文化大學 資訊傳播學系':'校系名稱';
+    card.appendChild(name); ids.push(name.id);
+    FACETS.forEach(([k,label])=>{
+      const row=document.createElement('div'); row.className='facet';
+      const sel=document.createElement('select'); sel.id='u'+n+k;
+      LEVELS.forEach(l=>{const o=document.createElement('option'); o.textContent=l; sel.appendChild(o);});
+      const lab=document.createElement('label'); lab.htmlFor=sel.id; lab.textContent=label;
+      row.appendChild(lab); row.appendChild(sel); card.appendChild(row); ids.push(sel.id);
+    });
+    const note=document.createElement('textarea'); note.id='u'+n+'note'; note.style.minHeight='64px';
+    note.setAttribute('aria-label','志願 '+n+' 備註'); note.placeholder='查到的證據或想問的問題';
+    card.appendChild(note); ids.push(note.id);
+    unis.appendChild(card);
+  }
+
+  function save(){
+    const data={supports};
+    ids.forEach(i=>data[i]=$(i).value);
+    try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}
+  }
+  function load(data){
+    ids.forEach(i=>{ if(data && typeof data[i]==='string') $(i).value=data[i]; });
+    supports=(data && Array.isArray(data.supports))?data.supports:[];
+    renderChecks(); updateCount();
+  }
+  function renderChecks(){
+    const box=$('supports'); box.innerHTML='';
+    const adjs=['adj1','adj2','adj3'].map(i=>$(i).value.trim());
+    let any=false;
+    adjs.forEach((a,idx)=>{
+      if(!a) return; any=true;
+      const id='sup'+idx;
+      const lab=document.createElement('label');
+      const cb=document.createElement('input'); cb.type='checkbox'; cb.id=id; cb.checked=supports.includes(a);
+      cb.addEventListener('change',()=>{ supports=supports.filter(s=>s!==a); if(cb.checked) supports.push(a); save(); });
+      lab.appendChild(cb); lab.appendChild(document.createTextNode(a)); box.appendChild(lab);
+    });
+    if(!any){ const p=document.createElement('span'); p.className='hint'; p.textContent='先在最上方填寫 3 個形容詞，這裡就會出現選項。'; box.appendChild(p); }
+  }
+  function updateCount(){
+    const n=[...$('sum').value.replace(/\s/g,'')].length;
+    const c=$('count'); c.textContent=n+' / 100 字'+(n>100?'，請再精簡':'');
+    c.classList.toggle('over',n>100);
+  }
+  function compose(){
+    const v=i=>$(i).value.trim()||'（未填）';
+    const lines=[
+      '【經歷轉譯卡】讓經歷會說話：學習歷程設計術',
+      '我的 3 個形容詞：'+['adj1','adj2','adj3'].map(i=>$(i).value.trim()||'＿').join('、'),
+      '經歷：'+v('exp'),
+      '放在哪裡：'+($('kind').value||'還不確定'),
+      '① 做了什麼：'+v('q1'),
+      '② 為什麼做：'+v('q2'),
+      '③ 怎麼完成：'+v('q3'),
+      '④ 如何證明：'+v('q4'),
+      '⑤ 學到什麼：'+v('q5'),
+      '支持的形容詞：'+(supports.length?supports.join('、'):'（未勾選）'),
+      '100 字摘要：'+v('sum')
+    ];
+    for(let n=1;n<=3;n++){
+      const nm=$('u'+n+'name').value.trim(); if(!nm) continue;
+      lines.push('【志願 '+n+'】'+nm);
+      FACETS.forEach(([k,label])=>lines.push('・'+label+'：'+$('u'+n+k).value));
+      const note=$('u'+n+'note').value.trim(); if(note) lines.push('・備註：'+note);
+    }
+    return lines.join('\n');
+  }
+  async function copyText(text,label){
+    try{ await navigator.clipboard.writeText(text); status.innerHTML='<span class="ok">已複製'+label+'</span>，現在可以貼到記事本或 LINE。'; $('fallback').hidden=true; }
+    catch(e){ const f=$('fallback'); f.value=text; f.hidden=false; f.focus(); f.select(); status.textContent='這個瀏覽器不允許自動複製。已選取下方文字，請長按或按 Ctrl+C 複製。'; }
+  }
+
+  try{ const raw=localStorage.getItem(KEY); if(raw) load(JSON.parse(raw)); else load(null);}catch(e){ load(null); }
+
+  ids.forEach(i=>{ const el=$(i); el.addEventListener('input',()=>{ if(i.startsWith('adj')) renderChecks(); if(i==='sum') updateCount(); save(); }); if(el.tagName==='SELECT') el.addEventListener('change',save); });
+  $('copyAll').addEventListener('click',()=>copyText(compose(),'全部內容'));
+  $('copyPrompt').addEventListener('click',()=>copyText($('prompt').textContent,'提示詞'));
+
+  const SAMPLE={adj1:'好奇',adj2:'會溝通',adj3:'重細節',exp:'幫熱舞社經營 IG 帳號（範例）',kind:'多元表現（社團、自主學習、服務、競賽、幹部）',
+    q1:'高一下開始負責熱舞社 IG 的拍照與發文，一週兩三篇。',
+    q2:'帳號很久沒更新，成發來看的人很少，社長問誰會修圖，我自願接下。',
+    q3:'先研究他校熱舞社帳號，做出固定封面模板，每次練習錄 15 秒短片。發現大家愛看 NG 片段，但有社員不想入鏡，我在群組徵詢同意，不願意的只拍背影，發文前先給當事人看。',
+    q4:'追蹤數由約 180 增至 412（附 IG 洞察截圖）；封面改版前後對照圖；成發觀眾人數：待確認。',
+    q5:'我發現自己喜歡研究「別人為什麼會想看」，也學到經營社群要先尊重被拍的人。想讀傳播相關科系。',
+    sum:'高一下我接手熱舞社停更的IG，參考他校帳號設計固定封面，每次練習錄15秒短片。發現觀眾愛看NG片段，我先徵詢社員同意，不願入鏡者只拍背影。一年內追蹤數由約180增至412，發現自己喜歡研究人為何想看。',
+    supports:['好奇','會溝通']};
+  let backup=null;
+  $('sample').addEventListener('click',()=>{
+    if(backup){ load(backup); backup=null; $('sample').textContent='看範例'; status.textContent='已回到你自己的草稿。'; save(); return; }
+    const cur={supports:[...supports]}; ids.forEach(i=>cur[i]=$(i).value); backup=cur;
+    load(SAMPLE); $('sample').textContent='回到我的草稿'; status.textContent='這是範例內容。按「回到我的草稿」就能恢復你寫的內容。';
+  });
+  let armed=false, timer=null;
+  $('clear').addEventListener('click',()=>{
+    if(!armed){ armed=true; $('clear').textContent='再按一次確認清空'; status.textContent='清空後無法復原。'; timer=setTimeout(()=>{armed=false;$('clear').textContent='清空';status.textContent='';},4000); return; }
+    clearTimeout(timer); armed=false; $('clear').textContent='清空';
+    ids.forEach(i=>{ const el=$(i); if(el.tagName==='SELECT') el.selectedIndex=0; else el.value=''; }); supports=[]; backup=null; $('sample').textContent='看範例';
+    renderChecks(); updateCount(); save(); status.textContent='已清空。';
+  });
+})();
+</script>
+
+</body>
+</html>
