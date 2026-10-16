@@ -10,6 +10,8 @@
 | `slides.pdf` | 講座簡報（19 頁） |
 | `feedback.pdf` | 講座回饋問卷（A4 一張兩份，8 題 4 點量表） |
 | `qr-worksheet.png` | 經歷轉譯卡的 QR code |
+| `qr-web.png`、`qr-ig.png`、`qr-line.png` | 系官網、Instagram、LINE 社群的 QR code |
+| `feedback-apps-script.gs` | 把線上回饋寫入 Google Sheet 的 Apps Script |
 
 線上版：<https://hitaiwan0705.github.io/ai-creative-lab/learning-portfolio/>
 
@@ -17,13 +19,14 @@
 
 1. 用手機掃 QR code，或直接開啟線上版。
 2. 依序閱讀「三種寫法」與「不同學門」的比較，不需要自己寫經歷。
-3. 回家練習是選用的；內容只存在你的瀏覽器，寫完按「複製全部」傳給自己保存。
+3. 講座最後在「講座回饋」匿名填寫回饋。
+4. 回家練習是選用的；內容只存在你的瀏覽器，寫完按「複製全部」傳給自己保存。
 
 ## 認識資訊傳播學系
 
 - [中國文化大學資訊傳播學系官網](https://ic.pccu.edu.tw/)
 - [Instagram @ic_pccu](https://www.instagram.com/ic_pccu/)
-- [LINE 機器人](https://line.me/ti/g2/PaRX80UGQp4Z8a3ys5W3QRuKg8Ju3EWHwKlf4w)
+- [LINE 社群](https://line.me/ti/g2/PaRX80UGQp4Z8a3ys5W3QRuKg8Ju3EWHwKlf4w)
 
 ## 資料來源
 

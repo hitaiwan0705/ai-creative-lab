@@ -113,6 +113,17 @@ pre.prompt{margin:0;white-space:pre-wrap;background:var(--tint);border-radius:4p
 .rule{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:15px}
 .rule dt{font-weight:700;color:var(--accent)}
 .rule dd{margin:0}
+fieldset.likert{border:none;margin:0;padding:10px 0;display:flex;flex-direction:column;gap:8px;min-width:0}
+fieldset.likert legend{font-size:15px;font-weight:500;padding:0;margin-bottom:8px;float:left;width:100%}
+.scale{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.scale.grade{grid-template-columns:repeat(3,minmax(0,1fr))}
+.scale label{position:relative;cursor:pointer}
+.scale input{position:absolute;opacity:0;width:1px;height:1px}
+.scale span{display:grid;place-items:center;text-align:center;min-height:44px;padding:4px;border:1px solid var(--soft);border-radius:4px;font-size:13px;line-height:1.3}
+.scale input:checked+span{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+.scale input:focus-visible+span{outline:3px solid var(--accent);outline-offset:2px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+#fbForm{display:flex;flex-direction:column;gap:12px}
 ul.links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 ul.links li{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;border-bottom:1px solid var(--soft);padding-bottom:8px}
 ul.links a{color:var(--ink);font-weight:700}
@@ -134,7 +145,7 @@ footer a{color:var(--muted)}
 
   <p>這張卡不用你寫經歷。跟著比較、判斷，看懂「同一件事，怎麼寫才有說服力」。所有範例都是虛構的，數字只供示範。</p>
   <nav class="toc" aria-label="段落">
-    <a href="#s-adj">3 個形容詞</a><a href="#s-three">三種寫法</a><a href="#s-field">不同學門</a><a href="#s-eval">校系評估</a><a href="#s-home">回家練習</a><a href="#h-about">認識資傳系</a>
+    <a href="#s-adj">3 個形容詞</a><a href="#s-three">三種寫法</a><a href="#s-field">不同學門</a><a href="#s-eval">校系評估</a><a href="#s-home">回家練習</a><a href="#s-fb">講座回饋</a><a href="#h-about">認識資傳系</a>
   </nav>
 
   <section id="s-adj" aria-labelledby="h-adj">
@@ -230,13 +241,36 @@ footer a{color:var(--muted)}
     <p class="hint">社團、活動、興趣屬於多元表現或自述素材，不能上傳成課程學習成果。各校系要求以甄選會公布的校系分則為準。</p>
   </section>
 
+  <section id="s-fb" aria-labelledby="h-fb">
+    <h2 id="h-fb"><span class="num">5</span>講座回饋</h2>
+    <p class="hint">匿名填寫，約 2 分鐘，結果只用於改善講座。每題選一個最符合你想法的選項。</p>
+    <form id="fbForm" novalidate>
+      <fieldset class="likert"><legend>年級</legend><div class="scale grade">
+        <label><input type="radio" name="grade" value="高一"><span>高一</span></label><label><input type="radio" name="grade" value="高二"><span>高二</span></label><label><input type="radio" name="grade" value="高三"><span>高三</span></label>
+      </div></fieldset>
+      <fieldset class="likert"><legend>1. 我更清楚大學審查學習歷程時重視什麼。</legend><div class="scale"><label><input type="radio" name="q1" value="1"><span>非常不同意</span></label><label><input type="radio" name="q1" value="2"><span>不同意</span></label><label><input type="radio" name="q1" value="3"><span>同意</span></label><label><input type="radio" name="q1" value="4"><span>非常同意</span></label></div></fieldset>
+      <fieldset class="likert"><legend>2. 我能分辨「流水帳」與「有說服力」寫法的差異。</legend><div class="scale"><label><input type="radio" name="q2" value="1"><span>非常不同意</span></label><label><input type="radio" name="q2" value="2"><span>不同意</span></label><label><input type="radio" name="q2" value="3"><span>同意</span></label><label><input type="radio" name="q2" value="4"><span>非常同意</span></label></div></fieldset>
+      <fieldset class="likert"><legend>3. 我知道如何依照不同學門，調整同一段經歷的重點。</legend><div class="scale"><label><input type="radio" name="q3" value="1"><span>非常不同意</span></label><label><input type="radio" name="q3" value="2"><span>不同意</span></label><label><input type="radio" name="q3" value="3"><span>同意</span></label><label><input type="radio" name="q3" value="4"><span>非常同意</span></label></div></fieldset>
+      <fieldset class="likert"><legend>4. 我知道如何用行動、證據與反思，證明自己的能力。</legend><div class="scale"><label><input type="radio" name="q4" value="1"><span>非常不同意</span></label><label><input type="radio" name="q4" value="2"><span>不同意</span></label><label><input type="radio" name="q4" value="3"><span>同意</span></label><label><input type="radio" name="q4" value="4"><span>非常同意</span></label></div></fieldset>
+      <fieldset class="likert"><legend>5. 我知道 AI 在準備學習歷程時可以怎麼用、哪些地方不能用。</legend><div class="scale"><label><input type="radio" name="q5" value="1"><span>非常不同意</span></label><label><input type="radio" name="q5" value="2"><span>不同意</span></label><label><input type="radio" name="q5" value="3"><span>同意</span></label><label><input type="radio" name="q5" value="4"><span>非常同意</span></label></div></fieldset>
+      <fieldset class="likert"><legend>6. 我知道可以從哪些面向，評估一個校系是否適合自己。</legend><div class="scale"><label><input type="radio" name="q6" value="1"><span>非常不同意</span></label><label><input type="radio" name="q6" value="2"><span>不同意</span></label><label><input type="radio" name="q6" value="3"><span>同意</span></label><label><input type="radio" name="q6" value="4"><span>非常同意</span></label></div></fieldset>
+      <fieldset class="likert"><legend>7. 講座的範例與互動，有助於我理解內容。</legend><div class="scale"><label><input type="radio" name="q7" value="1"><span>非常不同意</span></label><label><input type="radio" name="q7" value="2"><span>不同意</span></label><label><input type="radio" name="q7" value="3"><span>同意</span></label><label><input type="radio" name="q7" value="4"><span>非常同意</span></label></div></fieldset>
+      <fieldset class="likert"><legend>8. 整體而言，這場講座對我準備學習歷程有幫助。</legend><div class="scale"><label><input type="radio" name="q8" value="1"><span>非常不同意</span></label><label><input type="radio" name="q8" value="2"><span>不同意</span></label><label><input type="radio" name="q8" value="3"><span>同意</span></label><label><input type="radio" name="q8" value="4"><span>非常同意</span></label></div></fieldset>
+      <div class="field"><label for="fbGain">今天最有收穫的一件事（選填）</label><textarea id="fbGain" name="gain" maxlength="500"></textarea></div>
+      <div class="field"><label for="fbImprove">希望講座加強或改進的地方（選填）</label><textarea id="fbImprove" name="improve" maxlength="500"></textarea></div>
+      <input type="text" name="website" id="fbWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+      <div class="btns"><button type="submit" class="primary" id="fbSend">送出回饋</button></div>
+      <p class="status" id="fbStatus" role="status"></p>
+    </form>
+  </section>
+
   <section aria-labelledby="h-about">
     <h2 id="h-about">認識講師的系所</h2>
     <p class="hint">中國文化大學資訊傳播學系。想進一步了解課程、作品與活動，可以從這裡開始。</p>
     <ul class="links">
       <li><a href="https://ic.pccu.edu.tw/" target="_blank" rel="noopener">系官網</a><span>課程地圖、畢業製作、招生資訊</span></li>
       <li><a href="https://www.instagram.com/ic_pccu/" target="_blank" rel="noopener">Instagram @ic_pccu</a><span>系上活動與學生作品</span></li>
-      <li><a href="https://line.me/ti/g2/PaRX80UGQp4Z8a3ys5W3QRuKg8Ju3EWHwKlf4w" target="_blank" rel="noopener">LINE 機器人</a><span>手機點擊即可加入，問系上的問題</span></li>
+      <li><a href="https://line.me/ti/g2/PaRX80UGQp4Z8a3ys5W3QRuKg8Ju3EWHwKlf4w" target="_blank" rel="noopener">LINE 社群</a><span>手機點擊即可加入</span></li>
     </ul>
   </section>
 
@@ -388,6 +422,29 @@ footer a{color:var(--muted)}
     if(!armed){armed=true; $('clear').textContent='再按一次確認清空'; status.textContent='清空後無法復原。'; timer=setTimeout(()=>{armed=false;$('clear').textContent='清空';status.textContent='';},4000); return;}
     clearTimeout(timer); armed=false; $('clear').textContent='清空';
     ids.forEach(i=>$(i).value=''); updateCount(); save(); status.textContent='已清空。';
+  });
+
+  /* ---------- 5. feedback ---------- */
+  const FEEDBACK_URL='';
+  const fb=$('fbForm'), fbStatus=$('fbStatus'), fbSend=$('fbSend');
+  let fbSent=false; try{fbSent=localStorage.getItem('jingli-fb-sent')==='1';}catch(e){}
+  if(fbSent){fbSend.disabled=true; fbSend.textContent='已送出'; fbStatus.innerHTML='<span class="ok">這支手機已經送出過回饋，謝謝你。</span>';}
+  fb.addEventListener('submit',async ev=>{
+    ev.preventDefault();
+    if(fbSent) return;
+    const data=new FormData(fb);
+    const answered=[1,2,3,4,5,6,7,8].filter(i=>data.get('q'+i)).length;
+    if(answered<8){fbStatus.innerHTML='<span class="warn">還有 '+(8-answered)+' 題沒有選。</span>開放題可以不寫。'; return;}
+    if(!FEEDBACK_URL){fbStatus.textContent='線上回饋目前沒有開放，請改填紙本問卷，謝謝。'; return;}
+    fbSend.disabled=true; fbSend.textContent='送出中…';
+    try{
+      await fetch(FEEDBACK_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams(data)});
+      fbSent=true; try{localStorage.setItem('jingli-fb-sent','1');}catch(e){}
+      fbSend.textContent='已送出'; fbStatus.innerHTML='<span class="ok">已送出，謝謝你的回饋！</span>';
+    }catch(e){
+      fbSend.disabled=false; fbSend.textContent='送出回饋';
+      fbStatus.textContent='網路連線失敗，請稍後再按一次，或改填紙本問卷。';
+    }
   });
 })();
 </script>
