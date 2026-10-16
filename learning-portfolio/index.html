@@ -78,6 +78,8 @@ button{font:inherit;font-weight:700;font-size:15px;border-radius:4px;padding:10p
 .step .why{font-size:14px;color:var(--muted)}
 .ghint{font-size:14px;font-weight:500;border-left:4px solid var(--accent);padding:2px 0 2px 10px}
 /* field comparison */
+#fields .why{font-size:14px}
+#fields .why b{color:var(--ink)}
 .facts{background:var(--tint);border-radius:4px;padding:10px 12px;font-size:14px}
 .seg{display:flex;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
 .seg button{flex:1;border:none;border-radius:0;background:transparent;color:var(--ink);padding:8px 10px}
@@ -150,7 +152,7 @@ footer a{color:var(--muted)}
 
   <section id="s-field" aria-labelledby="h-field">
     <h2 id="h-field"><span class="num">3</span>同一段經歷，不同學門怎麼寫</h2>
-    <p class="hint">事實不變，改變的是「強調哪一面」。先查清楚你想讀的學門看重什麼，再決定重點。</p>
+    <p class="hint">四組都是常被搞混的科系。事實不變，改變的是「強調哪一面」。想比較其他科系，可以用 <a href="https://collego.edu.tw/" target="_blank" rel="noopener">ColleGo! 學類比較</a>。</p>
     <div id="fields"></div>
   </section>
 
@@ -266,7 +268,7 @@ footer a{color:var(--muted)}
 
   /* ---------- 3. field comparison ---------- */
   const FIELDS=[
-    {title:'藝術、設計、傳播學門',hint:'藝術重「表達自己的想法」，設計重「替別人解決問題」，傳播重「讓訊息被對的人接收」。',
+    {title:'藝術、設計、傳播學門',why:'三者都要交作品集、都和「創作」有關，常被當成同一件事。差別在作品是為了誰而做。',hint:'藝術重「表達自己的想法」，設計重「替別人解決問題」，傳播重「讓訊息被對的人接收」。',
      facts:'經歷：高二擔任熱舞社活動長，負責成發。編了一段 1 分鐘的開場舞、設計成發海報與 IG 封面、經營社團 IG 宣傳；一年內追蹤數約 180 增至 412。',
      tabs:[
       {name:'藝術',text:'我負責編成發的開場舞。一開始只是把喜歡的動作拼在一起，學姐說「看不出你想說什麼」。我改以「從陌生到默契」為主題，讓舞者從散開的隊形慢慢聚成一個圓，動作也從各跳各的變成同步。演出後我開始思考，身體動作如何傳達情感。',
@@ -278,7 +280,7 @@ footer a{color:var(--muted)}
       {name:'傳播',text:'我發現觀眾比較愛看練習的 NG 片段，於是調整 IG 的內容策略。但有社員不想入鏡，我先徵詢同意，不願意的只拍背影。一年內追蹤數從約 180 增加到 412。我學到傳播不只追求觸及，也要尊重被拍攝的人。',
        focus:['受眾分析','內容策略','成效數據','媒體倫理'],
        change:'只寫 IG 經營，強調觀眾是誰、訊息怎麼調整，並加入媒體倫理的反思。附上洞察報告截圖。'}]},
-    {title:'語言、人文、社會學門',hint:'語言重「語言怎麼運作」，人文重「這件事對人的意義」，社會重「現象背後的結構與原因」。',
+    {title:'語言、人文、社會學門',why:'喜歡「人與文化」的同學常在這三者之間猶豫。同樣關心人，提問的方式不同。',hint:'語言重「語言怎麼運作」，人文重「這件事對人的意義」，社會重「現象背後的結構與原因」。',
      facts:'經歷：一學期擔任社區課輔志工，每週一次，陪新住民家庭的國小生寫功課。',
      tabs:[
       {name:'語言',text:'我陪一位母語是越南語的國小生寫國語作業，發現她常把「了」放錯位置。我整理她的錯誤做成小卡，對照越南語的句型解釋。一學期後，她的作業從每頁約 5 個錯誤減少到 1、2 個。我開始好奇不同語言的文法差異如何影響學習。',
@@ -290,7 +292,7 @@ footer a{color:var(--muted)}
       {name:'社會',text:'課輔時我發現，8 位學生裡有 5 位的家長晚上要工作，沒有人陪寫功課。我訪談了 2 位家長，才知道他們不是不重視教育，而是工時太長。這讓我想了解家庭的經濟條件，如何影響孩子的學習機會。',
        focus:['社會觀察','提出問題','訪談等田野資料','結構性思考'],
        change:'從個人觀察走到社會結構，並展現蒐集資料的方法。避免寫成單純的愛心故事。'}]},
-    {title:'資訊工程、資訊管理、資訊傳播學系',hint:'資工重「把系統做出來」，資管重「讓系統支援流程與決策」，資傳重「讓人看得懂、用得順」。',
+    {title:'資訊工程、資訊管理、資訊傳播學系',why:'系名都有「資訊」，最常被搞混。三系都會寫程式，但寫程式的目的不同。',hint:'資工重「把系統做出來」，資管重「讓系統支援流程與決策」，資傳重「讓人看得懂、用得順」。',
      facts:'經歷：高二園遊會，負責班上攤位的訂餐系統。用 Google 表單收單、試算表統計，寫了一小段 Apps Script 自動加總，也設計了點餐畫面與取餐看板；兩天處理 186 筆訂單，錯誤從前一年約 10 筆降到 0。',
      tabs:[
       {name:'資工',text:'去年紙本訂單常算錯，我改用 Google 表單收單，並自學 Apps Script 寫了一段自動加總的程式。第一版遇到同一筆訂單重複送出的問題，我加上檢查機制才解決。兩天處理 186 筆訂單沒有出錯。我發現自己喜歡把重複的工作變成程式。',
@@ -301,12 +303,24 @@ footer a{color:var(--muted)}
        change:'強調流程怎麼被資料改善，程式只是工具。附上改善前後的流程圖與排班表。'},
       {name:'資傳',text:'我負責設計點餐畫面。第一版選項太多，同學常點錯，我改成依類別分頁、加上餐點照片，並在攤位放一張大字看板說明取餐號碼。兩天處理 186 筆訂單，錯誤從約 10 筆降到 0。我發現好的介面能讓人不用解釋就會用。',
        focus:['使用者體驗','介面設計','資訊視覺化','訊息溝通'],
-       change:'強調使用者怎麼看、怎麼用，以及改版的理由。附上點餐畫面改版前後的截圖。'}]}
+       change:'強調使用者怎麼看、怎麼用，以及改版的理由。附上點餐畫面改版前後的截圖。'}]},
+    {title:'心理、社會工作、教育心理與輔導',why:'都和「幫助人」有關，最常被搞混。心理系不等於諮商師養成，社工也不只是當志工。',hint:'心理重「用科學方法理解行為」，社工重「連結資源、改善處境」，輔導重「在教育現場陪伴學生成長」。',
+     facts:'經歷：高二擔任班級輔導股長，協助辦理新生適應活動，並做了一份「高中生壓力來源」問卷，回收有效問卷 32 份。',
+     tabs:[
+      {name:'心理',text:'我設計問卷調查同學的壓力來源，發現「考試」與「人際」是最常見的兩項，而自評壓力較高的同學，平均睡眠時數也比較短。但這只是相關，不代表誰造成誰。我開始想知道，要怎麼設計研究，才能確認行為背後的原因。',
+       focus:['研究方法','數據分析','行為觀察','科學思考'],
+       change:'強調問卷設計、數據與推論的限制。附上問卷題目與統計圖表；避免寫成「我很會安慰人」。'},
+      {name:'社工',text:'辦新生適應活動時，我發現轉學生最缺的是「知道可以找誰」。我和輔導室討論後，整理一份校內資源清單，並協助配對願意陪伴的學長姐，過程中先徵求當事人同意、不公開個人狀況。我學到助人要先看見需求，再連結資源。',
+       focus:['需求評估','資源連結','助人倫理','團隊合作'],
+       change:'強調看見需求與連結資源，並寫出保密等倫理考量。附上資源清單（去除個資）。'},
+      {name:'輔導',text:'我負責設計新生適應活動的小團體遊戲。第一次辦完，回饋單顯示大家玩得開心，卻沒有比較認識彼此。我把活動改成兩兩分享再輪換，第二梯次「認識至少 3 位新朋友」的人數明顯增加。我開始對「怎麼設計活動，幫助學生成長」感興趣。',
+       focus:['活動設計','傾聽與同理','教育情境','回饋修正'],
+       change:'強調在教育現場設計活動、依回饋修正。附上活動流程與回饋單統計。'}]}
   ];
   const fieldsBox=$('fields');
   FIELDS.forEach((f,fi)=>{
     const box=document.createElement('div'); box.className='case';
-    box.innerHTML='<h3>'+esc(f.title)+'</h3><p class="ghint">'+esc(f.hint)+'</p><p class="facts">'+esc(f.facts)+'</p>';
+    box.innerHTML='<h3>'+esc(f.title)+'</h3><p class="why"><b>為什麼放在一起：</b>'+esc(f.why)+'</p><p class="ghint">'+esc(f.hint)+'</p><p class="facts">'+esc(f.facts)+'</p>';
     const seg=document.createElement('div'); seg.className='seg'; seg.setAttribute('role','tablist'); seg.setAttribute('aria-label',f.title);
     const panel=document.createElement('div'); panel.className='version'; panel.setAttribute('role','tabpanel');
     const show=i=>{
