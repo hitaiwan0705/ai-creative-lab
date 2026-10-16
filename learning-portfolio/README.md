@@ -19,6 +19,12 @@
 2. 依序閱讀「三種寫法」與「不同學門」的比較，不需要自己寫經歷。
 3. 回家練習是選用的；內容只存在你的瀏覽器，寫完按「複製全部」傳給自己保存。
 
+## 認識資訊傳播學系
+
+- [中國文化大學資訊傳播學系官網](https://ic.pccu.edu.tw/)
+- [Instagram @ic_pccu](https://www.instagram.com/ic_pccu/)
+- [LINE 機器人（加入方式見 IG 貼文）](https://www.instagram.com/p/DJk4JNftg4V/)
+
 ## 資料來源
 
 - [教育部：高級中等學校學生學習歷程檔案作業要點](https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001916)

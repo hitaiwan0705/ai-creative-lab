@@ -113,6 +113,10 @@ pre.prompt{margin:0;white-space:pre-wrap;background:var(--tint);border-radius:4p
 .rule{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:15px}
 .rule dt{font-weight:700;color:var(--accent)}
 .rule dd{margin:0}
+ul.links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+ul.links li{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;border-bottom:1px solid var(--soft);padding-bottom:8px}
+ul.links a{color:var(--ink);font-weight:700}
+ul.links span{font-size:14px;color:var(--muted)}
 footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
 footer a{color:var(--muted)}
 .ok{color:var(--ink);font-weight:700}
@@ -130,7 +134,7 @@ footer a{color:var(--muted)}
 
   <p>這張卡不用你寫經歷。跟著比較、判斷，看懂「同一件事，怎麼寫才有說服力」。所有範例都是虛構的，數字只供示範。</p>
   <nav class="toc" aria-label="段落">
-    <a href="#s-adj">3 個形容詞</a><a href="#s-three">三種寫法</a><a href="#s-field">不同學門</a><a href="#s-eval">校系評估</a><a href="#s-home">回家練習</a>
+    <a href="#s-adj">3 個形容詞</a><a href="#s-three">三種寫法</a><a href="#s-field">不同學門</a><a href="#s-eval">校系評估</a><a href="#s-home">回家練習</a><a href="#h-about">認識資傳系</a>
   </nav>
 
   <section id="s-adj" aria-labelledby="h-adj">
@@ -224,6 +228,16 @@ footer a{color:var(--muted)}
       </table>
     </div>
     <p class="hint">社團、活動、興趣屬於多元表現或自述素材，不能上傳成課程學習成果。各校系要求以甄選會公布的校系分則為準。</p>
+  </section>
+
+  <section aria-labelledby="h-about">
+    <h2 id="h-about">認識講師的系所</h2>
+    <p class="hint">中國文化大學資訊傳播學系。想進一步了解課程、作品與活動，可以從這裡開始。</p>
+    <ul class="links">
+      <li><a href="https://ic.pccu.edu.tw/" target="_blank" rel="noopener">系官網</a><span>課程地圖、畢業製作、招生資訊</span></li>
+      <li><a href="https://www.instagram.com/ic_pccu/" target="_blank" rel="noopener">Instagram @ic_pccu</a><span>系上活動與學生作品</span></li>
+      <li><a href="https://www.instagram.com/p/DJk4JNftg4V/" target="_blank" rel="noopener">LINE 機器人</a><span>加入方式請見這則 IG 貼文</span></li>
+    </ul>
   </section>
 
   <footer>
