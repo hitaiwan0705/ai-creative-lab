@@ -23,7 +23,7 @@
 
 - [中國文化大學資訊傳播學系官網](https://ic.pccu.edu.tw/)
 - [Instagram @ic_pccu](https://www.instagram.com/ic_pccu/)
-- [LINE 機器人（加入方式見 IG 貼文）](https://www.instagram.com/p/DJk4JNftg4V/)
+- [LINE 機器人](https://line.me/ti/g2/PaRX80UGQp4Z8a3ys5W3QRuKg8Ju3EWHwKlf4w)
 
 ## 資料來源
 
