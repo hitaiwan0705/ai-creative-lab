@@ -307,3 +307,36 @@ body.deck{overflow:hidden;height:100vh;height:100dvh}
 .steps4 b{display:block;font-size:clamp(1.3rem,2.6vw,2rem);color:var(--cobalt)}
 .slide .roa-grid .ph{max-height:30vh}
 @media (max-width:820px){.roa-grid{grid-template-columns:1fr 1fr}.loop,.steps4{grid-template-columns:1fr 1fr}.loop div:nth-child(2)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-32px;transform:translateX(-50%)}}
+
+/* =========================================================
+   第二堂：帶著走任務模式
+   ========================================================= */
+.prog{height:6px;background:var(--paper-2);margin-top:10px;border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--cobalt);transition:width .3s}
+.step-tabs a{min-width:2.6em;text-align:center}
+.step-tabs a.ok::after{content:" ✓"}
+.step-tabs a.ok:not(.on){border-color:var(--cobalt);color:var(--cobalt)}
+.step{padding:18px 0 8px}
+.step-k{margin:0;font-family:var(--mono);font-weight:700;color:var(--terra-text);letter-spacing:.06em}
+.step h2{margin:.15em 0 .3em;font-size:1.7rem;font-weight:900;color:var(--cobalt);line-height:1.25}
+.step-goal{font-size:1.08rem;margin:.2em 0 .6em}
+.todo{margin:0 0 12px;padding:0;list-style:none;counter-reset:t}
+.todo li{counter-increment:t;position:relative;padding:10px 12px 10px 46px;border:2px solid var(--ink-text);border-radius:var(--r);margin-bottom:6px;background:#fff;line-height:1.5}
+.todo li::before{content:counter(t);position:absolute;left:10px;top:9px;width:26px;height:26px;border-radius:50%;background:var(--cobalt);color:#fff;font-weight:900;display:grid;place-items:center;font-size:.9rem}
+.done-box{border-color:var(--cobalt)}
+.done-msg{margin:.5em 0 0;font-weight:700;color:var(--cobalt);min-height:1.2em}
+.fast summary,.step details summary{cursor:pointer}
+.fast{border-color:var(--terra-text)}
+.step-nav{display:flex;justify-content:space-between;gap:8px;margin-top:14px}
+.step-nav .btn{flex:1;justify-content:center;text-align:center}
+.peer{border-style:dashed}
+.news-card .det{margin-top:8px}
+.show-ov{position:fixed;inset:0;z-index:50;background:var(--paper);overflow:auto;padding:24px 20px}
+.show-in{max-width:640px;margin:0 auto}
+.show-in .kick{font-family:var(--mono);font-weight:700;color:var(--terra-text);margin:0 0 8px}
+.show-in .lbl{margin:14px 0 2px;color:var(--ink-soft);font-weight:700}
+.show-in .big2{margin:0;font-size:1.45rem;font-weight:900;line-height:1.35;color:var(--ink-text)}
+.sort-card.picked{border-color:var(--cobalt);box-shadow:0 0 0 3px var(--cobalt)}
+/* 投影：STEP 頁 */
+.step-slide .todo li{font-size:clamp(1.05rem,1.8vw,1.45rem)}
+.fast-line{margin-top:.6em;padding:10px 14px;border-left:5px solid var(--terra);background:var(--terra-tint);font-size:clamp(1rem,1.6vw,1.3rem)}
