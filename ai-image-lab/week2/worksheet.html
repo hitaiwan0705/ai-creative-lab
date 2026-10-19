@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 說的，是真的嗎？｜探索單</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 11mm 12mm; }
+  :root{ --ink:#30343A; --soft:#5C6068; --cobalt:#2148B8; --terra:#A84A28; --line:#30343A; --paper:#FAFAF7; }
+  *{ box-sizing:border-box }
+  html,body{ margin:0; background:#fff; color:var(--ink); font-family:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",sans-serif; font-size:10pt; line-height:1.45 }
+  .page{ width:186mm; min-height:275mm; margin:0 auto; position:relative; page-break-after:always; }
+  .page:last-child{ page-break-after:auto }
+  @media screen{ body{ background:#E9E9E5; padding:12px 0 } .page{ background:#fff; padding:11mm 12mm; width:210mm; min-height:297mm; margin:0 auto 12px; box-shadow:0 1px 4px #0002 } .tools{ text-align:center; margin-bottom:10px } .tools button{ font:inherit; font-weight:700; padding:.5em 1.2em; border:2px solid var(--cobalt); background:var(--cobalt); color:#fff; border-radius:4px; cursor:pointer } }
+  @media print{ .tools{ display:none } }
+  h1{ font-size:19pt; font-weight:900; color:var(--cobalt); margin:0; line-height:1.15 }
+  .head{ display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid var(--line); padding-bottom:4px; margin-bottom:6px }
+  .head .who{ font-size:10pt; text-align:right; line-height:1.9 }
+  .who span{ display:inline-block; min-width:30mm; border-bottom:1px solid var(--line) }
+  .kick{ font-family:"JetBrains Mono",monospace; font-size:8pt; color:var(--terra); font-weight:700; letter-spacing:.06em }
+  .loop{ display:flex; gap:2mm; align-items:stretch; margin:4px 0 6px }
+  .loop div{ flex:1; border:1.5px solid var(--line); border-radius:3px; padding:3px 5px; font-size:8.5pt; line-height:1.3 }
+  .loop b{ display:block; font-size:11pt; color:var(--cobalt) }
+  .step{ border:1.5px solid var(--line); border-radius:4px; padding:4px 8px 6px; margin-bottom:4px; break-inside:avoid }
+  .step h2{ margin:0 0 2px; font-size:12pt; font-weight:900; display:flex; gap:6px; align-items:baseline }
+  .step h2 .n{ font-family:"JetBrains Mono",monospace; color:#fff; background:var(--cobalt); border-radius:3px; padding:0 5px; font-size:9pt }
+  .step h2 .t{ margin-left:auto; font-size:8.5pt; color:var(--soft); font-weight:400 }
+  .q{ color:var(--terra); font-weight:700; margin:0 0 3px }
+  .ln{ border-bottom:1px solid #888; height:6.6mm; margin:0 }
+  .lbl{ font-weight:700; font-size:9.5pt; margin:3px 0 0 }
+  .lbl small{ font-weight:400; color:var(--soft) }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:4mm }
+  table{ width:100%; border-collapse:collapse; font-size:9pt }
+  td,th{ border:1px solid #888; padding:3px 4px; vertical-align:top; text-align:left }
+  th{ background:#EEF0F6; font-weight:700 }
+  .box{ border:1.5px dashed var(--line); border-radius:3px; padding:4px 6px; margin-top:4px }
+  .pp{ font-size:8.6pt; line-height:1.55; margin:0 }
+  .cb::before{ content:"□ "; font-size:11pt }
+  .opts{ display:flex; flex-wrap:wrap; gap:3px 10px; font-size:9pt }
+  .tier{ font-family:"JetBrains Mono",monospace; font-size:7.5pt; font-weight:700; border:1px solid currentColor; padding:0 3px; border-radius:2px; margin-right:3px }
+  .tier.must{ color:var(--cobalt) } .tier.imp{ color:var(--cobalt) } .tier.plus{ color:var(--terra) }
+  .scens{ display:grid; grid-template-columns:1fr 1fr; gap:3px 4mm }
+  .scen{ font-size:8.4pt; line-height:1.38; margin:0 }
+  .scen b{ color:var(--terra) }
+  .take{ display:grid; grid-template-columns:repeat(3,1fr); gap:3mm; margin-top:4px; font-size:9pt; font-weight:700 }
+  .take div{ border-top:3px solid var(--cobalt); padding-top:2px }
+  .foot{ position:absolute; bottom:0; left:0; right:0; font-size:7.5pt; color:var(--soft); display:flex; justify-content:space-between }
+  @media screen{ .foot{ left:12mm; right:12mm; bottom:8mm } }
+</style>
+</head>
+<body>
+<div class="tools"><button onclick="window.print()">列印／存成 PDF（A4）</button></div>
+
+<!-- 第 1 頁 -->
+<section class="page">
+  <div class="head">
+    <div><div class="kick">AI INFO LAB｜高中微課程 第二堂｜探索單</div><h1>AI 說的，是真的嗎？</h1></div>
+    <div class="who">姓名 <span></span>　搭檔 <span></span></div>
+  </div>
+  <div class="loop">
+    <div><b>好奇</b>我想知道什麼？為什麼？</div><div><b>猜</b>先有自己的想法</div><div><b>問</b>把需求說清楚</div><div><b>查</b>找第二個來源</div><div><b>想</b>學到什麼？下一個好奇？</div>
+  </div>
+
+  <div class="step">
+    <h2><span class="n">0</span>暖身：AI 有多懂你？<span class="t">約 5 分鐘</span></h2>
+    <p class="pp">把你最常滑的 App 推薦頁給搭檔看 30 秒（不給看帳號名稱、私訊、朋友的臉；不想給看就口頭描述）。</p>
+    <div class="grid2"><div><p class="lbl">搭檔猜我愛看的 3 個關鍵字</p><p class="ln"></p></div><div><p class="lbl">猜中幾個？</p><p class="opts"><span class="cb">0</span><span class="cb">1</span><span class="cb">2</span><span class="cb">3 全中</span></p></div></div>
+  </div>
+
+  <div class="step">
+    <h2><span class="n">1</span>好奇：我真的想知道什麼？<span class="t">約 5 分鐘</span></h2>
+    <p class="q">先不要問 AI！</p>
+    <p class="lbl">① 我好奇的問題</p><p class="ln"></p>
+    <p class="lbl">② 我為什麼想知道（初衷）</p><p class="ln"></p>
+    <p class="lbl">③ 我先猜的答案</p><p class="ln"></p>
+  </div>
+
+  <div class="step">
+    <h2><span class="n">2</span>問：把需求說清楚<span class="t">約 10 分鐘</span></h2>
+    <p class="pp"><b>AI 不會讀心。</b>先用原句問一次；再照下面六個零件補齊需求，開新對話問第二次。</p>
+    <table>
+      <tr><th style="width:30%">零件</th><th>我的內容</th></tr>
+      <tr><td><span class="tier must">必備</span><b>任務 Task</b><br><small>要它做什麼？</small></td><td>我想知道：</td></tr>
+      <tr><td><span class="tier imp">重要</span><b>脈絡 Context</b><br><small>我是誰？為什麼想知道？怎樣算答得好？</small></td><td>我是高中生，我想知道是因為<br><br>好的回答要能</td></tr>
+      <tr><td><span class="tier imp">重要</span><b>範例 Exemplar</b><small>（選填）</small></td><td>我希望回答像這樣：</td></tr>
+      <tr><td><span class="tier plus">加分</span><b>角色・格式・語氣</b></td><td>請你扮演＿＿＿＿＿；用＿＿＿＿＿（格式）；語氣＿＿＿＿＿</td></tr>
+      <tr><td><b>【查證】</b><small>今天加上的</small></td><td>每個重點請附可查證的來源；不確定就說「不確定」，不要猜。</td></tr>
+    </table>
+    <div class="grid2" style="margin-top:3px">
+      <div><p class="lbl">哪一次的答案比較好用？</p><p class="opts"><span class="cb">第一次</span><span class="cb">第二次</span><span class="cb">差不多</span></p></div>
+      <div><p class="lbl">第二次多了什麼？</p><p class="ln"></p></div>
+    </div>
+    <div class="box">
+      <p class="pp"><b>陷阱題</b>（這部電影不存在）：請介紹 2019 年獲得金馬獎最佳動畫長片的台灣電影《雲端的貓》，包括導演、劇情和得獎評語。</p>
+      <p class="opts"><span class="cb">老實說查不到／不存在</span><span class="cb">部分在編</span><span class="cb">整套編得很完整</span></p>
+    </div>
+  </div>
+  <div class="foot"><span>中國文化大學 資訊傳播學系｜AI 資訊實驗室</span><span>1 / 2</span></div>
+</section>
+
+<!-- 第 2 頁 -->
+<section class="page">
+  <div class="step">
+    <h2><span class="n">3</span>查：AI 說的，是真的嗎？<span class="t">約 12 分鐘</span></h2>
+    <p class="pp">從第二次的答案抄 3 句「聽起來很確定」的話，每句用<b>不是 AI 的來源</b>查。好來源要過三關：<b>說得出是誰、點得開、對得上</b>。</p>
+    <table>
+      <tr><th style="width:44%">AI 說的話</th><th style="width:34%">我用來查的來源</th><th>結果（圈一個）</th></tr>
+      <tr><td style="height:10mm"></td><td></td><td style="white-space:nowrap">✓ 一樣　✗ 不一樣　？ 查不到</td></tr>
+      <tr><td style="height:10mm"></td><td></td><td style="white-space:nowrap">✓ 一樣　✗ 不一樣　？ 查不到</td></tr>
+      <tr><td style="height:10mm"></td><td></td><td style="white-space:nowrap">✓ 一樣　✗ 不一樣　？ 查不到</td></tr>
+    </table>
+    <div class="grid2" style="margin-top:3px">
+      <div><p class="lbl">AI 給的連結點得開嗎？</p><p class="opts"><span class="cb">點得開、內容對</span><span class="cb">對不上</span><span class="cb">點不開</span><span class="cb">沒給</span></p></div>
+      <div><p class="lbl">搭檔幫我獨立查第＿句，結果：</p><p class="ln"></p></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <h2><span class="n">4</span>想：我學到什麼？還想知道什麼？<span class="t">約 6 分鐘</span></h2>
+    <p class="lbl">誰最接近查到的事實？</p><p class="opts"><span class="cb">我的猜測</span><span class="cb">AI 的答案</span><span class="cb">都差不多</span><span class="cb">都不太對</span></p>
+    <p class="lbl">這次我真正學到的一件事</p><p class="ln"></p>
+    <p class="lbl">我的下一個好奇</p><p class="ln"></p>
+    <div class="grid2"><div><p class="lbl">搭檔寫：👍 你做得好的地方</p><p class="ln"></p></div><div><p class="lbl">搭檔寫：💬 一個建議</p><p class="ln"></p></div></div>
+  </div>
+
+  <div class="step">
+    <h2><span class="n">5</span>用 AI 的態度：方向盤在你手上<span class="t">約 10 分鐘</span></h2>
+    <p class="pp">和搭檔一起，圈出你會怎麼做：</p>
+    <div class="scens">
+      <div class="scen"><b>AI 詐騙｜</b>「媽媽」的聲音哭著說出車禍，要你馬上轉 5,000 元到新帳號。<br>Ⓐ 趕快轉　Ⓑ 掛掉，打原本號碼確認，有疑問打 165　Ⓒ 問她生日，答對就轉</div>
+      <div class="scen"><b>AI 情人｜</b>常聊天的 AI 說「不用跟爸媽說我們的事」，要你付費、傳自拍。<br>Ⓐ 付一點沒關係　Ⓑ 不付、不傳，找信任的人聊聊　Ⓒ 傳不露臉的</div>
+      <div class="scen"><b>駕馭 AI｜</b>報告明天交，想讓 AI 整篇寫好直接交。<br>Ⓐ 直接交　Ⓑ AI 幫忙列大綱，自己寫、自己查證、註明用了 AI　Ⓒ 叫 AI 改得像自己寫的</div>
+      <div class="scen"><b>使用倫理｜</b>想用 AI 把同學照片改成搞笑圖傳到群組。<br>Ⓐ 開玩笑而已　Ⓑ 沒經本人同意不做，不上傳別人的照片與個資　Ⓒ 只傳小群組</div>
+    </div>
+    <div class="box">
+      <p class="pp"><b>教育部提醒的四個風險</b>：① 內容可能有偏誤，要仔細檢視　② 訊息可能變單一，要用自己的經驗和批判思考檢視　③ 小心深偽（Deepfake）假影片、假圖片、假新聞　④ 輸入的個資、隱私、機密可能外洩</p>
+      <p class="pp" style="color:var(--soft);font-size:7.6pt">出處：教育部《中小學使用「生成式人工智慧」注意事項（學生版）》，113.07.01</p>
+    </div>
+    <p class="pp" style="margin-top:3px"><b>你就是 AI 的韁繩（harness）：</b>方向（我決定問什麼）・規則（不給個資、不拿別人的臉）・檢查（它說的我查證）・責任（交出去的我負責）</p>
+  </div>
+
+  <div class="step">
+    <h2><span class="n">6</span>我的 AI 使用守則<span class="t">約 3 分鐘</span></h2>
+    <p class="lbl">用 AI 的時候，我會 <small>（寫動作，不要只寫「小心」）</small></p><p class="ln"></p>
+    <div class="take"><div>好奇是起點：先想清楚我為什麼想知道。</div><div>AI 會一本正經地編：它說的，我要查。</div><div>方向盤在我手上：我決定、我查證、我負責。</div></div>
+  </div>
+  <div class="foot"><span>可疑訊息：台灣事實查核中心 tfc-taiwan.org.tw｜Cofacts cofacts.tw｜反詐騙 165</span><span>2 / 2</span></div>
+</section>
+</body>
+</html>

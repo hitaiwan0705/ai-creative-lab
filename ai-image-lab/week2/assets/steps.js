@@ -18,9 +18,17 @@
     "為什麼聽到喜歡的歌會起雞皮疙瘩？"
   ];
 
+  // 好問法：Jeff Su 的六個零件（任務必備；脈絡、範例重要；角色、格式、語氣加分）＋查證要求
   function goodPrompt() {
-    var q = state.q || "＿＿＿＿", why = state.why || "＿＿＿＿", fmt = state.fmt || "3 個重點、每點兩三句";
-    return "我是高中生，我想知道：" + q + "\n我想知道的原因是：" + why + "\n請用「" + fmt + "」回答。\n每個重點請附上我可以自己查證的來源（網站名稱或書名）。\n不確定的地方請直接說「不確定」，不要猜。";
+    var lines = [];
+    if (state.persona) lines.push("請你扮演" + state.persona + "。");
+    lines.push("【任務】我想知道：" + (state.q || "＿＿＿＿"));
+    lines.push("【脈絡】我是高中生。我想知道的原因是：" + (state.why || "＿＿＿＿") + "。" + (state.success ? "對我來說，好的回答要能：" + state.success + "。" : ""));
+    if (state.ex) lines.push("【範例】我希望回答像這樣：" + state.ex);
+    lines.push("【格式】" + (state.fmt || "3 個重點、每點兩三句"));
+    if (state.tone) lines.push("【語氣】" + state.tone);
+    lines.push("【查證】每個重點請附上我可以自己查證的來源（網站或書名）。不確定的地方請直接說「不確定」，不要猜。");
+    return lines.join("\n");
   }
 
   /* ---------- 步驟定義 ---------- */
@@ -76,23 +84,35 @@
       goal: "用兩種問法問 AI，比較哪一種答案比較好用。",
       todo: [
         "<b>第一次</b>：只把你的問題原句丟給 AI。",
-        "<b>第二次</b>：複製下面幫你組好的「好問法」，開一個新對話再問一次。",
+        "<b>第二次</b>：照下面的「六個零件」補齊你的需求，複製組好的好問法，開新對話再問一次。",
         "比較兩個答案，寫下差別；最後試一題<b>陷阱題</b>。"
       ],
       body: function () {
-        return pick("fmt", "我想要的回答格式", ["3 個重點、每點兩三句", "用國中生也懂的話講", "先講結論再講原因", "做成比較表"]) +
-          '<div class="box"><span class="tag">好問法（自動幫你組好）</span><pre id="gp" class="prompt-pre">' + esc(goodPrompt()) + '</pre>' +
+        return '<div class="box note"><b>AI 不會讀心。</b>它只能照你「說出來的」做。把想法說清楚，是用 AI 的基本功，也是跟人溝通的基本功。</div>' +
+          '<div class="box tier"><span class="tag">必備</span> <b>任務 Task</b>：你要它做什麼？<p class="soft" id="taskEcho"></p></div>' +
+          '<div class="box tier"><span class="tag">重要</span> <b>脈絡 Context</b>：你是誰、為什麼想知道、怎樣算回答得好？' +
+            field("success", "怎樣算回答得好？（成功長什麼樣）", "例：我看完能跟同學解釋、有生活例子") + "</div>" +
+          '<div class="box tier"><span class="tag">重要</span> <b>範例 Exemplar</b>（選填）：給它看一個你想要的樣子' +
+            field("ex", "", "例：像科普 YouTuber 那樣，先講一個生活例子") + "</div>" +
+          '<div class="box tier"><span class="tag warm">加分</span> <b>角色、格式、語氣</b>' +
+            pick("persona", "角色 Persona：請它扮演", ["有耐心的高中老師", "科普作家", "這個領域的專家"]) +
+            pick("fmt", "格式 Format", ["3 個重點、每點兩三句", "先講結論再講原因", "做成比較表"]) +
+            pick("tone", "語氣 Tone", ["像朋友聊天一樣輕鬆", "清楚正式", "簡短直接"]) + "</div>" +
+          '<div class="box"><span class="tag">組好的好問法</span><pre id="gp" class="prompt-pre">' + esc(goodPrompt()) + '</pre>' +
           '<div class="row"><button type="button" class="btn" data-copy="gp">複製好問法</button></div>' +
-          '<p class="soft" style="color:var(--ink-soft);margin:.6em 0 0;font-size:.92rem">好問法有五個零件：<b>我是誰</b>、<b>我想知道什麼</b>、<b>為什麼想知道</b>、<b>想要的格式</b>、<b>要附來源、不確定就說</b>。</p></div>' +
+          '<p class="soft" style="color:var(--ink-soft);margin:.6em 0 0;font-size:.92rem">最後一行【查證】是今天加上的：要 AI 附來源、不確定就說不確定。</p></div>' +
           pick("better", "哪一次的答案比較好用？", ["第一次", "第二次", "差不多"]) +
           field("diff", "第二次多了什麼／少了什麼？", "例：第二次有附來源，也說了哪裡不確定") +
           '<div class="box"><span class="tag warm">陷阱題</span><p id="pa">' + esc(D.hallucinationPrompt) + '</p><div class="row"><button type="button" class="btn ghost" data-copy="pa">複製陷阱題</button></div>' +
           '<p class="soft" style="color:var(--ink-soft);margin:.6em 0 0">偷偷告訴你：這部電影不存在。</p></div>' +
           pick("trap", "AI 怎麼回答陷阱題？", ["老實說查不到／不存在", "部分在編", "整套編得很完整"]);
       },
-      mount: function () { refreshPrompt(); },
+      mount: function (el) {
+        function echo() { el.querySelector("#taskEcho").textContent = "→ 從 STEP 1 帶入：" + (state.q || "（先回 STEP 1 寫下你的問題）"); refreshPrompt(); }
+        echo(); window.addEventListener("hashchange", echo);
+      },
       done: ["問了第一次（原句）", "用好問法問了第二次", "試了陷阱題"],
-      point: "問法會改變答案的品質：說清楚<b>你是誰、為什麼想知道、要什麼格式</b>，AI 才知道怎麼幫你。<br>但陷阱題告訴我們：就算問得很好，AI 還是可能<b>一本正經地編</b>。它是在「接出最像答案的句子」，不是在「查資料」——這叫 <b>AI 幻覺</b>。所以下一步要「查」。",
+      point: "問法會改變答案的品質。六個零件裡<b>任務必備，脈絡和範例最重要</b>，角色、格式、語氣是加分——說清楚你要什麼、你是誰、為什麼想知道，AI 才知道怎麼幫你。<br>但陷阱題告訴我們：就算問得很好，AI 還是可能<b>一本正經地編</b>。它是在「接出最像答案的句子」，不是在「查資料」——這叫 <b>AI 幻覺</b>。所以下一步要「查」。",
       fast: "追問 AI：「你剛剛說的第 2 點，確定嗎？請給我可以點開的網址。」它會改口嗎？",
       help: "AI 回很長看不完？在好問法最後加一句「150 字以內」。"
     },
@@ -274,14 +294,14 @@
     STEPS.forEach(function (s, i) { if (s.mount) s.mount(document.getElementById("step-" + i)); });
 
     root.querySelectorAll("input[data-k]").forEach(function (inp) {
-      inp.addEventListener("input", function () { state[inp.dataset.k] = inp.value; save(); if (/^(q|why)$/.test(inp.dataset.k)) refreshPrompt(); });
+      inp.addEventListener("input", function () { state[inp.dataset.k] = inp.value; save(); if (/^(q|why|success|ex)$/.test(inp.dataset.k)) refreshPrompt(); });
     });
     root.querySelectorAll("[data-pick]").forEach(function (g) {
       g.querySelectorAll("button").forEach(function (b) {
         b.onclick = function () {
           state[g.dataset.pick] = b.dataset.v; save();
           g.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
-          if (g.dataset.pick === "fmt") refreshPrompt();
+          if (/^(fmt|persona|tone)$/.test(g.dataset.pick)) refreshPrompt();
         };
       });
     });

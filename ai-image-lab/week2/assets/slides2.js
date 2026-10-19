@@ -62,6 +62,18 @@
 
     { seg: "s1", html: stepSlide(1), notes: "5 分鐘。強調「先不要問 AI，自己先猜」。巡堂看到太大的問題（例如『宇宙怎麼來』）可以建議縮小。" },
 
+    { seg: "s2", html:
+      '<div class="kicker">1 MINUTE｜AI 不會讀心</div><h2>把想法<em>說清楚</em>，<br>是用 AI 的基本功</h2>' +
+      '<div class="tiers">' +
+        '<div class="t1"><span class="tag">必備</span><b>任務 Task</b><small>你要它做什麼？</small></div>' +
+        '<div class="t2"><span class="tag">重要</span><b>脈絡 Context</b><small>你是誰？為什麼想知道？怎樣算回答得好？</small></div>' +
+        '<div class="t2"><span class="tag">重要</span><b>範例 Exemplar</b><small>給它看你想要的樣子</small></div>' +
+        '<div class="t3"><span class="tag warm">加分</span><b>角色・格式・語氣</b><small>Persona・Format・Tone</small></div>' +
+      "</div>" +
+      '<p class="lead" style="margin-top:.8em">今天再加一個零件：<b style="color:var(--cobalt)">【查證】附來源、不確定就說不確定。</b></p>' +
+      '<p class="soft" style="font-size:.95rem">整理自 Jeff Su〈Master the Perfect ChatGPT Prompt Formula〉：六個零件有重要順序——任務必備，脈絡與範例重要，角色、格式、語氣加分。</p>',
+      notes: "這頁是今天的「基本功」：AI 不會讀心，跟人溝通也一樣。脈絡可以用 Jeff Su 的三個問題來想：你的背景是什麼？成功長什麼樣？在什麼情境用？講完直接進 STEP 2，手機上已經把六個零件做成填空。" },
+
     { seg: "s2", html: stepSlide(2), notes: "10 分鐘。老師同時在投影上示範陷阱題，給沒有 AI 可用的同學看。" },
     { seg: "s2", html:
       '<div class="kicker">1 MINUTE｜AI 幻覺</div><h2>AI 不是在「查」，<br>是在「接」</h2>' +
@@ -83,6 +95,18 @@
       '<h2 style="font-size:clamp(2rem,4.6vw,3.6rem)">這四張，<em>哪些是真的</em>？</h2><div data-roa></div>',
       notes: "快速舉手投票，按「揭曉」：四張全部是 AI。接著說：會編文字、編照片，也能模仿聲音——這就是下一步情境卡的第一張。" },
     { seg: "s5", html: stepSlide(5), notes: "10 分鐘。兩人一起做 4 張情境卡。巡堂聽他們討論「最可能發生在自己身上的是哪一張」。AI 情人那張可能有人尷尬，不用點名。" },
+    { seg: "s5", html:
+      '<div class="kicker">1 MINUTE｜教育部提醒你的四件事</div><h2>使用生成式 AI，<br>先記得這<em>四個風險</em></h2>' +
+      '<div class="moe">' +
+        '<div><b>1　內容可能有偏誤</b>AI 的資料來自過去的紀錄，來源有成見或錯誤，結果也會偏；它自己判斷不了對錯。<i>→ 仔細檢視產出</i></div>' +
+        '<div><b>2　可能讓訊息變單一</b>資料不夠多元，AI 可能只呈現單一文化的觀點，甚至加深偏見。<i>→ 用自己的經驗和批判思考檢視，不全盤接受</i></div>' +
+        '<div><b>3　深偽（Deepfake）假內容</b>AI 能偽造影像和聲音，做出假影片、假圖片、假新聞。<i>→ 對沒經審核的影片、照片保持懷疑，想想它的目的</i></div>' +
+        '<div><b>4　個資、隱私、機密外洩</b>輸入的個資或敏感資訊，可能被收進訓練資料，日後被拿來回應別人。<i>→ 輸入前先想：這能給嗎？</i></div>' +
+      "</div>" +
+      '<p class="lead" style="margin-top:.6em">總提醒：不輕信未證實的訊息、批判評估 AI 產出、遵守道德與法律（如尊重智慧財產權）。</p>' +
+      '<p class="soft" style="font-size:.9rem">資料來源：教育部《中小學使用「生成式人工智慧」注意事項（學生版）》，113 年 7 月 1 日（臺教資(三)字第1132702614號函核定）。</p>',
+      notes: "跟剛才的情境卡對照：詐騙對應第 3 點（深偽）、AI 情人和改同學照片對應第 4 點（個資隱私）、報告照抄對應第 1、2 點（偏誤、要自己判斷）。" },
+
     { seg: "s5", html:
       '<div class="kicker">1 MINUTE｜HARNESS</div><h2>你，就是 AI 的<em>韁繩</em></h2>' +
       '<div class="steps4"><div><b>方向</b>我決定要問什麼、為什麼問</div><div><b>規則</b>我不給個資、不拿別人的臉</div><div><b>檢查</b>它說的，我查證</div><div><b>責任</b>交出去的東西，我負責</div></div>' +
