@@ -1,218 +1,230 @@
-/* 第二堂「帶著走」任務模式：一次只看一步，每步都有
-   目標 → 做法 → 完成條件 → 卡住了？ → 快手任務 → 搭檔互評
+/* 第二堂「帶著走」任務模式｜AI 說的，是真的嗎？——從好奇到查證
+   探索五步：好奇 → 猜 → 問 → 查 → 想；最後談使用 AI 的態度（詐騙、AI 情人、駕馭、倫理）。
+   每步：引導問題 → 這一步要做 → 編號做法 → 作答 → 完成了嗎？ → 💡 想讓你發現 → 快手任務 → 卡住了？
    作答只存在這支手機（localStorage），不會上傳。 */
 (function () {
   var L = window.LAB, D = window.W2;
-  var KEY = "ailab-w2-v1";
+  var KEY = "ailab-w2-v2";
   var state = {};
   try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
-  var HEADLINES = [
-    "台北 101 一夜之間變成粉紅色",
-    "淡水河邊出現一群企鵝",
-    "學校操場長出一朵比人還高的香菇",
-    "捷運車廂裡有一隻柴犬當站長",
-    "夜市出現會自己翻雞排的機器人"
+  var CURIOUS = [
+    "為什麼貓會發出呼嚕聲？",
+    "珍珠奶茶是誰發明的？",
+    "為什麼天空是藍的，夕陽卻是紅的？",
+    "台北 101 為什麼不怕颱風和地震？",
+    "為什麼聽到喜歡的歌會起雞皮疙瘩？"
   ];
-  var PROMPT_FAKE_MOVIE = D.hallucinationPrompt;
 
-  function imgPrompt() {
-    var h = state.headline || "＿＿＿＿";
-    return "請生成一張看起來像路人用手機隨手拍的新聞照片：" + h + "。真實光線、旁邊有路人、畫面有一點雜訊和晃動，不要有文字浮水印。";
+  function goodPrompt() {
+    var q = state.q || "＿＿＿＿", why = state.why || "＿＿＿＿", fmt = state.fmt || "3 個重點、每點兩三句";
+    return "我是高中生，我想知道：" + q + "\n我想知道的原因是：" + why + "\n請用「" + fmt + "」回答。\n每個重點請附上我可以自己查證的來源（網站名稱或書名）。\n不確定的地方請直接說「不確定」，不要猜。";
   }
 
   /* ---------- 步驟定義 ---------- */
   var STEPS = [
     {
-      id: "s0", min: 2, title: "準備", q: "今天只問一件事：AI 很懂你，但它懂真相嗎？",
-      goal: "找好搭檔、打開 AI，知道今天的規則。",
+      id: "s0", min: 5, title: "準備：AI 有多懂你？", q: "AI 這麼懂你，那它說的話，你都信嗎？",
+      goal: "找好搭檔、打開 AI；先用 3 分鐘看看 AI 有多懂你。",
       todo: [
-        "兩人一組，在下面寫搭檔的名字（綽號也可以）。",
-        "手機開一個 AI 聊天工具：ChatGPT、Gemini、Copilot 都可以。",
-        "確認它能不能生圖（多數可以）。不能也沒關係，STEP 3 有備援圖。"
+        "兩人一組，寫下搭檔的名字。手機打開一個 AI 聊天工具（ChatGPT、Gemini、Copilot 都可以）。",
+        "暖身：打開你最常滑的 App 推薦頁（YouTube 首頁、IG 探索、TikTok），給搭檔看 30 秒。<b>不要給他看帳號名稱、私訊、朋友的臉。</b>",
+        "搭檔在<b>你的手機</b>寫下他猜你愛看的 3 個關鍵字；你揭曉猜中幾個。"
       ],
       body: function () {
         return field("partner", "我的搭檔", "例：小安") +
-          '<div class="box note"><b>今天的路線</b><br>STEP 1　AI 有多懂你？（看你的首頁）<br>STEP 2　AI 懂不懂事實？（考考 AI）<br>STEP 3　如果用 AI 來騙一個很懂的人？（做假新聞）<br>STEP 4　抓得出來嗎？（互當偵探）<br>STEP 5　我的轉傳規則</div>' +
-          '<div class="box"><b>三個規則</b><br>1　截圖、假新聞都只在教室給搭檔看，不轉傳、不上傳。<br>2　不放真人、同學的臉，不做災難、政治、會讓人害怕的內容。<br>3　看不懂步驟就舉手，或先看「卡住了？」。</div>';
+          peer("p0", "搭檔填：我猜你愛看……", [["k", "3 個關鍵字", "例：籃球、貓、韓團"]]) +
+          pick("hit", "搭檔猜中幾個？", ["0 個", "1 個", "2 個", "3 個全中"]) +
+          '<details class="box"><summary><b>不想給別人看自己的首頁？</b></summary><p>完全沒關係。改成口頭說「我首頁最近最常出現的是……」就好。</p></details>' +
+          '<div class="box note"><b>今天的路線：探索五步</b><br>好奇 → 猜 → 問 → 查 → 想　＋　用 AI 的態度</div>' +
+          '<div class="box"><b>三個規則</b><br>1　截圖只給搭檔看，不轉傳、不上傳。<br>2　不把自己或別人的個資（全名、學號、地址、照片）貼給 AI。<br>3　看不懂步驟就舉手，或先看「卡住了？」。</div>';
       },
-      done: ["有搭檔了", "AI 工具打開了"]
+      done: ["有搭檔、AI 打開了", "暖身猜完了"],
+      point: "搭檔 30 秒就猜得出你愛看什麼，推薦系統比他更懂你。<br>但「很懂你喜歡什麼」和「說的都是真的」是兩回事。今天就來練：<b>AI 說的，怎麼知道是不是真的？</b>",
+      help: "沒有常用的 App？用 YouTube 首頁就好；或直接跳過暖身，從第 1 步開始。"
     },
     {
-      id: "s1", min: 8, title: "AI 眼中的你", q: "只看你的首頁，別人猜得出你是誰嗎？",
-      goal: "用你自己的推薦首頁，讓搭檔反過來猜你平常愛看什麼。",
+      id: "s1", min: 5, title: "好奇：我真的想知道什麼？", q: "最近有沒有一件事，讓你想問「為什麼」？",
+      goal: "寫下一個你真的好奇的問題、為什麼想知道，再先猜一個答案。",
       todo: [
-        "打開你<b>最常滑</b>的 App 推薦頁（YouTube 首頁、IG 探索、TikTok「為你推薦」、Shorts 都可以），截一張圖。<b>不要截到帳號名稱、私訊、朋友的臉。</b>",
-        "把截圖給搭檔看 30 秒。搭檔在<b>你的手機</b>寫下：他猜你愛看的 3 個關鍵字、猜你是怎樣的人。",
-        "你揭曉：猜中幾個？再寫下一個「我從沒搜尋過，卻一直出現」的東西。"
+        "寫下一個你<b>真的好奇</b>的問題（想不到就點下面的範例）。",
+        "寫下「我為什麼想知道」——這是你的<b>初衷</b>。",
+        "先不要問 AI！自己<b>猜</b>一個答案，猜錯沒關係。"
       ],
       body: function () {
-        return peer("p1", "搭檔填：我猜你……", [
-            ["k", "你平常愛看的 3 個關鍵字", "例：籃球、貓、韓團"],
-            ["who", "我猜你是一個……的人", "例：放學會去打球、很愛動物"]
-          ]) +
-          field("me", "我自己覺得我愛看的", "例：籃球、貓、滷味") +
-          '<div class="box"><b>搭檔猜中幾個？</b><div class="check" data-pick="hit" style="margin-top:6px">' +
-          ["0 個", "1 個", "2 個", "3 個全中"].map(function (o) { return '<button type="button" data-v="' + o + '" aria-pressed="' + (state.hit === o) + '">' + o + "</button>"; }).join("") + "</div></div>" +
-          field("never", "我從沒搜尋過，卻一直出現的", "例：一直推露營影片，可是我從沒搜過") +
-          '<details class="box"><summary><b>不想給別人看自己的首頁？</b></summary><p>完全沒關係。改成口頭描述：「我首頁最近最常出現的 5 則是……」，讓搭檔照樣猜。</p></details>';
-      },
-      done: ["搭檔猜完了", "我揭曉並記下猜中幾個", "寫下「沒搜過卻一直出現」的東西"],
-      point: "搭檔只看<b>一張圖、30 秒</b>就能猜出你。推薦系統看過你上千次的停留、按讚、滑過，它猜得更準——你的首頁，就是 AI 替你畫的像，也是它替你挑過的世界。<br>那個「沒搜過卻一直出現」的東西，就是 AI 在推你往某個方向。",
-      fast: "打開第二個 App 截圖：兩個 App 眼中的你一樣嗎？哪一個比較「懂」你？",
-      help: "沒有常用的 App？用 YouTube 首頁就好，不用登入也會有推薦。"
-    },
-    {
-      id: "s2", min: 10, title: "考考 AI：它懂不懂事實？", q: "AI 這麼懂你，那它懂不懂「什麼是真的」？",
-      goal: "問 AI 兩個問題，抓出它什麼時候在「編」。",
-      todo: [
-        "複製「問題 A」，貼給你的 AI。<b>這部電影其實不存在。</b>",
-        "自己出「問題 B」：問一個<b>你很熟、但網路上不太有名</b>的東西。",
-        "記下 AI 的表現，再跟搭檔交換手機，幫對方圈出一句「你覺得是編的」。"
-      ],
-      body: function () {
-        return '<div class="box"><span class="tag">問題 A</span><p id="pa">' + esc(PROMPT_FAKE_MOVIE) + '</p><div class="row"><button type="button" class="btn" data-copy="pa">複製問題 A</button></div></div>' +
-          judge("a", "AI 怎麼回答問題 A？") +
-          '<div class="box"><span class="tag">問題 B</span>' +
-          '<p class="soft" style="color:var(--ink-soft);margin:.4em 0">例：「請介紹我們學校的熱音社」「請介紹我家巷口的○○麵店」「我們學校的校慶是哪一天？」</p>' +
-          field("qb", "我的問題 B", "請介紹＿＿＿＿") + "</div>" +
-          judge("b", "AI 怎麼回答問題 B？") +
-          peer("p2", "搭檔填：我幫你圈一句", [
-            ["sus", "我覺得「這句是編的」（抄下那一句）", "例：「導演王大明以這部片拿下……」"],
-            ["why", "為什麼覺得是編的？", "例：太剛好、查不到、名字很奇怪"]
-          ]);
-      },
-      done: ["問了問題 A", "問了自己的問題 B", "搭檔幫我圈了一句"],
-      point: "AI 不是在「查資料」，而是在「接出最像答案的句子」。不知道的時候，它常常照樣接，而且語氣很有自信——這叫 <b>AI 幻覺</b>。<br>它很懂你喜歡什麼，卻不一定懂什麼是真的。",
-      fast: "追問 AI：「你確定嗎？請給我資料來源。」它會改口嗎？給的連結點得開嗎？",
-      help: "沒有 AI 可以用？跟搭檔共用一支手機，或看老師投影的示範結果來記錄。"
-    },
-    {
-      id: "s3", min: 12, title: "幫搭檔量身做一則假新聞", q: "如果有人知道你愛看什麼，再用 AI 做一則假新聞給你，你會信嗎？",
-      goal: "用 STEP 1 知道的搭檔喜好，做一則「他最可能差點相信」的練習用假新聞。",
-      todo: [
-        "看 STEP 1：搭檔愛看什麼？從那個主題想一個<b>無害、好笑</b>的假標題（或用下面的範例）。",
-        "複製生圖指令貼給 AI，生一張「看起來像真的」新聞照。",
-        "幫它寫一個「來源」（例如某粉專、某群組），做成下面的新聞卡。"
-      ],
-      body: function () {
-        var opts = HEADLINES.map(function (h) {
-          return '<button type="button" class="chip" data-hl="' + esc(h) + '" aria-pressed="' + (state.headline === h) + '">' + esc(h) + "</button>";
-        }).join("");
-        return '<div class="box note" id="partnerLikes"></div>' +
-          field("headline", "我的假標題（針對搭檔的喜好）", "例：（愛貓）台北捷運開放貓咪站長上班") +
-          '<details class="box"><summary><b>想不到？用範例標題</b></summary><div style="margin-top:6px" data-hls>' + opts + "</div></details>" +
-          '<div class="box"><span class="tag">生圖指令</span><p id="ip">' + esc(imgPrompt()) + '</p><div class="row"><button type="button" class="btn" data-copy="ip">複製生圖指令</button></div></div>' +
-          field("source", "這則「新聞」的來源", "例：某粉絲專頁｜分享 3.2 萬次") +
-          '<details class="box"><summary><b>沒辦法生圖？用老師的備援圖</b></summary><p>選一張當作新聞照（四張都是 AI 生成的）。</p><div class="roa-grid" data-backup></div></details>' +
-          '<div class="news-card" id="newsCard"></div>';
+        return '<div class="box"><b>想不到？點一個範例</b><div style="margin-top:6px" data-ex>' +
+          CURIOUS.map(function (c) { return '<button type="button" class="chip" data-v="' + esc(c) + '">' + esc(c) + "</button>"; }).join("") + "</div></div>" +
+          field("q", "① 我好奇的問題", "例：為什麼貓會發出呼嚕聲？") +
+          field("why", "② 我為什麼想知道（初衷）", "例：我家貓每天晚上都在我旁邊呼嚕，想知道牠是不是很開心") +
+          field("guess", "③ 我先猜的答案", "例：因為牠很放鬆、很開心");
       },
       mount: function (el) {
-        var likes = el.querySelector("#partnerLikes");
-        likes.innerHTML = field("myGuess", "搭檔愛看什麼？（你在 STEP 1 幫他猜、寫在他手機上的，抄過來）", "例：籃球、貓、韓團");
-        var grid = el.querySelector("[data-backup]");
-        grid.innerHTML = D.photos.map(function (p) {
-          return '<button type="button" class="sort-card' + (state.backup === p.key ? " picked" : "") + '" data-bk="' + p.key + '">' + L.fig(p.key, { caption: false, alt: p.label }) + "</button>";
-        }).join("");
-        L.wireImages(grid);
-        grid.querySelectorAll("[data-bk]").forEach(function (b) {
-          b.onclick = function () {
-            state.backup = state.backup === b.dataset.bk ? "" : b.dataset.bk; save();
-            grid.querySelectorAll("[data-bk]").forEach(function (x) { x.classList.toggle("picked", x.dataset.bk === state.backup); });
-            renderCard(el);
-          };
+        var q = el.querySelector('[data-k="q"]');
+        el.querySelectorAll("[data-ex] button").forEach(function (b) {
+          b.onclick = function () { q.value = b.dataset.v; state.q = b.dataset.v; save(); refreshPrompt(); };
         });
-        var own = el.querySelector('[data-k="headline"]');
-        el.querySelectorAll("[data-hl]").forEach(function (b) {
-          b.onclick = function () {
-            state.headline = b.dataset.hl; own.value = b.dataset.hl; save();
-            el.querySelectorAll("[data-hl]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
-            el.querySelector("#ip").textContent = imgPrompt(); renderCard(el);
-          };
-        });
-        own.addEventListener("input", function () {
-          state.headline = own.value.trim(); save();
-          el.querySelector("#ip").textContent = imgPrompt(); renderCard(el);
-        });
-        el.querySelector('[data-k="source"]').addEventListener("input", function () { renderCard(el); });
-        renderCard(el);
       },
-      done: ["想好針對搭檔的標題", "生出一張圖（或選了備援圖）", "寫好來源"],
-      point: "你只花 10 分鐘、只知道搭檔 3 個喜好，就做得出一則「剛好打中他」的假新聞。<br>把 STEP 1 和 STEP 3 放在一起看：<b>懂你的推薦系統＋會造假的生成 AI</b>，就能把假消息送到最可能相信的人面前。",
-      fast: "再生一張「更像真的」版本：加上「傍晚、逆光、手有點抖」。哪一版更難被識破？",
-      help: "AI 說不能生圖？換一個工具，或用備援圖。標題太像真的、會嚇到人的，請換一個好笑的。"
+      done: ["寫下好奇的問題", "寫下初衷", "自己先猜了答案"],
+      point: "探索從<b>好奇</b>開始，而「為什麼想知道」決定你要的是什麼樣的答案：想安心、想做報告、還是想跟朋友聊？<br>先自己猜一次，等一下才有「對照組」——你會知道 AI 說的跟你想的差在哪。",
+      fast: "再想一個「問了 AI 可能會答錯」的問題：跟你的學校、社區、家人有關，網路上不太有名的。",
+      help: "想不到問題？從「最近讓你覺得奇怪的一件事」開始，或直接點一個範例。"
     },
     {
-      id: "s4", min: 10, title: "互當偵探", q: "如果它剛好是你愛看的東西，你還抓得出破綻嗎？",
-      goal: "交換作品，用「查證四步」找出對方假新聞的破綻。",
+      id: "s2", min: 10, title: "問：把需求說清楚", q: "同一個問題，換個問法，AI 的答案會差多少？",
+      goal: "用兩種問法問 AI，比較哪一種答案比較好用。",
       todo: [
-        "把你的手機（圖＋新聞卡）給搭檔看 1 分鐘。",
-        "用<b>你自己的手機</b>，幫搭檔的作品填下面的偵探卡。",
-        "按「給搭檔看」，把偵探卡秀給他；再把搭檔給你的建議抄下來。"
+        "<b>第一次</b>：只把你的問題原句丟給 AI。",
+        "<b>第二次</b>：複製下面幫你組好的「好問法」，開一個新對話再問一次。",
+        "比較兩個答案，寫下差別；最後試一題<b>陷阱題</b>。"
       ],
       body: function () {
-        return '<div class="box"><b>查證四步</b><ol style="margin:.4em 0 0;padding-left:1.4em">' +
-          D.checklist.map(function (c) { return "<li><b>" + c[0] + "</b>：" + c[1] + "</li>"; }).join("") + "</ol></div>" +
-          peer("p4", "偵探卡：我看搭檔的假新聞", [
-            ["bait", "他用我的哪個喜好來騙我？", "例：用貓，我差點就信了"],
-            ["flaw", "露出破綻的地方", "例：貓的腳怪怪的、招牌字是亂碼"],
-            ["check", "如果要查證，我會先……", "例：看捷運公司官網／別家新聞有沒有報"]
-          ], true) +
-          '<div class="box"><b>差點相信的程度</b><div class="check" data-pick="score" style="margin-top:6px">' +
-          ["1 一眼假", "2", "3", "4", "5 差點就信了"].map(function (o) { return '<button type="button" data-v="' + o + '" aria-pressed="' + (state.score === o) + '">' + o + "</button>"; }).join("") + "</div></div>" +
-          '<div class="row"><button type="button" class="btn warm" data-show="p4">給搭檔看 ⤢</button></div>' +
-          field("got", "搭檔給我的建議（抄下來）", "例：招牌字露餡了") +
-          '<details class="box"><summary><b>沒有搭檔？用練習卡</b></summary><div data-det></div></details>';
+        return pick("fmt", "我想要的回答格式", ["3 個重點、每點兩三句", "用國中生也懂的話講", "先講結論再講原因", "做成比較表"]) +
+          '<div class="box"><span class="tag">好問法（自動幫你組好）</span><pre id="gp" class="prompt-pre">' + esc(goodPrompt()) + '</pre>' +
+          '<div class="row"><button type="button" class="btn" data-copy="gp">複製好問法</button></div>' +
+          '<p class="soft" style="color:var(--ink-soft);margin:.6em 0 0;font-size:.92rem">好問法有五個零件：<b>我是誰</b>、<b>我想知道什麼</b>、<b>為什麼想知道</b>、<b>想要的格式</b>、<b>要附來源、不確定就說</b>。</p></div>' +
+          pick("better", "哪一次的答案比較好用？", ["第一次", "第二次", "差不多"]) +
+          field("diff", "第二次多了什麼／少了什麼？", "例：第二次有附來源，也說了哪裡不確定") +
+          '<div class="box"><span class="tag warm">陷阱題</span><p id="pa">' + esc(D.hallucinationPrompt) + '</p><div class="row"><button type="button" class="btn ghost" data-copy="pa">複製陷阱題</button></div>' +
+          '<p class="soft" style="color:var(--ink-soft);margin:.6em 0 0">偷偷告訴你：這部電影不存在。</p></div>' +
+          pick("trap", "AI 怎麼回答陷阱題？", ["老實說查不到／不存在", "部分在編", "整套編得很完整"]);
       },
-      mount: function (el) { L.w2.detective(el.querySelector("[data-det]")); },
-      done: ["看過搭檔的作品", "填好偵探卡並給他看", "抄下搭檔給我的建議"],
-      point: "打中自己喜好的消息，最容易讓人放下戒心。光靠眼睛找破綻越來越難——更可靠的是<b>查來源</b>：誰說的？別家有沒有報？原圖從哪來？",
-      fast: "交換第二輪：找另一組，看看「不是針對你做的」假新聞，是不是比較好抓？",
-      help: "不知道怎麼寫？先寫「我第一眼覺得哪裡怪」，一句就好。"
+      mount: function () { refreshPrompt(); },
+      done: ["問了第一次（原句）", "用好問法問了第二次", "試了陷阱題"],
+      point: "問法會改變答案的品質：說清楚<b>你是誰、為什麼想知道、要什麼格式</b>，AI 才知道怎麼幫你。<br>但陷阱題告訴我們：就算問得很好，AI 還是可能<b>一本正經地編</b>。它是在「接出最像答案的句子」，不是在「查資料」——這叫 <b>AI 幻覺</b>。所以下一步要「查」。",
+      fast: "追問 AI：「你剛剛說的第 2 點，確定嗎？請給我可以點開的網址。」它會改口嗎？",
+      help: "AI 回很長看不完？在好問法最後加一句「150 字以內」。"
     },
     {
-      id: "s5", min: 4, title: "我的轉傳規則", q: "下次在群組看到「剛好是你愛看的」驚人消息，你會怎麼做？",
-      goal: "寫下一條你真的做得到的規則，帶走今天的紀錄。",
+      id: "s3", min: 12, title: "查：AI 說的，是真的嗎？", q: "AI 給你的答案裡，哪幾句是真的？你怎麼確定？",
+      goal: "從 AI 的答案挑 3 句話，各找一個「不是 AI」的來源核實。",
       todo: [
-        "寫下：「轉傳之前，我會先＿＿」。要寫動作，不要只寫「小心」。",
-        "按「我的實驗紀錄」，截圖留念。"
+        "從第二次的答案，抄下 3 句「聽起來很確定」的話。",
+        "每一句，用<b>另一個來源</b>查：搜尋引擎、官方網站、百科、課本或問老師。<b>AI 給的連結也要點開看。</b>",
+        "標記結果：✓ 查到一樣、✗ 查到不一樣、？查不到。請搭檔幫你獨立查其中一句。"
       ],
       body: function () {
-        return field("rule", "轉傳之前，我會先……", "例：看是誰說的、去 Cofacts 查一下") +
-          '<div class="box note"><b>今天帶走三句話</b><br>① 我的首頁，是 AI 依照我挑過的世界。<br>② AI 很懂我，卻不一定懂真相——語氣越有自信，越要查。<br>③ 越打中我喜好的消息，越要停三秒再轉。</div>' +
-          '<div class="row"><button type="button" class="btn" data-summary>我的實驗紀錄 ⤢</button></div>' +
-          '<div class="box"><b>查不出來？交給查核專家：</b><ul style="margin:.4em 0 0;padding-left:1.2em">' +
-          D.factcheck.map(function (c) { return '<li><a href="' + c[1] + '" target="_blank" rel="noopener">' + c[0] + "</a></li>"; }).join("") + "</ul></div>";
+        return [1, 2, 3].map(function (n) {
+          return '<div class="box vrow"><span class="tag">第 ' + n + " 句</span>" +
+            field("c" + n, "AI 說：", "抄下一句 AI 的話") +
+            field("s" + n, "我用來查的來源", "例：國家地理網站、維基百科、課本 p.32") +
+            pick("r" + n, "", ["✓ 查到一樣", "✗ 查到不一樣", "？ 查不到"]) + "</div>";
+        }).join("") +
+          pick("link", "AI 給的來源連結，點得開嗎？", ["都點得開、內容也對", "點得開但內容對不上", "點不開／是假的", "它沒給來源"]) +
+          peer("p3", "搭檔填：我幫你獨立查一句", [
+            ["which", "我查的是第幾句", "例：第 2 句"],
+            ["res", "我查到的結果與來源", "例：查不到，只有 AI 這樣說"]
+          ]);
       },
-      done: ["寫下我的轉傳規則", "截圖了我的實驗紀錄"]
+      done: ["抄下 3 句", "每句都查過、標好結果", "搭檔幫我獨立查了一句"],
+      point: "「查」不是再問一次 AI，而是找<b>第二個獨立的來源</b>：說得出是誰寫的、點得開、內容對得上。<br>如果 AI 給的連結點不開或內容對不上，那很可能就是幻覺。查不到的那一句，不要當成事實寫進報告。",
+      fast: "把「✗ 查到不一樣」的那句貼回給 AI：「我查到的是＿＿，你怎麼說？」看看它會怎麼回應。",
+      help: "不知道去哪查？先用搜尋引擎找「官方網站、新聞媒體、學校或研究單位」的頁面；論壇和影片留言比較不可靠。"
+    },
+    {
+      id: "s4", min: 6, title: "想：我學到什麼？還想知道什麼？", q: "你的猜測、AI 的答案、查到的事實，誰最接近？",
+      goal: "把三個版本放在一起比，寫下新的發現和下一個好奇。",
+      todo: [
+        "看看下面的對照表：你的猜測、AI 說的、你查到的。",
+        "寫下這次真正學到的一件事，和<b>下一個想問的問題</b>。",
+        "請搭檔讀完，給你「一個讚＋一個建議」。"
+      ],
+      body: function () {
+        return '<div class="box" id="cmp"></div>' +
+          pick("closest", "誰最接近查到的事實？", ["我的猜測", "AI 的答案", "都差不多", "都不太對"]) +
+          field("learn", "這次我真正學到的一件事", "例：貓呼嚕不一定是開心，生病時也可能呼嚕") +
+          field("next", "我的下一個好奇", "例：那貓為什麼生病也會呼嚕？") +
+          peer("p4", "搭檔填：一個讚＋一個建議", [
+            ["like", "👍 你做得好的地方", "例：你有去官方網站查，很可靠"],
+            ["tip", "💬 一個建議", "例：第 3 句可以再找一個來源"]
+          ]);
+      },
+      mount: function (el) {
+        function cmp() {
+          var r = [1, 2, 3].map(function (n) { return state["r" + n] ? "第 " + n + " 句：" + state["r" + n] : ""; }).filter(Boolean).join("　");
+          el.querySelector("#cmp").innerHTML =
+            '<p class="lbl">我的問題</p><p><b>' + esc(state.q || "（第 1 步還沒寫）") + "</b></p>" +
+            '<p class="lbl">我先猜的</p><p>' + esc(state.guess || "—") + "</p>" +
+            '<p class="lbl">查證結果</p><p>' + esc(r || "（第 3 步還沒標記）") + "</p>";
+        }
+        cmp();
+        window.addEventListener("hashchange", cmp);
+      },
+      done: ["比對了三個版本", "寫下學到的和下一個好奇", "搭檔給了一個讚＋一個建議"],
+      point: "AI 是探索的<b>助手</b>，不是終點。好奇 → 猜 → 問 → 查 → 想，走完一圈，最好的收穫常常不是答案，而是<b>下一個更好的問題</b>。",
+      fast: "用好問法把「下一個好奇」也問一次，再挑一句查證。",
+      help: "搭檔不知道怎麼給建議？請他從「來源可不可靠」或「有沒有查到第二個來源」來說。"
+    },
+    {
+      id: "s5", min: 10, title: "用 AI 的態度：方向盤在你手上", q: "AI 會編、也很懂你。那什麼時候要特別小心？",
+      goal: "和搭檔一起做 4 張情境卡，每張選一個你會怎麼做。",
+      todo: [
+        "兩人一起讀情境，各自選答案，再看說明。",
+        "選錯沒關係，重點是說得出「為什麼」。",
+        "最後兩人討論：哪一張最可能發生在你身上？"
+      ],
+      body: function () {
+        return D.scenarios.map(function (sc, i) {
+          return '<div class="box scen" data-sc="' + i + '"><span class="tag warm">' + esc(sc.tag) + "</span>" +
+            '<p class="scen-q">' + sc.q + "</p>" +
+            '<div class="opts">' + sc.options.map(function (o, k) { return '<button type="button" class="scen-o" data-k="' + k + '"' + (state["sc" + i] === k ? ' aria-pressed="true"' : "") + ">" + "ABC"[k] + ". " + esc(o) + "</button>"; }).join("") + "</div>" +
+            '<div class="scen-a"' + (state["sc" + i] == null ? " hidden" : "") + "><p><b>" + sc.answer + "</b></p><p>" + sc.explain + "</p></div></div>";
+        }).join("") +
+          '<div class="box note harness"><b>Harness（韁繩）是什麼？</b><br>在 AI 領域，harness 指的是包在 AI 外面、引導和限制它的那一圈：給方向、定規則、做檢查。<br>對你來說，<b>你就是那條韁繩</b>：你決定要問什麼（方向）、不給什麼資料（規則）、查證它說的（檢查）、最後交出去的東西由你負責（責任）。</div>' +
+          field("mostlikely", "我們覺得最可能發生的是哪一張？為什麼？", "例：AI 情人，因為身邊有人每天跟 AI 聊天");
+      },
+      mount: function (el) {
+        el.querySelectorAll(".scen").forEach(function (box) {
+          var i = +box.dataset.sc, sc = D.scenarios[i];
+          box.querySelectorAll(".scen-o").forEach(function (b) {
+            b.onclick = function () {
+              var k = +b.dataset.k; state["sc" + i] = k; save();
+              box.querySelectorAll(".scen-o").forEach(function (x) { x.setAttribute("aria-pressed", x === b); x.classList.toggle("is-right", +x.dataset.k === sc.right); });
+              box.querySelector(".scen-a").hidden = false;
+            };
+            if (state["sc" + i] != null) b.classList.toggle("is-right", +b.dataset.k === sc.right);
+          });
+        });
+      },
+      done: ["4 張情境卡都選了", "跟搭檔討論了最可能發生的一張"],
+      point: "AI 很懂你、又會一本正經地編，所以最容易被拿來<b>騙你、黏住你、或讓你偷懶</b>。<br>正確的態度不是「不要用」，而是<b>方向盤在你手上</b>：你決定問什麼、不給什麼、查證什麼、為結果負責。",
+      help: "看不懂 harness？想成騎馬：AI 是很會跑的馬，你手上的韁繩決定牠往哪裡跑。"
+    },
+    {
+      id: "s6", min: 3, title: "我的 AI 使用守則", q: "下次用 AI 之前，你會先提醒自己什麼？",
+      goal: "寫下一條你真的做得到的守則，帶走今天的紀錄。",
+      todo: [
+        "寫下：「用 AI 的時候，我會＿＿」。要寫動作，不要只寫「小心」。",
+        "按「我的探索紀錄」，截圖留念。"
+      ],
+      body: function () {
+        return field("rule", "用 AI 的時候，我會……", "例：用好問法問、每次至少查一個來源再相信") +
+          '<div class="box note"><b>今天帶走三句話</b><br>① 好奇是起點：先想清楚我為什麼想知道。<br>② AI 會一本正經地編：它說的，我要查。<br>③ 方向盤在我手上：我決定、我查證、我負責。</div>' +
+          '<div class="row"><button type="button" class="btn" data-summary>我的探索紀錄 ⤢</button></div>' +
+          '<div class="box"><b>遇到可疑訊息、可疑來電？</b><ul style="margin:.4em 0 0;padding-left:1.2em">' +
+          D.factcheck.map(function (c) { return '<li><a href="' + c[1] + '" target="_blank" rel="noopener">' + c[0] + "</a></li>"; }).join("") +
+          "<li>反詐騙諮詢專線：<b>165</b></li></ul></div>";
+      },
+      done: ["寫下我的守則", "截圖了探索紀錄"]
     }
   ];
 
   /* ---------- 小元件 ---------- */
   function field(k, label, ph) {
-    return (label ? '<label class="f" for="f-' + k + '">' + label + '</label>' : "") + '<input id="f-' + k + '" type="text" data-k="' + k + '" placeholder="' + esc(ph) + '" value="' + esc(state[k] || "") + '">';
+    return (label ? '<label class="f" for="f-' + k + '">' + label + "</label>" : "") + '<input id="f-' + k + '" type="text" data-k="' + k + '" placeholder="' + esc(ph) + '" value="' + esc(state[k] || "") + '">';
   }
-  function judge(k, q) {
-    var opts = ["答對了", "部分在編", "整個在編", "說它不知道／查不到"];
-    return '<div class="box"><b>' + q + '</b><div class="check" data-pick="j' + k + '" style="margin-top:6px">' +
-      opts.map(function (o) { return '<button type="button" data-v="' + o + '" aria-pressed="' + (state["j" + k] === o) + '">' + o + "</button>"; }).join("") + "</div></div>";
+  function pick(k, q, opts) {
+    return '<div class="box pickbox">' + (q ? "<b>" + q + "</b>" : "") + '<div class="check" data-pick="' + k + '" style="margin-top:6px">' +
+      opts.map(function (o) { return '<button type="button" data-v="' + esc(o) + '" aria-pressed="' + (state[k] === o) + '">' + esc(o) + "</button>"; }).join("") + "</div></div>";
   }
-  function peer(k, title, fields, mine) {
-    return '<div class="box peer" id="' + k + '"><span class="tag warm">' + (mine ? "我寫給搭檔" : "搭檔填") + '</span><h3 style="margin:.4em 0">' + title + "</h3>" +
+  function peer(k, title, fields) {
+    return '<div class="box peer"><span class="tag warm">搭檔填</span><h3 style="margin:.4em 0">' + title + "</h3>" +
       fields.map(function (f) { return field(k + "_" + f[0], f[1], f[2]); }).join("") + "</div>";
   }
-  function renderCard(el) {
-    var c = el.querySelector("#newsCard"); if (!c) return;
-    var h = state.headline || "（還沒選標題）", src = state.source || "某粉絲專頁";
-    c.innerHTML = '<div class="det box"><span class="tag warm">練習用・AI 生成・請勿轉傳</span>' +
-      '<p class="det-meta mono" style="margin-top:6px">來源：' + esc(src) + '</p><h3>' + esc(h) + "</h3>" +
-      (state.backup ? '<div class="det-img">' + L.fig(state.backup, { caption: false, alt: "新聞配圖（AI 生成）" }) + "</div>" : '<p class="soft" style="color:var(--ink-soft)">（配圖：你用 AI 生成的那張，在 AI 的畫面裡）</p>') + "</div>";
-    L.wireImages(c);
-  }
+  function refreshPrompt() { var p = document.getElementById("gp"); if (p) p.textContent = goodPrompt(); }
 
-  /* ---------- 全螢幕展示（給搭檔看／實驗紀錄） ---------- */
+  /* ---------- 全螢幕：我的探索紀錄 ---------- */
   function overlay(html) {
     var o = document.createElement("div");
     o.className = "show-ov"; o.setAttribute("role", "dialog"); o.setAttribute("aria-modal", "true");
@@ -221,25 +233,18 @@
     o.querySelector("[data-close]").onclick = function () { o.remove(); };
     o.querySelector("[data-close]").focus();
   }
-  function showPeer() {
-    var me = state.partner ? "給 " + esc(state.partner) : "給我的搭檔";
-    overlay('<p class="kick">' + me + '｜偵探卡</p>' +
-      '<p class="lbl">你用我的哪個喜好騙我</p><p class="big2">' + esc(state.p4_bait || "—") + "</p>" +
-      '<p class="lbl">露出破綻的地方</p><p class="big2">' + esc(state.p4_flaw || "—") + "</p>" +
-      '<p class="lbl">如果要查證，我會先</p><p class="big2">' + esc(state.p4_check || "—") + "</p>" +
-      '<p class="lbl">差點相信的程度</p><p class="big2">' + esc(state.score || "—") + "</p>");
-  }
   function showSummary() {
     function row(l, v) { return '<p class="lbl">' + l + '</p><p class="big2">' + esc(v || "—") + "</p>"; }
-    overlay('<p class="kick">AI 資訊實驗室｜我的實驗紀錄</p>' +
-      row("搭檔猜我愛看", (state.p1_k || "") + (state.hit ? "（猜中 " + state.hit + "）" : "")) +
-      row("沒搜過卻一直出現的", state.never) +
-      row("AI 回答「不存在的電影」", state.ja) +
-      row("AI 回答我的問題", (state.qb ? "「" + state.qb + "」→ " : "") + (state.jb || "")) +
-      row("我做的假新聞", state.headline) +
-      row("搭檔給我的建議", state.got) +
-      row("轉傳之前，我會先", state.rule) +
-      '<p class="soft" style="margin-top:12px">① 我的首頁，是 AI 依照我挑過的世界。② AI 很懂我，卻不一定懂真相。③ 越打中我喜好的消息，越要停三秒再轉。</p>');
+    var res = [1, 2, 3].map(function (n) { return state["r" + n] ? state["r" + n].slice(0, 1) : ""; }).filter(Boolean).join(" ");
+    overlay('<p class="kick">AI 資訊實驗室｜我的探索紀錄</p>' +
+      row("我好奇的問題", state.q) +
+      row("我先猜的", state.guess) +
+      row("AI 說的，我查證的結果", res ? res + "（✓ 對／✗ 不一樣／？ 查不到）" : "") +
+      row("陷阱題，AI 的反應", state.trap) +
+      row("我學到的", state.learn) +
+      row("我的下一個好奇", state.next) +
+      row("用 AI 的時候，我會", state.rule) +
+      '<p class="soft" style="margin-top:12px">① 好奇是起點 ② AI 說的，我要查 ③ 方向盤在我手上</p>');
   }
 
   /* ---------- 任務引擎 ---------- */
@@ -247,7 +252,7 @@
     var nav = document.getElementById("stepNav");
     nav.innerHTML = STEPS.map(function (s, i) { return '<a href="#step-' + i + '" data-i="' + i + '">' + (i === 0 ? "準備" : i) + "</a>"; }).join("");
     root.innerHTML = STEPS.map(function (s, i) {
-      var doneKey = "done_" + s.id, got = state[doneKey] || [];
+      var got = state["done_" + s.id] || [];
       return '<section class="step" id="step-' + i + '" hidden>' +
         '<p class="step-k">' + (i === 0 ? "STEP 0" : "STEP " + i + " / " + (STEPS.length - 1)) + "｜約 " + s.min + " 分鐘</p>" +
         "<h2>" + s.title + "</h2>" +
@@ -262,23 +267,24 @@
         (s.fast ? '<details class="box fast"><summary><b>⚡ 快手任務</b>（做完還有時間再做）</summary><p>' + s.fast + "</p></details>" : "") +
         (s.help ? '<details class="box"><summary><b>卡住了？</b></summary><p>' + s.help + "</p></details>" : "") +
         '<div class="step-nav">' + (i > 0 ? '<a class="btn ghost" href="#step-' + (i - 1) + '">← 上一步</a>' : "<span></span>") +
-          (i < STEPS.length - 1 ? '<a class="btn" href="#step-' + (i + 1) + '">下一步：' + STEPS[i + 1].title + " →</a>" : "") + "</div>" +
+          (i < STEPS.length - 1 ? '<a class="btn" href="#step-' + (i + 1) + '">下一步 →</a>' : "") + "</div>" +
         "</section>";
     }).join("");
 
     STEPS.forEach(function (s, i) { if (s.mount) s.mount(document.getElementById("step-" + i)); });
 
-    // 文字欄位：自動儲存
-    root.querySelectorAll("[data-k]").forEach(function (inp) {
-      inp.addEventListener("input", function () { state[inp.dataset.k] = inp.value; save(); });
+    root.querySelectorAll("input[data-k]").forEach(function (inp) {
+      inp.addEventListener("input", function () { state[inp.dataset.k] = inp.value; save(); if (/^(q|why)$/.test(inp.dataset.k)) refreshPrompt(); });
     });
-    // 單選判斷
     root.querySelectorAll("[data-pick]").forEach(function (g) {
       g.querySelectorAll("button").forEach(function (b) {
-        b.onclick = function () { state[g.dataset.pick] = b.dataset.v; save(); g.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b); }); };
+        b.onclick = function () {
+          state[g.dataset.pick] = b.dataset.v; save();
+          g.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+          if (g.dataset.pick === "fmt") refreshPrompt();
+        };
       });
     });
-    // 完成條件
     root.querySelectorAll("[data-done]").forEach(function (g) {
       var key = "done_" + g.dataset.done, msg = g.parentNode.querySelector(".done-msg");
       function upd() {
@@ -294,9 +300,7 @@
     root.querySelectorAll("[data-copy]").forEach(function (b) {
       b.onclick = function () { L.copy(document.getElementById(b.dataset.copy).textContent, b); };
     });
-    root.querySelectorAll("[data-show]").forEach(function (b) { b.onclick = showPeer; });
     root.querySelectorAll("[data-summary]").forEach(function (b) { b.onclick = showSummary; });
-    L.wireImages(root);
 
     function markNav() {
       nav.querySelectorAll("a").forEach(function (a) {
