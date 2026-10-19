@@ -340,3 +340,7 @@ body.deck{overflow:hidden;height:100vh;height:100dvh}
 /* 投影：STEP 頁 */
 .step-slide .todo li{font-size:clamp(1.05rem,1.8vw,1.45rem)}
 .fast-line{margin-top:.6em;padding:10px 14px;border-left:5px solid var(--terra);background:var(--terra-tint);font-size:clamp(1rem,1.6vw,1.3rem)}
+
+.step-q{margin:.1em 0 .5em;padding:10px 14px;border-left:5px solid var(--terra);background:var(--terra-tint);font-weight:900;font-size:1.12rem;line-height:1.45}
+.point{border-color:var(--cobalt);background:var(--cobalt-tint)}
+.point p{margin:.5em 0 0;line-height:1.6}
