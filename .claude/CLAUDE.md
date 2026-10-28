@@ -10,6 +10,7 @@
 |---|---|---|
 | `diagram-design` | skill | 流程圖、旅程地圖、服務藍圖、四象限、魚骨圖等教學圖表 |
 | `taste-skill` | skill | 新的課程介紹頁、任務頁的美術方向與自我檢查 |
+| `product-image-teardown` | skill（原創） | 產品意象拆解圖：部件 → 設計元素 → 意象，標註觀察／推論／數據與通用設計原則 |
 | `inclusive-visuals-specialist` | agent | AI 生圖 prompt 的偏見與刻板印象檢查（ai-image-lab） |
 | `persona-walkthrough` | agent | 以指定人物視角走查頁面（輸出僅為假設） |
 | `ux-researcher` | agent | 研究規劃、可用性測試設計 |

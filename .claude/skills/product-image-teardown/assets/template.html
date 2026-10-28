@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>產品意象拆解圖</title>
+<style>
+  /* 色票：預設 ai-image-lab CIS；對比值見 references/visual-grammar.md */
+  :root {
+    --paper: #FAFAF7;
+    --ink: #30343A;
+    --ink-soft: #5C6068;
+    --observe: #2148B8;
+    --infer: #A84A28;
+    --data: #30343A;
+    --font: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+  }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font); line-height: 1.6; }
+  main { max-width: 900px; margin: 0 auto; padding: 24px 16px 48px; }
+  svg { width: 100%; height: auto; display: block; }
+  .text-version { margin-top: 32px; border-top: 1px solid var(--ink-soft); padding-top: 16px; }
+  .text-version h2 { font-size: 1.1rem; margin: 0 0 8px; }
+  .text-version li { margin-bottom: 6px; }
+  .tag { font-size: .85em; padding: 0 .4em; border: 1.5px solid currentColor; border-radius: 3px; margin-left: .3em; white-space: nowrap; }
+  .tag-推論 { border-style: dashed; color: var(--infer); }
+  .tag-觀察 { color: var(--observe); }
+  .tag-數據 { background: var(--data); color: var(--paper); border-color: var(--data); }
+  @media print { main { max-width: none; } }
+</style>
+</head>
+<body>
+<main>
+  <div id="figure"></div>
+  <section class="text-version" id="text-version" aria-label="文字版"></section>
+</main>
+
+<script>
+/* ===== 只修改這個 DATA 物件 =====
+   evidence：'觀察' | '推論' | '數據'
+   數據等級必須附 source（量表、n、來源、年份），否則請改為推論。
+   shape：以 (0,0) 為部件中心的 SVG 片段；或改用 image: '相對路徑.png'。 */
+const DATA = {
+  title: '為什麼這把削皮刀讓人覺得親和？',
+  subtitle: 'Why does this peeler feel approachable?',
+  logic: '由刀頭到握柄（由上到下）',
+  palette: { part: '#E9E9E5', partStroke: '#5C6068', accent: '#C65F38' },
+  parts: [
+    {
+      name: '刀片', element: '不鏽鋼雙刃',
+      desc: '兩側開刃，左右手都能使用', evidence: '觀察',
+      ud: '通用設計原則 1：公平使用',
+      w: 200, h: 46,
+      shape: '<rect x="-100" y="-23" width="200" height="46" rx="6" fill="#D9DCE0" stroke="#5C6068" stroke-width="1.5"/><line x1="-88" y1="0" x2="88" y2="0" stroke="#5C6068" stroke-width="1.5"/>'
+    },
+    {
+      name: '刀頭支架', element: '細金屬框',
+      desc: '細線條與粗握柄對比，可能顯得精緻', evidence: '推論',
+      w: 240, h: 90,
+      shape: '<path d="M-110,-40 L-110,25 Q-110,45 -90,45 L90,45 Q110,45 110,25 L110,-40" fill="none" stroke="#5C6068" stroke-width="10" stroke-linecap="round"/>'
+    },
+    {
+      name: '握柄', element: '霧面矽膠',
+      desc: '低反光表面，可能降低冰冷感', evidence: '推論',
+      w: 150, h: 300,
+      shape: '<rect x="-75" y="-150" width="150" height="300" rx="70" fill="{accent}" stroke="#5C6068" stroke-width="1.5"/>'
+    },
+    {
+      name: '縱向肋條', element: '鰭狀凸紋',
+      desc: '可能提示握持位置、增加摩擦', evidence: '推論',
+      ud: '通用設計原則 6：低體力負擔',
+      w: 150, h: 120,
+      shape: '<rect x="-75" y="-60" width="150" height="120" rx="20" fill="{part}" stroke="#5C6068" stroke-width="1.5"/><g stroke="#5C6068" stroke-width="3" stroke-linecap="round"><line x1="-45" y1="-40" x2="-45" y2="40"/><line x1="-15" y1="-40" x2="-15" y2="40"/><line x1="15" y1="-40" x2="15" y2="40"/><line x1="45" y1="-40" x2="45" y2="40"/></g>'
+    },
+    {
+      name: '吊孔', element: '末端大圓孔',
+      desc: '孔徑大，掛在掛鉤上不需對準', evidence: '觀察',
+      w: 110, h: 110,
+      shape: '<circle r="52" fill="{part}" stroke="#5C6068" stroke-width="1.5"/><circle r="26" fill="#FAFAF7" stroke="#5C6068" stroke-width="1.5"/>'
+    }
+  ],
+  // mean 與 source 只在有真實調查時填寫；沒有就保持 null（顯示「待量測」）
+  kansei: [
+    { left: '冰冷', right: '溫暖', scale: 7, mean: null, source: null },
+    { left: '疏離', right: '親和', scale: 7, mean: null, source: null }
+  ],
+  note: '本圖為示範：標記「推論」者尚未經使用者驗證；部件為簡化輪廓，非實物照片。'
+};
+/* ===== DATA 結束 ===== */
+
+const W = 1200, H = 1500, AXIS = 600;
+const RAIL = { left: [40, 380], right: [820, 1160] };
+const ZONE = { top: 230, bottom: 1200 };
+const NUMS = '①②③④⑤⑥⑦⑧⑨';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+function layoutParts(parts) {
+  const total = parts.reduce((s, p) => s + p.h, 0);
+  const gap = Math.max(30, (ZONE.bottom - ZONE.top - total) / Math.max(1, parts.length - 1));
+  let y = ZONE.top;
+  return parts.map((p, i) => {
+    const top = y; y += p.h + gap;
+    return { ...p, i, top, cy: top + p.h / 2, half: p.w / 2, side: p.side || (i % 2 ? 'right' : 'left') };
+  });
+}
+
+function layoutLabels(placed) {
+  const MIN = 140;
+  for (const side of ['left', 'right']) {
+    const list = placed.filter(p => p.side === side).sort((a, b) => a.cy - b.cy);
+    let last = -Infinity;
+    for (const p of list) { p.ly = Math.max(p.cy, last + MIN); last = p.ly; }
+    const over = last - (ZONE.bottom - 20);
+    if (over > 0) list.forEach(p => { p.ly -= over; });
+  }
+}
+
+// 只用水平、垂直線段：垂直段 xb 位於該 y 範圍內所有部件的外側，因此不會穿過部件
+function leader(p, placed, slot) {
+  const dir = p.side === 'left' ? -1 : 1;
+  const x0 = p.side === 'left' ? RAIL.left[1] : RAIL.right[0];
+  const lo = Math.min(p.ly, p.cy) - 10, hi = Math.max(p.ly, p.cy) + 10;
+  const blocking = placed.filter(q => q.top < hi && q.top + q.h > lo);
+  const reach = Math.max(...blocking.map(q => q.half)) + 24 + slot * 12;
+  const xb = AXIS + dir * reach;
+  const xe = AXIS + dir * (p.half + 10);
+  const pts = Math.abs(p.ly - p.cy) < 1 ? [[x0, p.ly], [xe, p.cy]] : [[x0, p.ly], [xb, p.ly], [xb, p.cy], [xe, p.cy]];
+  return { pts, xe };
+}
+
+function evidenceStyle(ev) {
+  if (ev === '數據') return { stroke: css('--data'), width: 2.5, dash: '' };
+  if (ev === '推論') return { stroke: css('--infer'), width: 1.5, dash: '6 4' };
+  return { stroke: css('--observe'), width: 1.5, dash: '' };
+}
+
+function render() {
+  const placed = layoutParts(DATA.parts);
+  layoutLabels(placed);
+  const slots = { left: 0, right: 0 };
+  const out = [];
+  const pal = DATA.palette;
+  const fill = s => s.replace(/\{part\}/g, pal.part).replace(/\{accent\}/g, pal.accent);
+
+  out.push(`<rect width="${W}" height="${H}" fill="${css('--paper')}"/>`);
+  out.push(`<text x="40" y="96" font-size="44" font-weight="700" fill="${css('--ink')}">${esc(DATA.title)}</text>`);
+  if (DATA.subtitle) out.push(`<text x="40" y="138" font-size="22" fill="${css('--ink-soft')}">${esc(DATA.subtitle)}</text>`);
+  out.push(`<text x="40" y="180" font-size="18" fill="${css('--ink-soft')}">拆解邏輯：${esc(DATA.logic)}　｜　線型：實線＝觀察　虛線＝推論　粗實線＝數據</text>`);
+
+  for (const p of placed) {
+    out.push(`<g transform="translate(${AXIS},${p.cy})">` +
+      (p.image ? `<image href="${esc(p.image)}" x="${-p.half}" y="${-p.h / 2}" width="${p.w}" height="${p.h}"/>` : fill(p.shape)) + `</g>`);
+  }
+
+  for (const p of placed) {
+    const st = evidenceStyle(p.evidence);
+    const { pts, xe } = leader(p, placed, slots[p.side]++);
+    out.push(`<polyline points="${pts.map(q => q.join(',')).join(' ')}" fill="none" stroke="${st.stroke}" stroke-width="${st.width}" ${st.dash ? `stroke-dasharray="${st.dash}"` : ''}/>`);
+    out.push(`<text x="${xe + (p.side === 'left' ? -4 : 4)}" y="${p.cy - 10}" font-size="20" text-anchor="${p.side === 'left' ? 'end' : 'start'}" fill="${st.stroke}">${NUMS[p.i]}</text>`);
+
+    const left = p.side === 'left';
+    const x = left ? RAIL.left[1] - 8 : RAIL.right[0] + 8;
+    const anchor = left ? 'end' : 'start';
+    const lines = [
+      `<tspan font-size="24" font-weight="700" fill="${css('--ink')}">${NUMS[p.i]} ${esc(p.name)}｜${esc(p.element)}</tspan>`,
+      `<tspan x="${x}" dy="30" font-size="18" fill="${css('--ink-soft')}">${esc(p.desc)}</tspan>`
+    ];
+    if (p.ud) lines.push(`<tspan x="${x}" dy="26" font-size="16" fill="${css('--ink-soft')}">${esc(p.ud)}</tspan>`);
+    // p.ly 是引導線高度，對齊第一行標題的中線
+    out.push(`<text x="${x}" y="${p.ly + 8}" text-anchor="${anchor}">${lines.join('')}</text>`);
+
+    const tagW = p.evidence === '數據' ? 60 : 56;
+    const tagTop = p.ly + 8 + 30 + (p.ud ? 26 : 0) + 12;
+    const tagY = tagTop + 19;
+    const tx = left ? x - tagW : x;
+    const tagFill = p.evidence === '數據' ? css('--data') : 'none';
+    const tagText = p.evidence === '數據' ? css('--paper') : st.stroke;
+    out.push(`<rect x="${tx}" y="${tagTop}" width="${tagW}" height="26" rx="4" fill="${tagFill}" stroke="${st.stroke}" stroke-width="1.5" ${st.dash ? `stroke-dasharray="${st.dash}"` : ''}/>`);
+    out.push(`<text x="${tx + tagW / 2}" y="${tagY + 1}" font-size="16" text-anchor="middle" fill="${tagText}">${esc(p.evidence)}</text>`);
+  }
+
+  const bandY = 1290;
+  out.push(`<text x="40" y="${bandY}" font-size="22" font-weight="700" fill="${css('--ink')}">目標意象語彙（語意差異量表）</text>`);
+  DATA.kansei.forEach((k, j) => {
+    const y = bandY + 50 + j * 56, x1 = 260, x2 = 940;
+    const has = typeof k.mean === 'number' && k.source;
+    out.push(`<text x="${x1 - 16}" y="${y + 7}" font-size="20" text-anchor="end" fill="${css('--ink')}">${esc(k.left)}</text>`);
+    out.push(`<text x="${x2 + 16}" y="${y + 7}" font-size="20" fill="${css('--ink')}">${esc(k.right)}</text>`);
+    out.push(`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${css('--ink-soft')}" stroke-width="2" ${has ? '' : 'stroke-dasharray="6 6"'}/>`);
+    for (let s = 0; s < k.scale; s++) {
+      const sx = x1 + (x2 - x1) * s / (k.scale - 1);
+      out.push(`<line x1="${sx}" y1="${y - 6}" x2="${sx}" y2="${y + 6}" stroke="${css('--ink-soft')}" stroke-width="1.5"/>`);
+    }
+    if (has) {
+      const mx = x1 + (x2 - x1) * (k.mean - 1) / (k.scale - 1);
+      out.push(`<circle cx="${mx}" cy="${y}" r="9" fill="${css('--data')}"/>`);
+      out.push(`<text x="${mx}" y="${y - 16}" font-size="16" text-anchor="middle" fill="${css('--ink')}">${k.mean}</text>`);
+    } else {
+      out.push(`<text x="${(x1 + x2) / 2}" y="${y - 12}" font-size="16" text-anchor="middle" fill="${css('--ink-soft')}">待量測</text>`);
+    }
+  });
+  // 數據一定要和來源一起出現在圖上，圖被單獨轉貼時才不會失去出處
+  const sources = [...DATA.parts.filter(p => p.evidence === '數據').map(p => `${NUMS[DATA.parts.indexOf(p)]} ${p.source}`),
+    ...DATA.kansei.filter(k => typeof k.mean === 'number' && k.source).map(k => `${k.left}—${k.right} ${k.source}`)];
+  if (sources.length) out.push(`<text x="40" y="${H - 56}" font-size="16" fill="${css('--ink')}">數據來源：${esc(sources.join('；'))}</text>`);
+  if (DATA.note) out.push(`<text x="40" y="${H - 28}" font-size="16" fill="${css('--ink-soft')}">${esc(DATA.note)}</text>`);
+
+  const counts = { 觀察: 0, 推論: 0, 數據: 0 };
+  DATA.parts.forEach(p => { counts[p.evidence]++; });
+  const desc = `${DATA.title.replace(/[。？！]$/, '')}：拆解為 ${DATA.parts.length} 個部件：` +
+    DATA.parts.map((p, i) => `${NUMS[i]}${p.name}（${p.element}）${p.desc}，${p.evidence}`).join('；') +
+    `。證據統計：觀察 ${counts.觀察}、推論 ${counts.推論}、數據 ${counts.數據}。`;
+
+  document.getElementById('figure').innerHTML =
+    `<svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="fig-t fig-d" font-family="${esc(css('--font'))}" xmlns="http://www.w3.org/2000/svg">` +
+    `<title id="fig-t">${esc(DATA.title)}</title><desc id="fig-d">${esc(desc)}</desc>${out.join('')}</svg>`;
+
+  document.getElementById('text-version').innerHTML =
+    `<h2>文字版</h2><p>拆解邏輯：${esc(DATA.logic)}</p><ol>` +
+    DATA.parts.map(p => `<li><strong>${esc(p.name)}｜${esc(p.element)}</strong>：${esc(p.desc)}` +
+      `<span class="tag tag-${esc(p.evidence)}">${esc(p.evidence)}</span>${p.ud ? `<br>${esc(p.ud)}` : ''}${p.source ? `<br>資料來源：${esc(p.source)}` : ''}</li>`).join('') +
+    `</ol><p>目標意象：` + DATA.kansei.map(k => `${esc(k.left)}—${esc(k.right)}：${typeof k.mean === 'number' && k.source ? `${k.mean}／${k.scale}（${esc(k.source)}）` : '待量測'}`).join('；') +
+    `</p><p>證據統計：觀察 ${counts.觀察}、推論 ${counts.推論}、數據 ${counts.數據}。${DATA.note ? esc(DATA.note) : ''}</p>`;
+}
+
+render();
+</script>
+</body>
+</html>

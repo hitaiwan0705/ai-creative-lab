@@ -13,6 +13,12 @@
 | ux-researcher | `.claude/agents/` | 同上（`design/design-ux-researcher.md`） | 同上 | MIT |
 | visual-storyteller | `.claude/agents/` | 同上（`design/design-visual-storyteller.md`） | 同上 | MIT |
 
+## 本專案原創
+
+| 項目 | 安裝位置 | 說明 | 授權 |
+|---|---|---|---|
+| product-image-teardown | `.claude/skills/product-image-teardown/` | 2026-10-28 撰寫。方法上參考了 yvonnechen202608-byte/picture-design 中兩個 skill 的「視覺語法參數化、單變數修正、驗收清單」思路，但文字、版面、證據分級與程式皆為重新撰寫，未複製其內容（該 repo 未附授權） | 待作者決定 |
+
 ## 本專案對原檔的修改
 
 - `diagram-design/references/style-guide.md`：`Font source: web` 改為 `system`，產出的圖不再載入 Google Fonts（離線、不追蹤）。
